@@ -1,4 +1,5 @@
 import * as React from 'react';
+<<<<<<< HEAD
 
 import 
 { Button,
@@ -124,3 +125,15 @@ const styles = StyleSheet.create({
     borderRadius: 8.5,
   }
 });
+=======
+import { Button, View, Text } from 'react-native';
+
+function LogInScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Log In Screen</Text>
+    </View>
+  );
+}
+export default LogInScreen;
+>>>>>>> 6c1db4613216e7379817b682959bc628c4c3e7fc
