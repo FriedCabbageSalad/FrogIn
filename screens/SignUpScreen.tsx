@@ -11,9 +11,8 @@ import
   Image 
 } from 'react-native';
 
-function LogInScreen({ navigation }) {
+function SignUpScreen({ navigation }) {
   const [text, onChangeText] = React.useState('');
-  const [text2, onChangeText2] = React.useState('');
   const Separator = () => <View style={styles.separator} />;
   return (
       <ImageBackground source={require('./../assets/background.png')} resizeMode='cover' style={styles.imageSizing}>
@@ -26,8 +25,8 @@ function LogInScreen({ navigation }) {
 
         {/* Log In Features */}
         <View style={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.h2}>Login</Text>
-          <Text style={styles.h3}>Enter your details to login</Text>
+          <Text style={styles.h2}>Create Account</Text>
+          <Text style={styles.h3}>Enter your email to get started now!</Text>
           
           {/* Email Input */}
           <TextInput
@@ -36,23 +35,15 @@ function LogInScreen({ navigation }) {
             value={text}
             placeholder="email@domain.com"
           />
-
-          {/* Password Input */}
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeText2}
-            value={text2}
-            placeholder="Password"
-          />
           {/* Sign Up button, TO DO */}
           <View style={{width: "75%"}}>
-            <Button title="Login" color={'#000000'} 
+            <Button title="Sign up with email" color={'#000000'} 
               onPress={() => navigation.navigate('')}/>
           </View>
         </View>
-        <Separator/>
+
         {/* Divider with text in the middle */}
-        <View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: '12.5%',}}>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: '12.5%'}}>
           <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
             <View>
               <Text style={{width: 120, textAlign: 'center'}}>or continue with</Text>
@@ -72,7 +63,7 @@ function LogInScreen({ navigation }) {
 
           <View style={{width: "75%"}}>
             <Separator/>
-            <Text style={styles.TOS}>By clicking continue, you agree to our Terms of Service and Privacy Policy</Text>
+            <Text style={styles.h3}>By clicking continue, you agree to our Terms of Service and Privacy Policy</Text>
           </View>
         </View>
         
@@ -81,7 +72,7 @@ function LogInScreen({ navigation }) {
       </ImageBackground>
   );
 }
-export default LogInScreen;
+export default SignUpScreen;
 
 const styles = StyleSheet.create({
   header: {
@@ -94,22 +85,15 @@ const styles = StyleSheet.create({
   h2: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 28,
+    fontSize: 24,
     fontFamily: 'Sans-serif',
   },
   h3: {
     color: 'black',
-    fontSize: 16,
-    fontFamily: 'Sans-serif',
-    padding: 5,
-    paddingBottom: 10,
-  },
-  TOS: {
-    color: 'black',
     fontSize: 14,
     fontFamily: 'Sans-serif',
     padding: 5,
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
   imageSizing: {
     width: '100%',
@@ -122,7 +106,7 @@ const styles = StyleSheet.create({
   input: {
     width: '75%',
     height: 40,
-    margin: 6,
+    margin: 12,
     borderWidth: 0,
     padding: 10,
     paddingLeft: 20,
