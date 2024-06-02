@@ -21,7 +21,7 @@ function App() {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Password" component={PasswordScreen} />
-        <Stack.Screen name="LockScreen" component={LockScreen} />
+        <Stack.Screen name="Lock" component={LockScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import 
-{ Button,
+{ Alert,
+  Button,
   View,
   Text,
   ImageBackground,
@@ -11,6 +12,55 @@ import
   Image,
   Dimensions
 } from 'react-native';
+
+import auth from '@react-native-firebase/auth';
+
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+
+GoogleSignin.configure({
+  webClientId: '843583618218-6lp78r9qb51e647tkmib9pt5m5ev667q.apps.googleusercontent.com',
+});
+
+async function onGoogleButtonPress() {
+  // Check if your device supports Google Play
+  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  // Get the users ID token
+  const { idToken } = await GoogleSignin.signIn();
+
+  // Create a Google credential with the token
+  const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+  // Sign-in the user with the credential
+  return auth().signInWithCredential(googleCredential);
+}
+
+const showAlert = (title : string, msg : string, button : string) =>
+  Alert.alert(
+    title,
+    msg,
+    [
+      {
+        text: button,
+        style: 'default',
+      },
+    ],
+  );
+
+  const showAlertAction = (title : string, msg : string, button : string, action : () => Function) =>
+    Alert.alert(
+      title,
+      msg,
+      [
+        {
+          text: button,
+          style: 'default',
+          onPress: action,
+        },
+      ],
+    );
 
 const { height, width } = Dimensions.get('window')
 
@@ -56,10 +106,35 @@ function LogInScreen({ navigation}: {navigation: any}) {
                 placeholder="Password"
               />
               <Separator/>
-              {/* Sign Up button, TO DO */}
+              {/* Log In Button */}
               <View style={{width: "150%"}}>
                 <Button title="Login" color={'#000000'} 
-                  onPress={() => navigation.navigate('')}/>
+                  onPress={() => {
+                    if (text == "" || text2 == "") {
+                      showAlert('Error','Please enter an email and password','OK')
+                    } else {
+                    auth()
+                    .signInWithEmailAndPassword(text, text2)
+                    .then(() => {
+                      console.log('signed in!');
+                    })
+                    .catch(error => {
+                      if (error.code === 'auth/invalid-email') {
+                        showAlert('Invalid email address!','','OK');
+                      }
+                      if (error.code === 'auth/wrong-password') {
+                        showAlert('Wrong password','','OK');
+                      }
+                      if (error.code === 'auth/user-not-found') {
+                        showAlertAction('Account not found','','Sign Up for FrogIn',() => navigation.navigate('SignUp'));
+                      }
+                      else {
+                        //showAlert('Error','','OK');
+                      }
+                      console.error(error);
+                    });
+                  }
+                  }}/>
               </View>
             </View>
 
@@ -74,8 +149,8 @@ function LogInScreen({ navigation}: {navigation: any}) {
 
             {/* Google sign up button */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.575, justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
-
-              <TouchableOpacity style={styles.googleButton} onPress={() => navigation.navigate('')}>
+            
+              <TouchableOpacity style={styles.googleButton} onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                   <Image source={require('./../assets/google.jpg')} style={{height: '150%', width: '10%'}} resizeMode='contain'/>
                   <Text style={{color: 'black', paddingHorizontal: '2%'}}>Google</Text>

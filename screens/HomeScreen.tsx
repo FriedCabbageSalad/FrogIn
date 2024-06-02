@@ -12,14 +12,14 @@ function HomeScreen({ navigation}: {navigation: any}) {
       <Button title="Sign Up"
         onPress={() => navigation.navigate('SignUp')}/>
       
-      <Button title="Password Test"
+      <Button title="Password"
         onPress={() => navigation.navigate('Password')}/>
 
       <Button title="Settings"
         onPress={() => navigation.navigate('Settings')}/>
 
       <Button title="Lock"
-        onPress={() => navigation.navigate('LockScreen')}/>
+        onPress={() => navigation.navigate('Lock')}/>
     </View>
   );
 }
