@@ -1,20 +1,22 @@
 import React, {useState} from 'react';
 
-import 
-{ Button,
+import { 
   View,
   Text,
-  ImageBackground,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
   Image,
+  TouchableOpacity,
+  StyleSheet,
   Dimensions,
 } from 'react-native';
 
 import { TimerPicker } from "react-native-timer-picker";
 
 const { height, width } = Dimensions.get('window')
+var newDuration = {
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+};
 
 function dimensions() {
 
@@ -31,7 +33,7 @@ function LockScreen({ navigation}: {navigation: any}) {
     const [alarmString, setAlarmString] = useState<
             string | null
         >(null);
-
+    
     return (
         <View style={styles.background}>
             {/* Container for rest */}
@@ -39,16 +41,21 @@ function LockScreen({ navigation}: {navigation: any}) {
                 
                 <View style={styles.outerCircle}>
                     <View style={styles.innerCicle}>
+                        <Image source={require('./../assets/tank_with_egg.png')} style={styles.tank} resizeMode='stretch'/>
                     </View>
                 </View>
 
-                <View style={{backgroundColor: "#478E6D", alignItems: "center", justifyContent: "center"}}>
+                <View style={styles.timerView}>
                     <TimerPicker
+                        onDurationChange={(currDuration) =>
+                            newDuration = currDuration
+                        }
                         padWithNItems={1}
                         hourLabel=":"
-                        minuteLabel=":"
+                        minuteLabel=""
                         secondLabel=""
-
+                        hideSeconds
+                        clickSoundAsset={require('./../assets/select_click.mp3')}
                         styles={{
                             theme: "dark",
                             backgroundColor: "#478E6D",
@@ -77,7 +84,11 @@ function LockScreen({ navigation}: {navigation: any}) {
                 </View>
 
                 <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '4%'}}>
-                    <TouchableOpacity onPress={() => ''} style={styles.button}>
+                    <TouchableOpacity 
+                        onPress={() => {
+
+                        }
+                    } style={styles.button}>
                         <Text style={{color: 'white', fontSize: 18}}>Start</Text>
                     </TouchableOpacity>
                 </View>
@@ -125,6 +136,15 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingHorizontal: '10%',
         borderRadius: 8.5,
+    },
+    tank: {
+        width: dimensions()._height * 0.06,
+        height: dimensions()._height * 0.06,
+    },
+    timerView: {
+        backgroundColor: "#478E6D",
+        alignItems: "center",
+        justifyContent: "center",
+        opacity: 1
     }
-
 });
