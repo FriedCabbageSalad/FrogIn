@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, View, Text } from 'react-native';
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ navigation}: {navigation: any}) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>This is the Home Screen</Text>
@@ -18,6 +18,8 @@ function HomeScreen({ navigation }) {
       <Button title="Settings"
         onPress={() => navigation.navigate('Settings')}/>
 
+      <Button title="Lock"
+        onPress={() => navigation.navigate('LockScreen')}/>
     </View>
   );
 }

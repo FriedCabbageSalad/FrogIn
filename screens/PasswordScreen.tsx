@@ -10,7 +10,7 @@ import {
   Image
 } from 'react-native';
 
-function PasswordScreen({ navigation }) {
+function PasswordScreen({ navigation}: {navigation: any}) {
   // text = Username, text2 = password, text 3 is confirm password
   const [text, onChangeText] = React.useState('');
   const [text2, onChangeText2] = React.useState('');

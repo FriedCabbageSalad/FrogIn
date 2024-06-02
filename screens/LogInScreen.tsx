@@ -8,76 +8,86 @@ import
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  Image 
+  Image,
+  Dimensions
 } from 'react-native';
 
-function LogInScreen({ navigation }) {
+const { height, width } = Dimensions.get('window')
+
+function dimensions() {
+
+  var _height = Math.round(height),
+      _width = Math.round(width)
+
+  return { _height, _width }
+}
+
+function LogInScreen({ navigation}: {navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const [text2, onChangeText2] = React.useState('');
   const Separator = () => <View style={styles.separator} />;
   return (
       <ImageBackground source={require('./../assets/background.png')} resizeMode='cover' style={styles.imageSizing}>
 
-        {/* Application Name and Logo */}
-        <View style={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.header}>FrogIn</Text>
-          <Image source={require('./../assets/default_frog.png')} resizeMode='cover' style={styles.logo}/>
-        </View>
-
-        {/* Log In Features */}
-        <View style={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.h2}>Login</Text>
-          <Text style={styles.h3}>Enter your details to login</Text>
-          
-          {/* Email Input */}
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeText}
-            value={text}
-            placeholder="email@domain.com"
-          />
-
-          {/* Password Input */}
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeText2}
-            value={text2}
-            placeholder="Password"
-          />
-          {/* Sign Up button, TO DO */}
-          <View style={{width: "75%"}}>
-            <Button title="Login" color={'#000000'} 
-              onPress={() => navigation.navigate('')}/>
-          </View>
-        </View>
-        <Separator/>
-        {/* Divider with text in the middle */}
-        <View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: '12.5%',}}>
-          <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
-            <View>
-              <Text style={{width: 120, textAlign: 'center'}}>or continue with</Text>
+            {/* Application Name and Logo */}
+            <View style={{position: 'absolute', top: dimensions()._height * 0.1, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
+              <Text style={styles.header}>FrogIn</Text>
+              <Image source={require('./../assets/default_frog.png')} resizeMode='stretch' style={styles.logo}/>
             </View>
-          <View style={{flex: 1, height: 1, backgroundColor: 'white'}} />
-        </View>
 
-        {/* Google sign up button */}
-        <View style={{flex: 6, justifyContent: 'center', alignItems: 'center'}}>
+            {/* Log In Features */}
+            <View style={{position: 'absolute', top: dimensions()._height * 0.25, justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
+              <Text style={styles.h2}>Login</Text>
+              <Text style={styles.h3}>Enter your details to login</Text>
+              
+              {/* Email Input */}
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeText}
+                value={text}
+                placeholder="email@domain.com"
+              />
 
-          <TouchableOpacity style={styles.googleButton} onPress={() => navigation.navigate('')}>
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Image source={require('./../assets/google.jpg')} style={{height: '150%', width: '10%'}} resizeMode='contain'/>
-              <Text style={{color: 'black', paddingHorizontal: '2%'}}>Google</Text>
+              {/* Password Input */}
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeText2}
+                value={text2}
+                placeholder="Password"
+              />
+              <Separator/>
+              {/* Sign Up button, TO DO */}
+              <View style={{width: "150%"}}>
+                <Button title="Login" color={'#000000'} 
+                  onPress={() => navigation.navigate('')}/>
+              </View>
             </View>
-          </TouchableOpacity>
 
-          <View style={{width: "75%"}}>
-            <Separator/>
-            <Text style={styles.TOS}>By clicking continue, you agree to our Terms of Service and Privacy Policy</Text>
-          </View>
-        </View>
-        
-        {/* Padding for vertical adjustment */}
-        <View style={{flex: 10, justifyContent: 'center', alignItems: 'center'}}></View>
+            {/* Divider with text in the middle */}
+            <View style={{position: 'absolute', top: dimensions()._height * 0.525, flexDirection: 'row', alignItems: 'center', marginHorizontal: '12.5%',}}>
+              <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+                <View>
+                  <Text style={{width: 120, textAlign: 'center'}}>or continue with</Text>
+                </View>
+              <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+            </View>
+
+            {/* Google sign up button */}
+            <View style={{position: 'absolute', top: dimensions()._height * 0.575, justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
+
+              <TouchableOpacity style={styles.googleButton} onPress={() => navigation.navigate('')}>
+                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                  <Image source={require('./../assets/google.jpg')} style={{height: '150%', width: '10%'}} resizeMode='contain'/>
+                  <Text style={{color: 'black', paddingHorizontal: '2%'}}>Google</Text>
+                </View>
+              </TouchableOpacity>
+
+              <View style={{width: "75%"}}>
+                <Separator/>
+                <Text style={styles.TOS}>By clicking continue, you agree to our Terms of Service and Privacy Policy</Text>
+              </View>
+            </View>
+            
       </ImageBackground>
   );
 }
@@ -89,7 +99,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 48,
     fontFamily: 'Sans-serif',
-    padding: 5
+    padding: 5,
   },
   h2: {
     color: 'black',
@@ -116,11 +126,11 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   logo: {
-    width: '30%',
-    height: '45%'
+    width: '75%',
+    height: '100%',
   },
   input: {
-    width: '75%',
+    width: '150%',
     height: 40,
     margin: 6,
     borderWidth: 0,
@@ -133,7 +143,7 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
   },
   googleButton: {
-    width: '75%',
+    width: '95%',
     alignItems: 'center',
     backgroundColor: 'white',
     padding: 10,

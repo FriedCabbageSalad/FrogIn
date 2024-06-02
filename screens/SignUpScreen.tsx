@@ -11,7 +11,7 @@ import
   Image 
 } from 'react-native';
 
-function SignUpScreen({ navigation }) {
+function SignUpScreen({ navigation}: {navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const Separator = () => <View style={styles.separator} />;
   return (
