@@ -7,8 +7,19 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  Image
+  Image,
+  Dimensions
 } from 'react-native';
+
+const { height, width } = Dimensions.get('window')
+
+function dimensions() {
+
+  var _height = Math.round(height),
+      _width = Math.round(width)
+
+  return { _height, _width }
+}
 
 function PasswordScreen({ navigation}: {navigation: any}) {
   // text = Username, text2 = password, text 3 is confirm password
@@ -21,12 +32,12 @@ function PasswordScreen({ navigation}: {navigation: any}) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <ImageBackground source={require('./../assets/background.png')} resizeMode='cover' style={styles.imageSizing}>
           {/* Application Name and Logo */}
-          <View style={{flex: 8, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{position: 'absolute', top: dimensions()._height * 0.075, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
             <Text style={styles.header}>FrogIn</Text>
-            <Image source={require('./../assets/default_frog.png')} resizeMode='cover' style={styles.logo}/>
+            <Image source={require('./../assets/default_frog.png')} resizeMode='stretch' style={styles.logo}/>
           </View>
           {/* Sign Up Fields */}
-          <View style={{flex: 12, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{position: 'absolute', top: dimensions()._height * 0.2, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
             <TextInput
               style={styles.input}
               onChangeText={onChangeText}
@@ -55,7 +66,6 @@ function PasswordScreen({ navigation}: {navigation: any}) {
 
           </View>
 
-          <View style={{flex: 12, justifyContent: 'center', alignItems: 'center'}}></View>
       </ImageBackground>
     </View>
   );
@@ -75,11 +85,11 @@ const styles = StyleSheet.create({
     padding: 5
   },
   logo: {
-    width: '30%',
-    height: '45%'
+    width: '75%',
+    height: '100%',
   },
   input: {
-    width: '75%',
+    width: '150%',
     height: 40,
     margin: 12,
     borderWidth: 0,
@@ -89,13 +99,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   signUpButton: {
-    width: '75%',
+    width: '150%',
     alignItems: 'center',
     backgroundColor: 'black',
     padding: 10,
     borderRadius: 8.5,
   },
   separator: {
-    marginVertical: '2%',
+    marginVertical: '3%',
   }
 });
