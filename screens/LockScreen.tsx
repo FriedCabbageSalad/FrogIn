@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  Alert,
 } from 'react-native';
 
 import { TimerPicker } from "react-native-timer-picker";
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
         width: dimensions()._height * 0.218,
         height: dimensions()._height * 0.218,
         borderRadius: dimensions()._borderRadius,
-        backgroundColor: '#AEA085',
+        backgroundColor: '#FFE7A1',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -211,5 +210,5 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
         fontWeight: "500",
         letterSpacing: 1,
-      },
+    },
 });

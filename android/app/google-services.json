@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "843583618218",
+    "project_id": "frogin-6969",
+    "storage_bucket": "frogin-6969.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:843583618218:android:a9da7c11842d0d6e1b64d3",
+        "android_client_info": {
+          "package_name": "com.frogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "843583618218-5pbr9vbqvo7jo1i1asvt00mkr9ft8i6m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.frogin",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "843583618218-6lp78r9qb51e647tkmib9pt5m5ev667q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRLO86tGc933SEN-EQhMOEiXCk3mZ1voA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "843583618218-6lp78r9qb51e647tkmib9pt5m5ev667q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

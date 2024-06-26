@@ -1,56 +1,79 @@
-# Frog In
+This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-A brief description of what this project does and who it's for
+# Getting Started
 
+>**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
-## Demo
+## Step 1: Start the Metro Server
 
-Insert youtube link
+First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
-
-## Features
-
-- Log in screen
-- Google log in auth integration
-
-
-
-## Run Locally
-
-Note: we have only tested installation on windows with android emulator
-
-### Step 0
-
-Install Java 17.0.11
-https://www.oracle.com/sg/java/technologies/downloads/#java17
-
-Install Android Studio Jellyfish
-https://developer.android.com/studio
-
-Install Node.js v20.14.0 (LTS)
-https://nodejs.org/en/
-
-
-Create environment variable paths for the Java SDK and Android SDK
-
-- In the Windows search menu, enter: "Edit the system environment variables", this will open the System Properties window.
-- Choose Environment Variables... and then choose New... under User variables.
-- Enter the Variable name and value (path). If you've chosen a specific location to install the Java and Android SDKs, be sure to update the variable paths accordingly.
-- JAVA_HOME: C:\Program Files\Java\Java17
-- ANDROID_HOME: C:\Users\username\AppData\Local\Android\Sdk
-
-### Step 1
-
-Download files into folder
-
-### Step 2
-
-Launch Android Studio and start an emulator (we recommend Pixel 8)
-
-### Step 3
-
-In the folder, run
+To start Metro, run the following command from the _root_ of your React Native project:
 
 ```bash
-  npx react-native run-android
+# using npm
+npm start
+
+# OR using Yarn
+yarn start
 ```
+
+## Step 2: Start your Application
+
+Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+
+### For Android
+
+```bash
+# using npm
+npm run android
+
+# OR using Yarn
+yarn android
+```
+
+### For iOS
+
+```bash
+# using npm
+npm run ios
+
+# OR using Yarn
+yarn ios
+```
+
+If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+
+This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+
+## Step 3: Modifying your App
+
+Now that you have successfully run the app, let's modify it.
+
+1. Open `App.tsx` in your text editor of choice and edit some lines.
+2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+
+   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+
+## Congratulations! :tada:
+
+You've successfully run and modified your React Native App. :partying_face:
+
+### Now what?
+
+- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
+- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+
+# Troubleshooting
+
+If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+
+# Learn More
+
+To learn more about React Native, take a look at the following resources:
+
+- [React Native Website](https://reactnative.dev) - learn more about React Native.
+- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
+- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
+- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
+- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
