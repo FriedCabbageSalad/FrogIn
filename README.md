@@ -1,5 +1,8 @@
 # FrogIn
 
+## Full README
+https://docs.google.com/document/d/1yc9KK-xlpNC51n4DE_wswI6iQt7f8Em-ETr5ljg4Yx4/edit?usp=sharing
+
 ## Problem Statement
 Remaining productive in life is as fickle as always, so why not focus up with the help of a little
 application? Introducing, FrogIn a portmanteau of Frog and the colloquial phrase “lock in”
@@ -16,6 +19,3 @@ When they start the timer, they will be given a frog egg, which over the course 
 will mature and grow into fully fledged adults! However, should the user abscond their
 commitment, the frog will sadly pass away instead. Users will be able to collect and display
 the various frogs collected in a personal “pond” where the frogs will live.
-
-## Full README
-https://docs.google.com/document/d/1yc9KK-xlpNC51n4DE_wswI6iQt7f8Em-ETr5ljg4Yx4/edit?usp=sharing
