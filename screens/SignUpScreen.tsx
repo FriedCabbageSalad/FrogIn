@@ -73,7 +73,7 @@ function dimensions() {
 }
 
 
-function SignUpScreen({ navigation}: {navigation: any}) {
+function SignUpScreen({navigation}: {navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const Separator = () => <View style={styles.separator} />;
   return (
@@ -108,19 +108,23 @@ function SignUpScreen({ navigation}: {navigation: any}) {
                 .fetchSignInMethodsForEmail(text)
                   .then((val) => {
                     console.log(val)
-                    if (val.includes("password") || val.includes("google.com")) {
-                      showAlertAction('Account already exists!','','Log in to FrogIn',() => navigation.navigate('LogIn'))
+                    if (val.includes("google.com")) {
+                      showAlertAction('Account already exists! Log in with your Google account.','','Log in to FrogIn',() => navigation.navigate('LogIn'))
+                    }
+                    else if (val.includes("password")) {
+                      showAlertAction('Account already exists! Log in with your email.','','Log in to FrogIn',() => navigation.navigate('LogIn'))
                     }
                   })
-                  .catch(error => {
-                    if (error.code === 'auth/') {
-                      showAlert('Invalid email address!','','OK');
-                    }
-                    else {
-                      showAlert('Error',error,'OK');
-                    }
-                    console.error(error);
-                  });
+                .catch(error => {
+                  if (error.code === 'auth/') {
+                    showAlert('Invalid email address!','','OK');
+                  }
+                  else {
+                    showAlert('Error',error,'OK');
+                  }
+                  console.error(error);
+                })
+                .then(() => navigation.navigate('Password', {emailstring: text}))
                 };
               }}/>
           </View>
@@ -136,10 +140,9 @@ function SignUpScreen({ navigation}: {navigation: any}) {
         </View>
 
         {/* Google sign up button */}
-        {/* Google sign up button */}
         <View style={{position: 'absolute', top: dimensions()._height * 0.515, justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
 
-          <TouchableOpacity style={styles.googleButton} onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}>
+          <TouchableOpacity style={styles.googleButton} onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Home'))}>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
               <Image source={require('./../assets/google.jpg')} style={{height: '150%', width: '10%'}} resizeMode='contain'/>
               <Text style={{color: 'black', paddingHorizontal: '2%'}}>Google</Text>

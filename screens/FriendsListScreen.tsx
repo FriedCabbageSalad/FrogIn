@@ -30,7 +30,7 @@ const pfpDirectories = [
 
 const pfpDirectory = pfpDirectories[1].image;
 
-function FriendsListScreen({ navigation}: {navigation: any}) {
+function FriendsListScreen({navigation}: {navigation: any}) {
     const [text, onChangeText] = React.useState('');
   return (
     // Background Image
