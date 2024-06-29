@@ -7,10 +7,17 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Alert,
+  Modal,
+  Pressable
 } from 'react-native';
 
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
+import { BaseGacha } from './../FrogGacha.tsx'
+
+
+const Separator = () => <View style={{marginVertical: '2%'}}/>;
 
 const { height, width } = Dimensions.get('window')
 var newDuration = {
@@ -19,6 +26,13 @@ var newDuration = {
     seconds: 0
 };
 var totalDuration = 0;
+
+const frogDirectories = [
+    {image: require('./../assets/tank_with_egg.png')},
+    {image: require('./../assets/frogs/default_frog.png')},
+    {image: require('./../assets/frogs/blue_frog.png')},
+    {image: require('./../assets/frogs/ocean_frog.png')},
+  ]
 
 function dimensions() {
 
@@ -34,8 +48,9 @@ function LockScreen({navigation}: {navigation: any}) {
     const [timerEnd, setTimerEnd] = useState(false);
     const [buttonVisible, setButtonVisible] = useState(true);
     const [pickerVisible, setShowPicker] = useState(true);
-
-    const timer = useRef();
+    const [modalVisible, setModalVisible] = useState(false);
+    const [displayImage, setDisplayImage] = useState(0);
+    const timer = useRef();    
     
     return (
         <View style={styles.background}>
@@ -45,7 +60,7 @@ function LockScreen({navigation}: {navigation: any}) {
                 {/* Circle and Image */}
                 <View style={styles.outerCircle}>
                     <View style={styles.innerCicle}>
-                        <Image source={require('./../assets/tank_with_egg.png')} style={styles.tank} resizeMode='stretch'/>
+                        <Image source={frogDirectories[displayImage].image} style={styles.tank} resizeMode='stretch'/>
                     </View>
                 </View>
 
@@ -98,6 +113,7 @@ function LockScreen({navigation}: {navigation: any}) {
                                     totalDuration = newDuration.hours * 3600 + newDuration.minutes * 60 + newDuration.seconds;
                                     setButtonVisible(false);
                                     setShowPicker(false);
+                                    setDisplayImage(0);
                                 }
                             }
                         } style={styles.buttonStart}>
@@ -114,7 +130,11 @@ function LockScreen({navigation}: {navigation: any}) {
                             timestamp={totalDuration}
                             containerStyle={styles.countdown}
                             textStyle={styles.countdownText}
-                            timerCallback={() => ''}/>
+                            timerCallback={() => {
+                                setButtonVisible(true);
+                                setShowPicker(true);
+                                setDisplayImage(BaseGacha());
+                            }}/>
                     </View>
                 ) : null}
                 
@@ -131,6 +151,35 @@ function LockScreen({navigation}: {navigation: any}) {
                         </TouchableOpacity>
                     </View>
                 ) : null}
+
+                <View style={styles.centeredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert('Modal has been closed.');
+                            setModalVisible(!modalVisible);
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Green Frog 65%</Text>
+                            <Text style={styles.modalText}>Blue Frog 30%</Text>
+                            <Text style={styles.modalText}>Ocean Frog 5%</Text>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.textStyle}>Exit</Text>
+                            </Pressable>
+                            </View>
+                        </View>
+                    </Modal>
+                    <Pressable
+                        style={[styles.button, styles.buttonOpen]}
+                        onPress={() => setModalVisible(true)}>
+                        <Text style={styles.textStyle}>Show Odds</Text>
+                    </Pressable>
+                </View>
             </View>
 
             {/* Space reserved for navbar */}
@@ -211,4 +260,45 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         letterSpacing: 1,
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: '#9AC99B',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+      },
+      buttonOpen: {
+        backgroundColor: '#C8B88A',
+      },
+      buttonClose: {
+        backgroundColor: '#C8B88A',
+      },
+      textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+      },
 });
