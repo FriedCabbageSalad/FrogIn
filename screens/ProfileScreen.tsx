@@ -26,7 +26,7 @@ function dimensions() {
   return { _borderRadius, _height, _width }
 }
 
-function ProfileScreen({ navigation}: {navigation: any}) {
+function ProfileScreen({navigation}: {navigation: any}) {
   const pfpDirectory = pfpDirectories[1].image;
   return (
     <View style={styles.background}>

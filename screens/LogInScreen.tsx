@@ -72,7 +72,7 @@ function dimensions() {
   return { _height, _width }
 }
 
-function LogInScreen({ navigation}: {navigation: any}) {
+function LogInScreen({navigation}: {navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const [text2, onChangeText2] = React.useState('');
   const Separator = () => <View style={styles.separator} />;
@@ -117,7 +117,8 @@ function LogInScreen({ navigation}: {navigation: any}) {
                     auth()
                     .signInWithEmailAndPassword(text, text2)
                     .then(() => {
-                      console.log('signed in!');
+                      //success
+                      navigation.navigate('Home')
                     })
                     .catch(error => {
                       if (error.code === 'auth/invalid-email') {
@@ -130,9 +131,11 @@ function LogInScreen({ navigation}: {navigation: any}) {
                         showAlertAction('Account not found','','Sign Up for FrogIn',() => navigation.navigate('SignUp'));
                       }
                       else {
-                        //showAlert('Error','','OK');
+                        console.error(error);
                       }
-                      console.error(error);
+                    })
+                    .then(() => {
+                      
                     });
                   }
                   }}/>
@@ -150,8 +153,7 @@ function LogInScreen({ navigation}: {navigation: any}) {
 
             {/* Google sign up button */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.575, justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
-            
-              <TouchableOpacity style={styles.googleButton} onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}>
+              <TouchableOpacity style={styles.googleButton} onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Home'))}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                   <Image source={require('./../assets/google.jpg')} style={{height: '150%', width: '10%'}} resizeMode='contain'/>
                   <Text style={{color: 'black', paddingHorizontal: '2%'}}>Google</Text>

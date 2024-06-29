@@ -29,7 +29,7 @@ function dimensions() {
     return { _borderRadius, _height, _width }
 }
 
-function LockScreen({ navigation}: {navigation: any}) {
+function LockScreen({navigation}: {navigation: any}) {
 
     const [timerEnd, setTimerEnd] = useState(false);
     const [buttonVisible, setButtonVisible] = useState(true);

@@ -11,6 +11,8 @@ import {
   Dimensions
 } from 'react-native';
 
+import auth from '@react-native-firebase/auth';
+
 const { height, width } = Dimensions.get('window')
 
 function dimensions() {
@@ -21,7 +23,9 @@ function dimensions() {
   return { _height, _width }
 }
 
-function PasswordScreen({ navigation}: {navigation: any}) {
+function PasswordScreen({route, navigation}: {route: any, navigation: any}) {
+  //email from previous screen
+  const text4 = route.params.emailstring;
   // text = Username, text2 = password, text 3 is confirm password
   const [text, onChangeText] = React.useState('');
   const [text2, onChangeText2] = React.useState('');
@@ -60,7 +64,16 @@ function PasswordScreen({ navigation}: {navigation: any}) {
             <Separator/>
             
             {/* Confirmation Button */}
-            <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.navigate('')}>
+            <TouchableOpacity style={styles.signUpButton} onPress={() => {
+              auth()
+              .createUserWithEmailAndPassword(text4, text2)
+              .then(() => {
+                console.log('User account created & signed in!');
+              })
+              .catch(error => {
+                console.error(error);
+              });
+            }}>
                 <Text style={{color: 'white', paddingHorizontal: '2%', justifyContent: 'center', alignItems: 'center' }}>Sign Up</Text>
             </TouchableOpacity>
 
