@@ -50,7 +50,7 @@ function FriendsListScreen({navigation}: {navigation: any}) {
                 </TouchableOpacity>
             </View>
             <Text style={styles.title}>Friend's List</Text>
-            <Text style={styles.friendTotal}>5 friends</Text>
+            <Text style={styles.friendTotal}> friends</Text>
         </View>
 
         {/* Friend List */}

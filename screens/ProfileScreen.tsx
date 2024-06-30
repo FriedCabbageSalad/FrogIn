@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {useRef, useState} from 'react';
-
 import {
   View,
   Text,
@@ -16,6 +15,8 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import { UpdateProfile } from './HomeScreen.tsx'
 
 const { height, width } = Dimensions.get('window')
 const pfpDirectories = [
@@ -35,7 +36,7 @@ function dimensions() {
   return { _borderRadius, _height, _width }
 }
 
-function ProfileScreen({navigation}: {navigation: any}) {
+function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
   const pfpDirectory = pfpDirectories[1].image;
   const [modalVisible, setModalVisible] = useState(false);
   const [text, onChangeText] = React.useState('');
@@ -45,11 +46,11 @@ function ProfileScreen({navigation}: {navigation: any}) {
       <View style={{flex: 1}}>
         {/* Top Banner */}
         <View style={styles.banner}>
-          {/* Name */}
+          {/* Friendly UID */}
           <Text style={{fontSize: 20, margin: 10, color: 'white', fontWeight: '300', position: 'absolute', top: 0, left: 0}}>
-            0000-0000
+            {/*turns friendlyUID into xxxx-xxxx*/}
+            {("00000000" + route.params.userdata[2].toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")}
           </Text>
-
           {/* Friends List Button */}
           <TouchableOpacity style={styles.friendsListButton} 
             onPress={() => navigation.navigate('FriendsList')}>
@@ -69,7 +70,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
         <View style={{alignItems: 'center', alignSelf: 'center', justifyContent: 'center', position: 'absolute', top: dimensions()._height * 0.29, flexDirection: 'row'}}>
           <View>
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
-                John Smith
+              {route.params.userdata[1]}
             </Text>
           </View>
         
@@ -80,7 +81,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
               transparent={true}
               visible={modalVisible}
               onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
+              //Alert.alert('Modal has been closed.');
               setModalVisible(!modalVisible);
             }}>
               <View style={styles.centeredView}>
@@ -109,7 +110,11 @@ function ProfileScreen({navigation}: {navigation: any}) {
                     {/* Confirm Change Username Button */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
-                        onPress={() => ''}>
+                        onPress={() => {
+                          firestore().collection('UserData').doc(route.params.userdata[0]).update({name: text})
+                          setModalVisible(!modalVisible)
+                          UpdateProfile(1, text);
+                        }}>
                         <Text style={styles.textStyle}>Change Username</Text>
                     </Pressable>
                   </View>

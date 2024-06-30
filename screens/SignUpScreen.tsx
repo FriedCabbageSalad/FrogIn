@@ -124,6 +124,7 @@ function SignUpScreen({navigation}: {navigation: any}) {
                   }
                   console.error(error);
                 })
+                //success
                 .then(() => navigation.navigate('Password', {emailstring: text}))
                 };
               }}/>
@@ -141,8 +142,7 @@ function SignUpScreen({navigation}: {navigation: any}) {
 
         {/* Google sign up button */}
         <View style={{position: 'absolute', top: dimensions()._height * 0.515, justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
-
-          <TouchableOpacity style={styles.googleButton} onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Home'))}>
+          <TouchableOpacity style={styles.googleButton} onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Home'))}>{/*success*/}
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
               <Image source={require('./../assets/google.jpg')} style={{height: '150%', width: '10%'}} resizeMode='contain'/>
               <Text style={{color: 'black', paddingHorizontal: '2%'}}>Google</Text>
