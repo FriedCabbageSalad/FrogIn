@@ -4,10 +4,17 @@ import { Button, View, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
+//page store for userdata
+let ud : any[];
+export function UpdateProfile(index: number, data: string) {
+  ud[index] = data
+}
+
 function HomeScreen({navigation}: {navigation: any}) {
+
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<any>([]);
 
   // Handle user state changes
   function onAuthStateChanged(user: any) {
@@ -42,18 +49,32 @@ function HomeScreen({navigation}: {navigation: any}) {
 
   //user logged in
   if (user) {
+    
     // gets userdata from server and create userdata if it doesnt exist
     const userdata = firestore().collection('UserData').doc(user.uid).get().then(documentSnapshot => {
       if (!documentSnapshot.exists) {
           firestore().collection('UserData').get().then(querySnapshot => {
-            console.error('Total users: ', querySnapshot.size);
-            firestore().collection('UserData').doc(user.uid).set({UID:user.uid, name:"test", friendlyUID: querySnapshot.size, mins: 0, frogs: 0, achievements: [0], friends: ["Johnny", 0]})
+            firestore().collection('UserData').doc(user.uid).set({UID:user.uid, name:"test", friendlyUID: querySnapshot.size, mins: 0, frogs: [0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})
           })
         }
       return firestore().collection('UserData').doc(user.uid).get()
     })
-    .then(documentSnapshot => documentSnapshot.data());
 
+    //parse userdata into arrays of array to send to other screens
+    async function parseud() {
+      ud = [
+        await userdata.then(documentSnapshot => documentSnapshot.get("UID")),
+        await userdata.then(documentSnapshot => documentSnapshot.get("name")),
+        await userdata.then(documentSnapshot => documentSnapshot.get("friendlyUID")),
+        await userdata.then(documentSnapshot => documentSnapshot.get("mins")),
+        await userdata.then(documentSnapshot => documentSnapshot.get("frogs")),
+        await userdata.then(documentSnapshot => documentSnapshot.get("achievements")),
+        await userdata.then(documentSnapshot => documentSnapshot.get("friends")),
+      ];
+      console.log(ud[1]);
+    }
+    parseud();
+    
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{fontSize: 40}}>WORK IN PROGRESS</Text>
@@ -72,13 +93,13 @@ function HomeScreen({navigation}: {navigation: any}) {
           onPress={() => navigation.navigate('Settings')}/>
 
         <Button title="Lock"
-          onPress={() => navigation.navigate('Lock', {userdata: userdata})}/>
+          onPress={() => navigation.navigate('Lock')}/>
 
         <Button title="Profile"
-          onPress={() => navigation.navigate('Profile', {userdata: userdata})}/>
+          onPress={() => navigation.navigate('Profile', {userdata: ud})}/>
 
         <Button title="FriendsList"
-          onPress={() => navigation.navigate('FriendsList', {userdata: userdata})}/>
+          onPress={() => navigation.navigate('FriendsList')}/>
 
         <Button title="Log Out"
           onPress={() => auth()
