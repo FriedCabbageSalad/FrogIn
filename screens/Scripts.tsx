@@ -1,15 +1,16 @@
-import * as React from 'react';
-import { Button, View, Text } from 'react-native';
+export const frogDirectories = [
+    {image: require('./../assets/tank_with_egg.png')},
+    {image: require('./../assets/frogs/default_frog.png')},
+    {image: require('./../assets/frogs/blue_frog.png')},
+    {image: require('./../assets/frogs/ocean_frog.png')},
+    {image: require('./../assets/frogs/gray_frog.png')},
+    {image: require('./../assets/frogs/purple_frog.png')},
+    {image: require('./../assets/frogs/red_frog.png')},
+  ]
 
-function GachaNumberGenerator() {
+  function GachaNumberGenerator() {
     return Math.floor(Math.random() * 100);
 }
-
-// const frogDirectories = [
-//     {image: require('./../assets/frogs/default_frog.png')},
-//     {image: require('./../assets/frogs/blue_frog.png')},
-//     {image: require('./../assets/frogs/ocean_frog.png')},
-//   ]
 
 // Green Frog 65%
 // Blue Frog 30%

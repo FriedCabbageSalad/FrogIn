@@ -11,6 +11,7 @@ import PasswordScreen from './screens/PasswordScreen';
 import LockScreen from './screens/LockScreen';
 import ProfileScreen from './screens/ProfileScreen'
 import FriendsListScreen from './screens/FriendsListScreen';
+import FrogPondScreen from './screens/FrogPondScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ function App() {
         <Stack.Screen name="Lock" component={LockScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="FriendsList" component={FriendsListScreen} />
+        <Stack.Screen name="FrogPond" component={FrogPondScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
