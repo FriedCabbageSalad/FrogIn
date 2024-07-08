@@ -14,7 +14,7 @@ import {
 
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
-import { BaseGacha } from './../FrogGacha.tsx'
+import { frogDirectories, BaseGacha } from './../screens/Scripts.tsx'
 
 
 const Separator = () => <View style={{marginVertical: '2%'}}/>;
@@ -27,12 +27,6 @@ var newDuration = {
 };
 var totalDuration = 0;
 
-const frogDirectories = [
-    {image: require('./../assets/tank_with_egg.png')},
-    {image: require('./../assets/frogs/default_frog.png')},
-    {image: require('./../assets/frogs/blue_frog.png')},
-    {image: require('./../assets/frogs/ocean_frog.png')},
-  ]
 
 function dimensions() {
 

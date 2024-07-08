@@ -6,7 +6,8 @@ import firestore from '@react-native-firebase/firestore';
 
 //page store for userdata
 let ud : any[];
-export function UpdateProfile(index: number, data: string) {
+
+export function UpdateProfile(index: number, data: any) {
   ud[index] = data
 }
 
@@ -55,8 +56,7 @@ function HomeScreen({navigation}: {navigation: any}) {
       if (!documentSnapshot.exists) {
           firestore().collection('UserData').get().then(querySnapshot => {
             firestore().collection('UserData').doc(user.uid).set({UID:user.uid, name:"test", friendlyUID: querySnapshot.size, mins: 0, frogs: [0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})
-          })
-        }
+          })}
       return firestore().collection('UserData').doc(user.uid).get()
     })
 
@@ -79,15 +79,17 @@ function HomeScreen({navigation}: {navigation: any}) {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{fontSize: 40}}>WORK IN PROGRESS</Text>
         <Text style={{fontSize: 20}}>This is a Test Home Screen</Text>
+        <Text style={{fontSize: 20}}>Welcome</Text>
 
-        <Button title="Log In"
+        {/* <Button title="Log In"
           onPress={() => navigation.navigate('LogIn')}/>
         
         <Button title="Sign Up"
           onPress={() => navigation.navigate('SignUp')}/>
         
         <Button title="Password"
-          onPress={() => navigation.navigate('Password')}/>
+          onPress={() => navigation.navigate('Password')}/> */}
+
 
         <Button title="Settings"
           onPress={() => navigation.navigate('Settings')}/>
@@ -96,10 +98,17 @@ function HomeScreen({navigation}: {navigation: any}) {
           onPress={() => navigation.navigate('Lock')}/>
 
         <Button title="Profile"
-          onPress={() => navigation.navigate('Profile', {userdata: ud})}/>
+          onPress={() => {
+            parseud()
+            navigation.navigate('Profile', {userdata: ud})
+          }}/>
 
         <Button title="FriendsList"
           onPress={() => navigation.navigate('FriendsList')}/>
+
+
+        <Button title="FrogPond"
+          onPress={() => navigation.navigate('FrogPond')}/>
 
         <Button title="Log Out"
           onPress={() => auth()

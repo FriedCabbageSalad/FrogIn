@@ -17,13 +17,9 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { UpdateProfile } from './HomeScreen.tsx'
+import { frogDirectories } from './../screens/Scripts.tsx'
 
 const { height, width } = Dimensions.get('window')
-const pfpDirectories = [
-  {image: require('./../assets/frogs/default_frog.png')},
-  {image: require('./../assets/frogs/blue_frog.png')},
-  {image: require('./../assets/frogs/ocean_frog.png')},
-]
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
 const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
 
@@ -37,9 +33,10 @@ function dimensions() {
 }
 
 function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
-  const pfpDirectory = pfpDirectories[1].image;
-  const [modalVisible, setModalVisible] = useState(false);
+  const [usernameModalVisible, setUsernameModalVisible] = useState(false);
+  const [pfpModalVisible, setPFPModalVisible] = useState(false);
   const [text, onChangeText] = React.useState('');
+  const [displayImage, setDisplayImage] = useState(1);
 
   return (
     <View style={styles.background}>
@@ -62,12 +59,152 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
         <View style={styles.pfpOuterFrame}>
           <View style={styles.pfpInnerFrame}>
             {/* Profile Picture Location */}
-            <Image source={pfpDirectory} resizeMode='contain' style={styles.pfp}/>
+            <Image source={frogDirectories[displayImage].image} resizeMode='contain' style={styles.pfp}/>
             </View>
         </View>
 
         {/* Username */}
         <View style={{alignItems: 'center', alignSelf: 'center', justifyContent: 'center', position: 'absolute', top: dimensions()._height * 0.29, flexDirection: 'row'}}>
+        
+        {/* Change Profile Picture Button */}
+        <View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={pfpModalVisible}
+              onRequestClose={() => {
+              setPFPModalVisible(!pfpModalVisible);
+            }}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  
+                  <View style={{flexDirection: 'row'}}>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        setDisplayImage(1);
+                        }}>
+                        <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                    </Pressable>
+
+                    <SeparatorHorizontal/>
+
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                          setPFPModalVisible(!pfpModalVisible);
+                          setDisplayImage(2);
+                          }}>
+                        <Image source={require('./../assets/frogs/blue_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                    </Pressable>
+
+                    <SeparatorHorizontal/>
+
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                          setPFPModalVisible(!pfpModalVisible);
+                          setDisplayImage(3);
+                          }}>
+                        <Image source={require('./../assets/frogs/ocean_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                    </Pressable>
+
+                  </View>
+
+                  <SeparatorVertical/>
+
+                  <View style={{flexDirection: 'row'}}>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        setDisplayImage(4);
+                        }}>
+                        <Image source={require('./../assets/frogs/gray_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                    </Pressable>
+
+                    <SeparatorHorizontal/>
+
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                          setPFPModalVisible(!pfpModalVisible);
+                          setDisplayImage(5);
+                          }}>
+                        <Image source={require('./../assets/frogs/purple_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                    </Pressable>
+
+                    <SeparatorHorizontal/>
+
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                          setPFPModalVisible(!pfpModalVisible);
+                          setDisplayImage(6);
+                          }}>
+                        <Image source={require('./../assets/frogs/red_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                    </Pressable>
+
+                  </View>
+
+                  <SeparatorVertical/>
+
+                  <View style={{flexDirection: 'row'}}>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        setDisplayImage(0);
+                        }}>
+                        <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                    </Pressable>
+
+                    <SeparatorHorizontal/>
+
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                          setPFPModalVisible(!pfpModalVisible);
+                          setDisplayImage(1);
+                          }}>
+                        <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                    </Pressable>
+
+                    <SeparatorHorizontal/>
+
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                          setPFPModalVisible(!pfpModalVisible);
+                          setDisplayImage(2);
+                          }}>
+                        <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                    </Pressable>
+
+                  </View>
+
+                  <SeparatorVertical/>
+
+                  <View style={{flexDirection: 'row'}}>
+                    {/* Exit Modal Button */}
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => setPFPModalVisible(!pfpModalVisible)}>
+                        <Text style={styles.textStyle}>Exit</Text>
+                    </Pressable>
+
+                  </View>
+                </View>
+              </View>
+            </Modal>
+
+            <Pressable
+              onPress={() => setPFPModalVisible(true)}>
+              <Image source={require('./../assets/edit_image.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
+            </Pressable>
+          </View>  
+
           <View>
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
               {route.params.userdata[1]}
@@ -79,10 +216,10 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
             <Modal
               animationType="slide"
               transparent={true}
-              visible={modalVisible}
+              visible={usernameModalVisible}
               onRequestClose={() => {
               //Alert.alert('Modal has been closed.');
-              setModalVisible(!modalVisible);
+              setUsernameModalVisible(!usernameModalVisible);
             }}>
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
@@ -101,7 +238,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                     {/* Exit Modal Button */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}>
+                        onPress={() => setUsernameModalVisible(!usernameModalVisible)}>
                         <Text style={styles.textStyle}>Exit</Text>
                     </Pressable>
 
@@ -112,8 +249,9 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           firestore().collection('UserData').doc(route.params.userdata[0]).update({name: text})
-                          setModalVisible(!modalVisible)
                           UpdateProfile(1, text);
+                          route.params.userdata[1] = text;
+                          setUsernameModalVisible(!usernameModalVisible)
                         }}>
                         <Text style={styles.textStyle}>Change Username</Text>
                     </Pressable>
@@ -123,7 +261,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
             </Modal>
 
             <Pressable
-              onPress={() => setModalVisible(true)}>
+              onPress={() => setUsernameModalVisible(true)}>
               <Image source={require('./../assets/edit_pencil.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
             </Pressable>
 
@@ -268,4 +406,8 @@ const styles = StyleSheet.create({
     borderRadius: 8.5,
     backgroundColor: 'white'
   },
+  pfpModal: {
+    height: dimensions()._height * 0.05,
+    width: dimensions()._height * 0.05
+  }
 });

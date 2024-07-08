@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { 
+  Alert,
   Button,
   View,
   Text,
@@ -22,6 +23,18 @@ function dimensions() {
 
   return { _height, _width }
 }
+
+const showAlert = (title : string, msg : string, button : string) =>
+  Alert.alert(
+    title,
+    msg,
+    [
+      {
+        text: button,
+        style: 'default',
+      },
+    ],
+  );
 
 function PasswordScreen({route, navigation}: {route: any, navigation: any}) {
   //email from previous screen
@@ -65,14 +78,29 @@ function PasswordScreen({route, navigation}: {route: any, navigation: any}) {
             
             {/* Confirmation Button */}
             <TouchableOpacity style={styles.signUpButton} onPress={() => {
-              auth()
-              .createUserWithEmailAndPassword(text4, text2)
-              .then(() => {
-                console.log('User account created & signed in!');
-              })
-              .catch(error => {
-                console.error(error);
-              });
+
+              if (text2 == "" || text3 == "") {
+                showAlert("Please enter a password", "", "OK")
+              }
+              else if(text2 != text3) {
+                showAlert("Passwords do not match", "", "OK")
+              }
+              else if(text == "") {
+                showAlert("Name cannot be empty", "", "OK")
+              }
+              else {
+                auth()
+                .createUserWithEmailAndPassword(text4, text2)
+                .then(() => {
+                  // success
+                  navigation.navigate('Home')
+                })
+                .catch(error => {
+                  if (error.code === 'auth/weak-password') {
+                    showAlert("Weak Password","Your password is too weak! Choose a longer one","OK")
+                  };
+                })
+            };
             }}>
                 <Text style={{color: 'white', paddingHorizontal: '2%', justifyContent: 'center', alignItems: 'center' }}>Sign Up</Text>
             </TouchableOpacity>
