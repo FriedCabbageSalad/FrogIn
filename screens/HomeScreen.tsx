@@ -6,6 +6,7 @@ import firestore from '@react-native-firebase/firestore';
 
 //page store for userdata
 let ud : any[];
+
 export function UpdateProfile(index: number, data: any) {
   ud[index] = data
 }
@@ -89,6 +90,7 @@ function HomeScreen({navigation}: {navigation: any}) {
         <Button title="Password"
           onPress={() => navigation.navigate('Password')}/> */}
 
+
         <Button title="Settings"
           onPress={() => navigation.navigate('Settings')}/>
 
@@ -103,6 +105,7 @@ function HomeScreen({navigation}: {navigation: any}) {
 
         <Button title="FriendsList"
           onPress={() => navigation.navigate('FriendsList')}/>
+
 
         <Button title="FrogPond"
           onPress={() => navigation.navigate('FrogPond')}/>
