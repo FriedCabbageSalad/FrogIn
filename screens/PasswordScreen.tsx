@@ -69,6 +69,7 @@ function PasswordScreen({route, navigation}: {route: any, navigation: any}) {
             
             {/* Confirmation Button */}
             <TouchableOpacity style={styles.signUpButton} onPress={() => {
+
               if (text2 == "" || text3 == "") {
                 showAlert("Please enter a password", "", "OK")
               }
