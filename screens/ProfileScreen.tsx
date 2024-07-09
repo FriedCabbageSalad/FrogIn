@@ -17,20 +17,10 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { UpdateProfile } from './HomeScreen.tsx'
-import { frogDirectories } from './../screens/Scripts.tsx'
+import { frogDirectories, defaultFrogIndex, dimensions } from './../screens/Scripts.tsx'
 
-const { height, width } = Dimensions.get('window')
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
 const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
-
-function dimensions() {
-
-  var _borderRadius = Math.round((height + width) / 2),
-      _height = Math.round(height),
-      _width = Math.round(width)
-
-  return { _borderRadius, _height, _width }
-}
 
 function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
   const [usernameModalVisible, setUsernameModalVisible] = useState(false);
@@ -83,7 +73,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                         setPFPModalVisible(!pfpModalVisible);
-                        setDisplayImage(1);
+                        setDisplayImage(defaultFrogIndex);
                         }}>
                         <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
@@ -94,7 +84,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(2);
+                          setDisplayImage(defaultFrogIndex + 1);
                           }}>
                         <Image source={require('./../assets/frogs/blue_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
@@ -105,7 +95,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(3);
+                          setDisplayImage(defaultFrogIndex + 2);
                           }}>
                         <Image source={require('./../assets/frogs/ocean_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
@@ -119,7 +109,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                         setPFPModalVisible(!pfpModalVisible);
-                        setDisplayImage(4);
+                        setDisplayImage(defaultFrogIndex + 3);
                         }}>
                         <Image source={require('./../assets/frogs/gray_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
@@ -130,7 +120,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(5);
+                          setDisplayImage(defaultFrogIndex + 4);
                           }}>
                         <Image source={require('./../assets/frogs/purple_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
@@ -141,7 +131,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(6);
+                          setDisplayImage(defaultFrogIndex + 5);
                           }}>
                         <Image source={require('./../assets/frogs/red_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
@@ -155,9 +145,9 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                         setPFPModalVisible(!pfpModalVisible);
-                        setDisplayImage(0);
+                        setDisplayImage(defaultFrogIndex + 6);
                         }}>
-                        <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                        <Image source={require('./../assets/frogs/white_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                     <SeparatorHorizontal/>
@@ -166,9 +156,9 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(1);
+                          setDisplayImage(defaultFrogIndex + 7);
                           }}>
-                        <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                        <Image source={require('./../assets/frogs/dark_gray_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                     <SeparatorHorizontal/>
@@ -177,9 +167,9 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(2);
+                          setDisplayImage(defaultFrogIndex + 8);
                           }}>
-                        <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                        <Image source={require('./../assets/frogs/brown_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                   </View>

@@ -13,16 +13,7 @@ import {
 } from 'react-native';
 
 import auth from '@react-native-firebase/auth';
-
-const { height, width } = Dimensions.get('window')
-
-function dimensions() {
-
-  var _height = Math.round(height),
-      _width = Math.round(width)
-
-  return { _height, _width }
-}
+import { dimensions } from './../screens/Scripts.tsx'
 
 const showAlert = (title : string, msg : string, button : string) =>
   Alert.alert(
