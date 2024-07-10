@@ -24,7 +24,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
   const [usernameModalVisible, setUsernameModalVisible] = useState(false);
   const [pfpModalVisible, setPFPModalVisible] = useState(false);
   const [text, onChangeText] = React.useState('');
-  const [displayImage, setDisplayImage] = useState(1);
+  const [displayImage, setDisplayImage] = useState(route.params.userdata[4]);
 
   return (
     <View style={styles.background}>
@@ -34,7 +34,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
           {/* Friendly UID */}
           <Text style={{fontSize: 20, margin: 10, color: 'white', fontWeight: '300', position: 'absolute', top: 0, left: 0}}>
             {/*turns friendlyUID into xxxx-xxxx*/}
-            {("00000000" + route.params.userdata[2].toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")}
+            {("00000000" + route.params.userdata[3].toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")}
           </Text>
           {/* Friends List Button */}
           <TouchableOpacity style={styles.friendsListButton} 
@@ -193,9 +193,10 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
             </Pressable>
           </View>  
 
+          {/* Username display */}
           <View>
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
-              {route.params.userdata[1]}
+              {route.params.userdata[2]}
             </Text>
           </View>
         
@@ -206,7 +207,6 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
               transparent={true}
               visible={usernameModalVisible}
               onRequestClose={() => {
-              //Alert.alert('Modal has been closed.');
               setUsernameModalVisible(!usernameModalVisible);
             }}>
               <View style={styles.centeredView}>
@@ -239,11 +239,11 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                           if (text != "") {
                             firestore().collection('UserData').doc(route.params.userdata[0]).update({name: text})
                             UpdateProfile(1, text);
-                            route.params.userdata[1] = text;
+                            route.params.userdata[2] = text;
                             setUsernameModalVisible(!usernameModalVisible)
                           }
                           else {
-                            
+                            showAlert('Please enter a username','','OK')
                           }
                         }}>
                         <Text style={styles.textStyle}>Change Username</Text>
