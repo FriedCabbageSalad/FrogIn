@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button, View, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {defaultFrogIndex} from './../screens/Scripts.tsx'
 
 //page store for userdata
 let ud : any[];
@@ -57,14 +58,15 @@ function HomeScreen({navigation}: {navigation: any}) {
         // if userdata doesnt exis, create, and update ud
         if (!documentSnapshot.exists) {
             firestore().collection('UserData').get().then(querySnapshot => {
-              firestore().collection('UserData').doc(user.uid).set({uid:user.uid, name: "user " + querySnapshot.size, fuid: querySnapshot.size, pfp: 0, mins: 0, frogs: [0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})
-              ud = [user.uid, "user " + querySnapshot.size, querySnapshot.size, 0, 0, [0], [0], ["John Smith", "0000-0000", 0]]
+              firestore().collection('UserData').doc(user.uid).set({uid:user.uid, email:user.email, name: "user " + querySnapshot.size, fuid: querySnapshot.size, pfp: defaultFrogIndex, mins: 0, frogs: [0,0,0,0,0,0,0,0,0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})
+              ud = [user.uid, user.email, "user " + querySnapshot.size, querySnapshot.size, defaultFrogIndex, 0, [0,0,0,0,0,0,0,0,0], [0], ["John Smith", "0000-0000", 0]]
             })
           }
           // else load data from document into ud
           else {
             ud = [
               documentSnapshot.get("uid"),
+              documentSnapshot.get("email"),
               documentSnapshot.get("name"),
               documentSnapshot.get("fuid"),
               documentSnapshot.get("pfp"),
@@ -94,7 +96,6 @@ function HomeScreen({navigation}: {navigation: any}) {
         <Button title="Password"
           onPress={() => navigation.navigate('Password')}/> */}
 
-
         <Button title="Settings"
           onPress={() => navigation.navigate('Settings')}/>
 
@@ -106,7 +107,6 @@ function HomeScreen({navigation}: {navigation: any}) {
 
         <Button title="FriendsList"
           onPress={() => navigation.navigate('FriendsList')}/>
-
 
         <Button title="FrogPond"
           onPress={() => navigation.navigate('FrogPond')}/>

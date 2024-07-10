@@ -4,20 +4,18 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   ScrollView,
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
   Image,
-  Alert,
   Modal,
   Pressable,
   TextInput,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { UpdateProfile } from './HomeScreen.tsx'
-import { frogDirectories, defaultFrogIndex, dimensions } from './../screens/Scripts.tsx'
+import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx'
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
 const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
@@ -26,7 +24,36 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
   const [usernameModalVisible, setUsernameModalVisible] = useState(false);
   const [pfpModalVisible, setPFPModalVisible] = useState(false);
   const [text, onChangeText] = React.useState('');
-  const [displayImage, setDisplayImage] = useState(1);
+  const [displayImage, setDisplayImage] = useState(route.params.userdata[4]);
+  const frogPFPList = [
+    require('./../assets/frogs/default_frog.png'),
+    require('./../assets/frogs/blue_frog.png'),
+    require('./../assets/frogs/ocean_frog.png'),
+    require('./../assets/frogs/gray_frog.png'),
+    require('./../assets/frogs/purple_frog.png'),
+    require('./../assets/frogs/red_frog.png'),
+    require('./../assets/frogs/white_frog.png'),
+    require('./../assets/frogs/dark_gray_frog.png'),
+    require('./../assets/frogs/brown_frog.png'),
+  ]
+
+  //function for showing available frogs when changing pfp
+  function frogDisplay(n : number) {
+    if (route.params.userdata[6][n] != 0) {
+      return frogPFPList[n]
+    }
+    else {
+      return require('./../assets/frogs/locked_frog.png')
+    }
+  }
+
+  //function when pfp changed
+  function updatePFP(n : number) {
+    route.params.userdata[4] = n + defaultFrogIndex
+    setDisplayImage(defaultFrogIndex + n);
+    UpdateProfile(4, n + defaultFrogIndex)
+    firestore().collection('UserData').doc(route.params.userdata[0]).update({pfp: n + defaultFrogIndex})
+  }
 
   return (
     <View style={styles.background}>
@@ -36,7 +63,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
           {/* Friendly UID */}
           <Text style={{fontSize: 20, margin: 10, color: 'white', fontWeight: '300', position: 'absolute', top: 0, left: 0}}>
             {/*turns friendlyUID into xxxx-xxxx*/}
-            {("00000000" + route.params.userdata[2].toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")}
+            {("00000000" + route.params.userdata[3].toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")}
           </Text>
           {/* Friends List Button */}
           <TouchableOpacity style={styles.friendsListButton} 
@@ -69,35 +96,40 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                 <View style={styles.modalView}>
                   
                   <View style={{flexDirection: 'row'}}>
+                    {/* icon 0, row 1, col 1 */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                         setPFPModalVisible(!pfpModalVisible);
-                        setDisplayImage(defaultFrogIndex);
+                        updatePFP(0);
                         }}>
                         <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                     <SeparatorHorizontal/>
 
+                    {/* icon 1, row 1, col 2 */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(defaultFrogIndex + 1);
-                          }}>
-                        <Image source={require('./../assets/frogs/blue_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                          if (route.params.userdata[6][1] != 0) {
+                            updatePFP(1)
+                          }}}>
+                          <Image source={frogDisplay(1)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                     <SeparatorHorizontal/>
 
+                    {/* icon 2, row 1, col 3 */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(defaultFrogIndex + 2);
-                          }}>
-                        <Image source={require('./../assets/frogs/ocean_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                          if (route.params.userdata[6][2] != 0) {
+                            updatePFP(2)
+                          }}}>
+                        <Image source={frogDisplay(2)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                   </View>
@@ -105,35 +137,41 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                   <SeparatorVertical/>
 
                   <View style={{flexDirection: 'row'}}>
+                    {/* icon 3, row 2, col 1 */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                         setPFPModalVisible(!pfpModalVisible);
-                        setDisplayImage(defaultFrogIndex + 3);
-                        }}>
-                        <Image source={require('./../assets/frogs/gray_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                        if (route.params.userdata[6][3] != 0) {
+                          updatePFP(3)
+                        }}}>
+                        <Image source={frogDisplay(3)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                     <SeparatorHorizontal/>
 
+                    {/* icon 4, row 2, col 2 */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(defaultFrogIndex + 4);
-                          }}>
-                        <Image source={require('./../assets/frogs/purple_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                          if (route.params.userdata[6][4] != 0) {
+                            updatePFP(4)
+                          }}}>
+                        <Image source={frogDisplay(4)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                     <SeparatorHorizontal/>
 
+                    {/* icon 5, row 2, col 3 */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(defaultFrogIndex + 5);
-                          }}>
-                        <Image source={require('./../assets/frogs/red_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                          if (route.params.userdata[6][5] != 0) {
+                            updatePFP(5)
+                          }}}>
+                        <Image source={frogDisplay(5)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                   </View>
@@ -141,35 +179,41 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                   <SeparatorVertical/>
 
                   <View style={{flexDirection: 'row'}}>
+                    {/* icon 6, row 3, col 1 */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                         setPFPModalVisible(!pfpModalVisible);
-                        setDisplayImage(defaultFrogIndex + 6);
-                        }}>
-                        <Image source={require('./../assets/frogs/white_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                        if (route.params.userdata[6][6] != 0) {
+                          updatePFP(6)
+                        }}}>
+                        <Image source={frogDisplay(6)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                     <SeparatorHorizontal/>
 
+                    {/* icon 7, row 3, col 2 */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(defaultFrogIndex + 7);
-                          }}>
-                        <Image source={require('./../assets/frogs/dark_gray_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                          if (route.params.userdata[6][7] != 0) {
+                            updatePFP(7)
+                          }}}>
+                        <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                     <SeparatorHorizontal/>
 
+                    {/* icon 8, row 3, col 3 */}
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          setDisplayImage(defaultFrogIndex + 8);
-                          }}>
-                        <Image source={require('./../assets/frogs/brown_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                          if (route.params.userdata[6][8] != 0) {
+                            updatePFP(8)
+                          }}}>
+                        <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                   </View>
@@ -195,9 +239,10 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
             </Pressable>
           </View>  
 
+          {/* Username display */}
           <View>
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
-              {route.params.userdata[1]}
+              {route.params.userdata[2]}
             </Text>
           </View>
         
@@ -208,7 +253,6 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
               transparent={true}
               visible={usernameModalVisible}
               onRequestClose={() => {
-              //Alert.alert('Modal has been closed.');
               setUsernameModalVisible(!usernameModalVisible);
             }}>
               <View style={styles.centeredView}>
@@ -238,10 +282,15 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
-                          firestore().collection('UserData').doc(route.params.userdata[0]).update({name: text})
-                          UpdateProfile(1, text);
-                          route.params.userdata[1] = text;
-                          setUsernameModalVisible(!usernameModalVisible)
+                          if (text != "") {
+                            firestore().collection('UserData').doc(route.params.userdata[0]).update({name: text})
+                            UpdateProfile(1, text);
+                            route.params.userdata[2] = text;
+                            setUsernameModalVisible(!usernameModalVisible)
+                          }
+                          else {
+                            showAlert('Please enter a username','','OK')
+                          }
                         }}>
                         <Text style={styles.textStyle}>Change Username</Text>
                     </Pressable>
