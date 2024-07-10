@@ -9,17 +9,21 @@ import {
     TouchableOpacity,
     Image
 } from 'react-native';
-import { frogDirectories, dimensions } from './../screens/Scripts.tsx'
+
+const { height, width } = Dimensions.get('window')
+
+function dimensions() {
+
+    var _height = Math.round(height),
+        _width = Math.round(width)
+  
+    return { _height, _width }
+  }
 
 function FrogPondScreen({navigation}: {navigation: any}) {
     return (
         <ImageBackground source={require('./../assets/frog_pond_background.png')} resizeMode='cover' style={styles.imageSizing}>
-            {/* Frog */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.4, left: dimensions()._width * 0.45}}>
-                <Image source={frogDirectories[3].image}/>
-            </View>
 
-            {/* Navbar */}
             <View style={styles.navbar}>
                 {/* button to profile */}
                 <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.25 - 40, width: 40, height: 40,}} 

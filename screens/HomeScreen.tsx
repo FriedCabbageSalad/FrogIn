@@ -51,29 +51,33 @@ function HomeScreen({navigation}: {navigation: any}) {
   //user logged in
   if (user) {
     
-    // gets userdata from server and create userdata if it doesnt exist
-    const userdata = firestore().collection('UserData').doc(user.uid).get().then(documentSnapshot => {
+  // userdata processing
+  function loadUD() { 
+    firestore().collection('UserData').doc(user.uid).get().then(documentSnapshot => {
+      // if userdata doesnt exis, create, and update ud
       if (!documentSnapshot.exists) {
           firestore().collection('UserData').get().then(querySnapshot => {
-            firestore().collection('UserData').doc(user.uid).set({UID:user.uid, name:"test", friendlyUID: querySnapshot.size, mins: 0, frogs: [0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})
-          })}
-      return firestore().collection('UserData').doc(user.uid).get()
+            firestore().collection('UserData').doc(user.uid).set({uid:user.uid, name: "user " + querySnapshot.size, fuid: querySnapshot.size, pfp: 0, mins: 0, frogs: [0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})
+            ud = [user.uid, "user " + querySnapshot.size, querySnapshot.size, 0, 0, [0], [0], ["John Smith", "0000-0000", 0]]
+          })
+        }
+        // else load data from document into ud
+        else {
+          ud = [
+            documentSnapshot.get("uid"),
+            documentSnapshot.get("name"),
+            documentSnapshot.get("fuid"),
+            documentSnapshot.get("pfp"),
+            documentSnapshot.get("mins"),
+            documentSnapshot.get("frogs"),
+            documentSnapshot.get("achievements"),
+            documentSnapshot.get("friends"),
+          ];
+        }
+        return documentSnapshot;
     })
-
-    //parse userdata into arrays of array to send to other screens
-    async function parseud() {
-      ud = [
-        await userdata.then(documentSnapshot => documentSnapshot.get("UID")),
-        await userdata.then(documentSnapshot => documentSnapshot.get("name")),
-        await userdata.then(documentSnapshot => documentSnapshot.get("friendlyUID")),
-        await userdata.then(documentSnapshot => documentSnapshot.get("mins")),
-        await userdata.then(documentSnapshot => documentSnapshot.get("frogs")),
-        await userdata.then(documentSnapshot => documentSnapshot.get("achievements")),
-        await userdata.then(documentSnapshot => documentSnapshot.get("friends")),
-      ];
-      console.log(ud[1]);
-    }
-    parseud();
+  }
+  loadUD();
     
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -98,14 +102,10 @@ function HomeScreen({navigation}: {navigation: any}) {
           onPress={() => navigation.navigate('Lock')}/>
 
         <Button title="Profile"
-          onPress={() => {
-            parseud()
-            navigation.navigate('Profile', {userdata: ud})
-          }}/>
+          onPress={() => {navigation.navigate('Profile', {userdata: ud})}}/>
 
         <Button title="FriendsList"
           onPress={() => navigation.navigate('FriendsList')}/>
-
 
         <Button title="FrogPond"
           onPress={() => navigation.navigate('FrogPond')}/>

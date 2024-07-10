@@ -14,17 +14,28 @@ import {
 
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
-import { frogDirectories, BaseGacha, defaultFrogIndex, dimensions } from './../screens/Scripts.tsx'
+import { frogDirectories, BaseGacha } from './../screens/Scripts.tsx'
 
 
 const Separator = () => <View style={{marginVertical: '2%'}}/>;
 
+const { height, width } = Dimensions.get('window')
 var newDuration = {
     hours: 0,
     minutes: 0,
     seconds: 0
 };
 var totalDuration = 0;
+
+
+function dimensions() {
+
+    var _borderRadius = Math.round((height + width) / 2),
+        _height = Math.round(height),
+        _width = Math.round(width)
+
+    return { _borderRadius, _height, _width }
+}
 
 function LockScreen({navigation}: {navigation: any}) {
 
