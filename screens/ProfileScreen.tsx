@@ -25,6 +25,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
   const [pfpModalVisible, setPFPModalVisible] = useState(false);
   const [text, onChangeText] = React.useState('');
   const [displayImage, setDisplayImage] = useState(route.params.userdata[4]);
+
   const frogPFPList = [
     require('./../assets/frogs/default_frog.png'),
     require('./../assets/frogs/blue_frog.png'),
@@ -54,6 +55,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
     UpdateProfile(4, n + defaultFrogIndex)
     firestore().collection('UserData').doc(route.params.userdata[0]).update({pfp: n + defaultFrogIndex})
   }
+
 
   return (
     <View style={styles.background}>
