@@ -94,7 +94,6 @@ function HomeScreen({navigation}: {navigation: any}) {
         <Button title="Password"
           onPress={() => navigation.navigate('Password')}/> */}
 
-
         <Button title="Settings"
           onPress={() => navigation.navigate('Settings')}/>
 
@@ -106,7 +105,6 @@ function HomeScreen({navigation}: {navigation: any}) {
 
         <Button title="FriendsList"
           onPress={() => navigation.navigate('FriendsList')}/>
-
 
         <Button title="FrogPond"
           onPress={() => navigation.navigate('FrogPond')}/>
