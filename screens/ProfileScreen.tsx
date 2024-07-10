@@ -4,20 +4,18 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   ScrollView,
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
   Image,
-  Alert,
   Modal,
   Pressable,
   TextInput,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { UpdateProfile } from './HomeScreen.tsx'
-import { frogDirectories, defaultFrogIndex, dimensions } from './../screens/Scripts.tsx'
+import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx'
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
 const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
@@ -238,10 +236,15 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
-                          firestore().collection('UserData').doc(route.params.userdata[0]).update({name: text})
-                          UpdateProfile(1, text);
-                          route.params.userdata[1] = text;
-                          setUsernameModalVisible(!usernameModalVisible)
+                          if (text != "") {
+                            firestore().collection('UserData').doc(route.params.userdata[0]).update({name: text})
+                            UpdateProfile(1, text);
+                            route.params.userdata[1] = text;
+                            setUsernameModalVisible(!usernameModalVisible)
+                          }
+                          else {
+                            
+                          }
                         }}>
                         <Text style={styles.textStyle}>Change Username</Text>
                     </Pressable>

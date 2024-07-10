@@ -1,21 +1,17 @@
 import React, {useRef, useState} from 'react';
-
 import { 
   View,
   Text,
   Image,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
   Alert,
   Modal,
   Pressable
 } from 'react-native';
-
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
 import { frogDirectories, BaseGacha, defaultFrogIndex, dimensions } from './../screens/Scripts.tsx'
-
 
 const Separator = () => <View style={{marginVertical: '2%'}}/>;
 

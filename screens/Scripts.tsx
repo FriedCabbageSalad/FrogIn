@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, Alert } from 'react-native';
 
 export const frogDirectories = [
     {image: require('./../assets/tank_with_egg.png')},
@@ -55,3 +55,28 @@ export function BaseGacha() {
             return 0
     }
 }
+
+export const showAlert = (title : string, msg : string, button : string) =>
+    Alert.alert(
+      title,
+      msg,
+      [
+        {
+          text: button,
+          style: 'default',
+        },
+      ],
+    );
+  
+export const showAlertAction = (title : string, msg : string, button : string, action : () => Function) =>
+      Alert.alert(
+        title,
+        msg,
+        [
+          {
+            text: button,
+            style: 'default',
+            onPress: action,
+          },
+        ],
+      );

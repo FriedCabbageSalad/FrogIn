@@ -1,8 +1,6 @@
 import * as React from 'react';
-
 import 
-{ Alert,
-  Button,
+{ Button,
   View,
   Text,
   ImageBackground,
@@ -10,10 +8,8 @@ import
   TextInput,
   StyleSheet,
   Image,
-  Dimensions
 } from 'react-native';
-
-import { dimensions } from './../screens/Scripts.tsx'
+import { dimensions, showAlert, showAlertAction} from './../screens/Scripts.tsx';
 import auth from '@react-native-firebase/auth';
 
 import {
@@ -37,31 +33,6 @@ async function onGoogleButtonPress() {
   // Sign-in the user with the credential
   return auth().signInWithCredential(googleCredential);
 }
-
-const showAlert = (title : string, msg : string, button : string) =>
-  Alert.alert(
-    title,
-    msg,
-    [
-      {
-        text: button,
-        style: 'default',
-      },
-    ],
-  );
-
-  const showAlertAction = (title : string, msg : string, button : string, action : () => Function) =>
-    Alert.alert(
-      title,
-      msg,
-      [
-        {
-          text: button,
-          style: 'default',
-          onPress: action,
-        },
-      ],
-    );
 
 function SignUpScreen({navigation}: {navigation: any}) {
   const [text, onChangeText] = React.useState('');
