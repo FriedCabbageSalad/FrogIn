@@ -57,14 +57,15 @@ function HomeScreen({navigation}: {navigation: any}) {
         // if userdata doesnt exis, create, and update ud
         if (!documentSnapshot.exists) {
             firestore().collection('UserData').get().then(querySnapshot => {
-              firestore().collection('UserData').doc(user.uid).set({uid:user.uid, name: "user " + querySnapshot.size, fuid: querySnapshot.size, pfp: 0, mins: 0, frogs: [0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})
-              ud = [user.uid, "user " + querySnapshot.size, querySnapshot.size, 0, 0, [0], [0], ["John Smith", "0000-0000", 0]]
+              firestore().collection('UserData').doc(user.uid).set({uid:user.uid, email:user.email, name: "user " + querySnapshot.size, fuid: querySnapshot.size, pfp: 3, mins: 0, frogs: [0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})
+              ud = [user.uid, user.email, "user " + querySnapshot.size, querySnapshot.size, 0, 0, [0], [0], ["John Smith", "0000-0000", 0]]
             })
           }
           // else load data from document into ud
           else {
             ud = [
               documentSnapshot.get("uid"),
+              documentSnapshot.get("email"),
               documentSnapshot.get("name"),
               documentSnapshot.get("fuid"),
               documentSnapshot.get("pfp"),

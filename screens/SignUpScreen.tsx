@@ -11,7 +11,6 @@ import
 } from 'react-native';
 import { dimensions, showAlert, showAlertAction} from './../screens/Scripts.tsx';
 import auth from '@react-native-firebase/auth';
-
 import {
   GoogleSignin,
   statusCodes,
@@ -23,7 +22,7 @@ GoogleSignin.configure({
 
 async function onGoogleButtonPress() {
   // Check if your device supports Google Play
-  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
   // Get the users ID token
   const { idToken } = await GoogleSignin.signIn();
 
