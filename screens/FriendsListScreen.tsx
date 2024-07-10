@@ -14,9 +14,21 @@ import {
     TextInput
 } from 'react-native';
 
-import { frogDirectories, dimensions } from './../screens/Scripts.tsx'
+const { height, width } = Dimensions.get('window')
 
-const pfpDirectory = frogDirectories[3].image;
+function dimensions() {
+    var _borderRadius = Math.round((height + width) / 2),
+        _height = Math.round(height),
+        _width = Math.round(width)
+    return { _borderRadius, _height, _width }
+}
+
+const pfpDirectories = [
+    {image: require('./../assets/frogs/default_frog.png')},
+    {image: require('./../assets/frogs/blue_frog.png')}
+  ]
+
+const pfpDirectory = pfpDirectories[1].image;
 
 function FriendsListScreen({navigation}: {navigation: any}) {
     const [text, onChangeText] = React.useState('');

@@ -13,7 +13,6 @@ import
   Dimensions
 } from 'react-native';
 
-import { dimensions } from './../screens/Scripts.tsx'
 import auth from '@react-native-firebase/auth';
 
 import {
@@ -62,6 +61,17 @@ const showAlert = (title : string, msg : string, button : string) =>
         },
       ],
     );
+
+const { height, width } = Dimensions.get('window')
+
+function dimensions() {
+
+  var _height = Math.round(height),
+      _width = Math.round(width)
+
+  return { _height, _width }
+}
+
 
 function SignUpScreen({navigation}: {navigation: any}) {
   const [text, onChangeText] = React.useState('');
