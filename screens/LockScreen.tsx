@@ -27,12 +27,51 @@ function LockScreen({navigation}: {navigation: any}) {
     const [timerEnd, setTimerEnd] = useState(false);
     const [buttonVisible, setButtonVisible] = useState(true);
     const [pickerVisible, setShowPicker] = useState(true);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [oddsModalVisible, setOddsModalVisible] = useState(false);
+    const [tutorialModalVisible, setTutorialModalVisible] = useState(false);
     const [displayImage, setDisplayImage] = useState(0);
     const timer = useRef();    
     
     return (
         <View style={styles.background}>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={tutorialModalVisible}
+                onRequestClose={() => {
+                setTutorialModalVisible(!tutorialModalVisible);
+            }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTitleText}>Tutorial</Text>
+                        <Text style={styles.modalText}>
+                            Welcome to the Lock Screen!
+                            Here you can set the amount of time you'd like to focus with the sliders.
+                        </Text>
+                        <Text style={styles.modalText}>
+                            Try your best to make it all way without leaving the app to receive a frog!
+                            The more time you focus for, the better your odds of receiving rarer frogs.
+                        </Text>
+                        <Text style={styles.modalText}>
+                            Be warned, leaving the app while the timer is ticking will have disastrous
+                            consequences for your amphibian pal.
+                        </Text>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setTutorialModalVisible(!tutorialModalVisible)}>
+                            <Text style={styles.textStyle}>Exit</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+
+            <View style={{position: 'absolute', right: 0, backgroundColor: '#C8B88A', borderRadius: 20, margin: 7}}>  
+                <Pressable
+                    onPress={() => setTutorialModalVisible(true)}>
+                    <Image source={require('./../assets/question_mark.png')} resizeMode='contain' style={{width: 25, height: 25}}/>
+                </Pressable>
+            </View>  
             {/* Container for rest */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.1, alignItems: 'center', alignSelf: 'center', justifyContent: 'center' }}>
                 
@@ -135,10 +174,10 @@ function LockScreen({navigation}: {navigation: any}) {
                     <Modal
                         animationType="slide"
                         transparent={true}
-                        visible={modalVisible}
+                        visible={oddsModalVisible}
                         onRequestClose={() => {
                             Alert.alert('Modal has been closed.');
-                            setModalVisible(!modalVisible);
+                            setOddsModalVisible(!oddsModalVisible);
                         }}>
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
@@ -147,7 +186,7 @@ function LockScreen({navigation}: {navigation: any}) {
                             <Text style={styles.modalText}>Ocean Frog 5%</Text>
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModalVisible(!modalVisible)}>
+                                onPress={() => setOddsModalVisible(!oddsModalVisible)}>
                                 <Text style={styles.textStyle}>Exit</Text>
                             </Pressable>
                             </View>
@@ -155,7 +194,7 @@ function LockScreen({navigation}: {navigation: any}) {
                     </Modal>
                     <Pressable
                         style={[styles.button, styles.buttonOpen]}
-                        onPress={() => setModalVisible(true)}>
+                        onPress={() => setOddsModalVisible(true)}>
                         <Text style={styles.textStyle}>Show Odds</Text>
                     </Pressable>
                 </View>
@@ -300,5 +339,13 @@ const styles = StyleSheet.create({
       modalText: {
         marginBottom: 15,
         textAlign: 'center',
+        fontSize: 18
+      },
+      modalTitleText: {
+        marginBottom: 15,
+        textAlign: 'center',
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: 'white'
       },
 });
