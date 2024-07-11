@@ -26,25 +26,13 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const [displayImage, setDisplayImage] = useState(route.params.userdata[4]);
 
-  const frogPFPList = [
-    require('./../assets/frogs/default_frog.png'),
-    require('./../assets/frogs/blue_frog.png'),
-    require('./../assets/frogs/ocean_frog.png'),
-    require('./../assets/frogs/gray_frog.png'),
-    require('./../assets/frogs/purple_frog.png'),
-    require('./../assets/frogs/red_frog.png'),
-    require('./../assets/frogs/white_frog.png'),
-    require('./../assets/frogs/dark_gray_frog.png'),
-    require('./../assets/frogs/brown_frog.png'),
-  ]
-
   //function for showing available frogs when changing pfp
   function frogDisplay(n : number) {
     if (route.params.userdata[6][n] != 0) {
-      return frogPFPList[n]
+      return frogDirectories[n + defaultFrogIndex].image
     }
     else {
-      return require('./../assets/frogs/locked_frog.png')
+      return frogDirectories[1].image
     }
   }
 
@@ -105,7 +93,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         setPFPModalVisible(!pfpModalVisible);
                         updatePFP(0);
                         }}>
-                        <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={styles.pfpModal}/>
+                        <Image source={frogDirectories[defaultFrogIndex].image} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
                     <SeparatorHorizontal/>
