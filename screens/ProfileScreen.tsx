@@ -44,6 +44,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
     firestore().collection('UserData').doc(route.params.userdata[0]).update({pfp: n + defaultFrogIndex})
   }
 
+  //function for showing alert when clicking locked pfp
   function frogLockedAlert() {
     showAlert('Frog not unlocked yet!','Grow more frogs to unlock this frog.','OK')
   }

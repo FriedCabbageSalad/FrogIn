@@ -15,7 +15,7 @@ export const frogDirectories = [
     {image: require('./../assets/frogs/brown_frog.png')},
   ]
 
-export const defaultFrogIndex = 3;
+export const defaultFrogIndex : number = 3;
 
 const { height, width } = Dimensions.get('window')
 export function dimensions() {
@@ -28,32 +28,45 @@ export function dimensions() {
 }
 
   function GachaNumberGenerator() {
-    return Math.floor(Math.random() * 100);
+    return Math.ceil(Math.random() * 100); //rolls 1 to 100
 }
 
-// Green Frog 65%
-// Blue Frog 30%
-// Ocean Frog 5%
-export function BaseGacha() {
-    const roll = GachaNumberGenerator();
-    console.log(roll);
-    switch (true) {
-        case (roll <= 5):
-            console.log("ocean");
-            return 3
-            break;
-        case (roll > 5 && roll <= 35):
-            console.log("blue");
-            return 2
-            break;
-        case (roll > 35):
-            console.log("green");
-            return 1
-            break;
-        default:
-            console.log("defaulted");
-            return 0
-    }
+//matrix to determine gacha rolls
+const gachamatrix : number[][] = [
+  //frogs 0 to 8, 100 acts as failsafe
+  [65,30, 5, 0, 0, 0, 0, 0, 0,100], //<30m
+  [30,20,20,10,10,10, 0, 0, 0,100], //30m to 1h
+  [20,10,10,15,15,15, 5, 5, 5,100], //1h to 2h
+  [ 0, 0,10,20,20,20,10,10,10,100], //>2h
+]
+
+//determines which category to roll in
+const cat = (sec : number) => {
+  switch (true) {
+    case (sec < 30*60): return 0
+    case (sec >= 30*60 && sec < 60*60): return 1
+    case (sec >= 60*60 && sec < 120*60): return 2
+    case (sec > 120*60): return 3
+    default: return 0
+  }}
+
+
+export function frogGacha(sec : number) {
+  var roll = GachaNumberGenerator()
+  console.log('roll' + roll)
+  var result = 0
+  var category = cat(sec)
+  while (roll > 0) {
+    roll = roll - gachamatrix[category][result]
+    if (roll <= 0) {
+      break
+    } else {
+      result++
+    }}
+    console.log('res' + result)
+  if (result = 9) {return defaultFrogIndex} //failsafe
+  //return result + defaultFrogIndex;
+  return 5;
 }
 
 export const showAlert = (title : string, msg : string, button : string) =>
@@ -66,7 +79,7 @@ export const showAlert = (title : string, msg : string, button : string) =>
           style: 'default',
         },
       ],
-    );
+    )
   
 export const showAlertAction = (title : string, msg : string, button : string, action : () => Function) =>
       Alert.alert(
@@ -79,4 +92,4 @@ export const showAlertAction = (title : string, msg : string, button : string, a
             onPress: action,
           },
         ],
-      );
+      )
