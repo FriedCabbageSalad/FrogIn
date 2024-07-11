@@ -26,7 +26,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const [displayImage, setDisplayImage] = useState(route.params.userdata[4]);
 
-  //function for checking available frogs when changing pfp
+  //function for showing available frogs when changing pfp
   function frogDisplay(n : number) {
     if (route.params.userdata[6][n] != 0) {
       return frogDirectories[n + defaultFrogIndex].image
@@ -121,7 +121,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                           setPFPModalVisible(!pfpModalVisible);
                           if (route.params.userdata[6][2] != 0) {
                             updatePFP(2)
-                          } else {showAlert('Frog not unlocked yet!','Grow more frogs to unlock this frog.','OK')}}}>
+                          } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(2)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
