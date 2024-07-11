@@ -4,7 +4,6 @@ import {
     View,
     Text,
     StyleSheet,
-    Dimensions,
     ImageBackground,
     ScrollView,
     SafeAreaView,
@@ -13,8 +12,7 @@ import {
     Image,
     TextInput
 } from 'react-native';
-
-import { frogDirectories, dimensions } from './../screens/Scripts.tsx'
+import { frogDirectories, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx'
 
 const pfpDirectory = frogDirectories[3].image;
 

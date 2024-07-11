@@ -26,7 +26,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const [displayImage, setDisplayImage] = useState(route.params.userdata[4]);
 
-  //function for checking available frogs when changing pfp
+  //function for showing available frogs when changing pfp
   function frogDisplay(n : number) {
     if (route.params.userdata[6][n] != 0) {
       return frogDirectories[n + defaultFrogIndex].image
@@ -43,6 +43,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
     UpdateProfile(4, n + defaultFrogIndex)
     firestore().collection('UserData').doc(route.params.userdata[0]).update({pfp: n + defaultFrogIndex})
   }
+
 
   return (
     <View style={styles.background}>
