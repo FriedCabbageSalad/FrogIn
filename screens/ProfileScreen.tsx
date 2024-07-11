@@ -44,6 +44,10 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
     firestore().collection('UserData').doc(route.params.userdata[0]).update({pfp: n + defaultFrogIndex})
   }
 
+  function frogLockedAlert() {
+    showAlert('Frog not unlocked yet!','Grow more frogs to unlock this frog.','OK')
+  }
+
   return (
     <View style={styles.background}>
       <View style={{flex: 1}}>
@@ -104,7 +108,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                           setPFPModalVisible(!pfpModalVisible);
                           if (route.params.userdata[6][1] != 0) {
                             updatePFP(1)
-                          }}}>
+                          } else {frogLockedAlert()}}}>
                           <Image source={frogDisplay(1)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
@@ -117,7 +121,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                           setPFPModalVisible(!pfpModalVisible);
                           if (route.params.userdata[6][2] != 0) {
                             updatePFP(2)
-                          }}}>
+                          } else {showAlert('Frog not unlocked yet!','Grow more frogs to unlock this frog.','OK')}}}>
                         <Image source={frogDisplay(2)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
@@ -133,7 +137,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         setPFPModalVisible(!pfpModalVisible);
                         if (route.params.userdata[6][3] != 0) {
                           updatePFP(3)
-                        }}}>
+                        } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(3)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
@@ -146,7 +150,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                           setPFPModalVisible(!pfpModalVisible);
                           if (route.params.userdata[6][4] != 0) {
                             updatePFP(4)
-                          }}}>
+                          } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(4)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
@@ -159,7 +163,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                           setPFPModalVisible(!pfpModalVisible);
                           if (route.params.userdata[6][5] != 0) {
                             updatePFP(5)
-                          }}}>
+                          } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(5)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
@@ -175,7 +179,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         setPFPModalVisible(!pfpModalVisible);
                         if (route.params.userdata[6][6] != 0) {
                           updatePFP(6)
-                        }}}>
+                        } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(6)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
@@ -188,7 +192,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                           setPFPModalVisible(!pfpModalVisible);
                           if (route.params.userdata[6][7] != 0) {
                             updatePFP(7)
-                          }}}>
+                          } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
@@ -201,7 +205,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                           setPFPModalVisible(!pfpModalVisible);
                           if (route.params.userdata[6][8] != 0) {
                             updatePFP(8)
-                          }}}>
+                          } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
                     </Pressable>
 
