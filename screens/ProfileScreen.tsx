@@ -18,6 +18,7 @@ import { UpdateProfile } from './HomeScreen.tsx'
 import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx'
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
+const SeparatorVerticalSmall = () => <View style={{marginVertical: '0.5%'}}/>;
 const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
 
 function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
@@ -306,13 +307,46 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
       {/* Achievements */}
       <SafeAreaView style={styles.scrollViewContainer}>
         <ScrollView style={{marginTop: 20}}>
-          <View style={styles.achievementContainer}></View>
-          <View style={styles.achievementContainer}></View>
-          <View style={styles.achievementContainer}></View>
-          <View style={styles.achievementContainer}></View>
-          <View style={styles.achievementContainer}></View>
-          <View style={styles.achievementContainer}></View>
-          <View style={styles.achievementContainer}></View>
+
+          <View style={styles.achievementContainer}>
+            <View>
+              {/* Achievement Name */}
+              <Text style={{color: '#478E6D', fontSize: 19, fontWeight: 'bold'}}>Focus Time 1</Text>
+              {/* Achievement Description */}
+              <Text style={{color: 'black'}}>Focus for 4 hours total</Text>
+            </View>
+
+            <View style={{position: 'absolute', right: 0, margin: 5, marginTop: 10}}>
+              {/* Locked/Unlocked? */}
+              <Image source={require('./../assets/tick.png')} resizeMode='contain' style={{position: 'absolute', right: 0, marginRight: 5, width: 30, height: 30}}/>
+            </View>
+
+            <View style={{position: 'absolute', right: 0, bottom: 0, margin: 10}}>
+              {/* Progress */}
+              <Text style={{color: '#AB9D78', fontSize: 16, fontWeight: 'bold'}}>4/4</Text>
+            </View>
+          </View>
+
+
+          <View style={styles.achievementLockedContainer}>
+            <View>
+              {/* Achievement Name */}
+              <Text style={{color: '#478E6D', fontSize: 19, fontWeight: 'bold'}}>Focus Time 2</Text>
+              {/* Achievement Description */}
+              <Text style={{color: 'black'}}>Focus for 10 hours total</Text>
+            </View>
+
+            <View style={{position: 'absolute', right: 0, margin: 5, marginTop: 10}}>
+              {/* Locked/Unlocked? */}
+              <Image source={require('./../assets/green_cross.png')} resizeMode='contain' style={{position: 'absolute', right: 0, marginRight: 5, width: 30, height: 30}}/>
+            </View>
+
+            <View style={{position: 'absolute', right: 0, bottom: 0, margin: 10}}>
+              {/* Progress */}
+              <Text style={{color: '#AB9D78', fontSize: 16, fontWeight: 'bold'}}>4/10</Text>
+            </View>
+          </View>
+
         </ScrollView>
       </SafeAreaView>
 
@@ -393,12 +427,20 @@ const styles = StyleSheet.create({
   },
   achievementContainer: {
     width: dimensions()._width * 0.8,
-    height: dimensions()._height * 0.075,
-    alignItems: 'center',
-    backgroundColor: 'white',
+    height: dimensions()._height * 0.08,
+    backgroundColor: '#9AC99B',
     padding: 10,
     margin: 10,
     borderRadius: 8.5,
+  },
+  achievementLockedContainer: {
+    width: dimensions()._width * 0.8,
+    height: dimensions()._height * 0.08,
+    backgroundColor: '#BEBBBB',
+    padding: 10,
+    margin: 10,
+    borderRadius: 8.5,
+    flexDirection: 'row'
   },
   friendsListIcon: {
     height: '100%',
