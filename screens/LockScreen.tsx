@@ -1,5 +1,6 @@
-import React, {useRef, useState} from 'react';
-import { 
+import React, {useRef, useState, useEffect} from 'react';
+import {
+  AppState,
   View,
   Text,
   Image,
@@ -11,7 +12,7 @@ import {
 } from 'react-native';
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
-import { frogDirectories, BaseGacha, defaultFrogIndex, dimensions } from './../screens/Scripts.tsx'
+import { frogDirectories, frogGacha, defaultFrogIndex, dimensions } from './../screens/Scripts.tsx';
 
 const Separator = () => <View style={{marginVertical: '2%'}}/>;
 
@@ -23,6 +24,22 @@ var newDuration = {
 var totalDuration = 0;
 
 function LockScreen({navigation}: {navigation: any}) {
+
+    //app state detector
+    const appState = useRef(AppState.currentState);
+    const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+    
+//   useEffect(() => {
+//     const subscription = AppState.addEventListener('change', nextAppState => {
+//       appState.current = nextAppState;
+//       setAppStateVisible(appState.current);
+//       console.log('AppState', appState.current);
+//     });
+//     return () => {
+//       subscription.remove();
+//     };
+//     }, []);
 
     const [timerEnd, setTimerEnd] = useState(false);
     const [buttonVisible, setButtonVisible] = useState(true);
@@ -71,10 +88,14 @@ function LockScreen({navigation}: {navigation: any}) {
                     onPress={() => setTutorialModalVisible(true)}>
                     <Image source={require('./../assets/question_mark.png')} resizeMode='contain' style={{width: 25, height: 25}}/>
                 </Pressable>
-            </View>  
+            </View>
+
             {/* Container for rest */}
+            <View>
+            <Text style={{fontSize: 10}}>Current state is: {appStateVisible}</Text>
+            </View>
+
             <View style={{position: 'absolute', top: dimensions()._height * 0.1, alignItems: 'center', alignSelf: 'center', justifyContent: 'center' }}>
-                
                 {/* Circle and Image */}
                 <View style={styles.outerCircle}>
                     <View style={styles.innerCicle}>
@@ -151,7 +172,7 @@ function LockScreen({navigation}: {navigation: any}) {
                             timerCallback={() => {
                                 setButtonVisible(true);
                                 setShowPicker(true);
-                                setDisplayImage(BaseGacha());
+                                setDisplayImage(frogGacha(totalDuration));
                             }}/>
                     </View>
                 ) : null}
