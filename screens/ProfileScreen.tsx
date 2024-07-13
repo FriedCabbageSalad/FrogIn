@@ -14,7 +14,7 @@ import {
   TextInput,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import { UpdateProfile } from './HomeScreen.tsx'
+import { UpdateProfile, ud } from './HomeScreen.tsx'
 import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx'
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
@@ -60,11 +60,6 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
             {/*turns friendlyUID into xxxx-xxxx*/}
             {("00000000" + route.params.userdata[3].toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")}
           </Text>
-          {/* Friends List Button */}
-          <TouchableOpacity style={styles.friendsListButton} 
-            onPress={() => navigation.navigate('FriendsList')}>
-            <Image source={require('./../assets/friends_list_alex.png')} style={styles.friendsListIcon} resizeMode='contain'/>
-          </TouchableOpacity>
         </View>
 
         {/* Profile Picture Frame */}
@@ -351,10 +346,10 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
       </SafeAreaView>
 
       {/* Navbar */}
-      <View style={{position: 'absolute', top: dimensions()._height * 0.85, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
+      <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
           
           <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.2 - 40, width: 40, height: 40,}} 
-              onPress={() => navigation.navigate('FriendsList')}>
+              onPress={() => navigation.navigate('Profile', {userdata: ud})}>
               <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
           </TouchableOpacity>
 

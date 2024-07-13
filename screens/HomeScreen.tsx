@@ -6,7 +6,7 @@ import firestore from '@react-native-firebase/firestore';
 import {defaultFrogIndex} from './../screens/Scripts.tsx'
 
 //page store for userdata
-let ud : any[];
+export let ud : any[];
 
 export function UpdateProfile(index: number, data: any) {
   ud[index] = data
