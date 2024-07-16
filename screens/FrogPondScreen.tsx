@@ -9,10 +9,10 @@ import {
     Image,
 } from 'react-native';
 import { frogDirectories, dimensions} from './../screens/Scripts.tsx'
-import { ud } from './../screens/HomeScreen.tsx'
+import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 import auth from '@react-native-firebase/auth';
 
-function FrogPondScreen({navigation}: {navigation: any}) {
+function FrogPondScreen({route, navigation}: {route: any, navigation: any}) {
     return (
         <ImageBackground source={require('./../assets/frog_pond_background.png')} resizeMode='cover' style={styles.imageSizing}>
             <View style={{position: 'absolute', right: 0, borderRadius: 10, margin: 7, padding: 3, backgroundColor: '#516D67'}}>  
@@ -33,7 +33,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
                 
                 <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.2 - 40, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Profile', {userdata: ud})}>
+                    onPress={() => navigation.navigate('Profile')}>
                     <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
 

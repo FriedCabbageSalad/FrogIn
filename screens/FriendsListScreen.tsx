@@ -13,10 +13,10 @@ import {
     TextInput
 } from 'react-native';
 import { frogDirectories, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx'
-import { ud } from './../screens/HomeScreen.tsx'
+import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 const pfpDirectory = frogDirectories[3].image;
 
-function FriendsListScreen({navigation}: {navigation: any}) {
+function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
     const [text, onChangeText] = React.useState('');
   return (
     // Background Image
@@ -68,7 +68,7 @@ function FriendsListScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
                 
                 <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.2 - 40, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Profile', {userdata: ud})}>
+                    onPress={() => navigation.navigate('Profile')}>
                     <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
 
