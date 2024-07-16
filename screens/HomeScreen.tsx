@@ -20,8 +20,8 @@ function fieldToIndex(name : string) : number {
     case "frogs": return 6
     case "achivements": return 7
     case "friends": return 8
+    default: return 0
   }
-  return 0;
 }
 
 //sending userdata to other components

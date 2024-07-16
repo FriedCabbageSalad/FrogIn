@@ -41,7 +41,7 @@ const gachamatrix : number[][] = [
 ]
 
 //determines which category to roll in
-const cat = (sec : number) => {
+export const timeCat = (sec : number) => {
   switch (true) {
     case (sec < 30*60): return 0
     case (sec >= 30*60 && sec < 60*60): return 1
@@ -55,7 +55,7 @@ export function frogGacha(sec : number) {
   var roll = GachaNumberGenerator()
   console.log('roll' + roll)
   var result = 0
-  var category = cat(sec)
+  var category = timeCat(sec)
   while (roll > 0) {
     roll = roll - gachamatrix[category][result]
     if (roll <= 0) {
@@ -64,9 +64,8 @@ export function frogGacha(sec : number) {
       result++
     }}
     console.log('res' + result)
-  if (result = 9) {return defaultFrogIndex} //failsafe
-  //return result + defaultFrogIndex;
-  return 5;
+  if (result >= 9) {return defaultFrogIndex} //failsafe
+  return result + defaultFrogIndex;
 }
 
 export const showAlert = (title : string, msg : string, button : string) =>
