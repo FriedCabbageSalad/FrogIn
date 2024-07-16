@@ -1,21 +1,9 @@
 import * as React from 'react';
 import {useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  StatusBar,
-  TouchableOpacity,
-  Image,
-  Modal,
-  Pressable,
-  TextInput,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal, Pressable, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { getUD, updateUD } from './HomeScreen.tsx'
-import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx'
+import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx';
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
 const SeparatorVerticalSmall = () => <View style={{marginVertical: '0.5%'}}/>;

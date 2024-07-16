@@ -1,21 +1,10 @@
 import * as React from 'react';
-import 
-{ Button,
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  Image,
-} from 'react-native';
+import { Button, View, Text, ImageBackground, TouchableOpacity, TextInput, StyleSheet, Image } from 'react-native';
 import { dimensions, showAlert, showAlertAction} from './../screens/Scripts.tsx';
 import auth from '@react-native-firebase/auth';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
+//token for firebase backend
 GoogleSignin.configure({
   webClientId: '843583618218-6lp78r9qb51e647tkmib9pt5m5ev667q.apps.googleusercontent.com',
 });
@@ -25,10 +14,8 @@ async function onGoogleButtonPress() {
   await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
   // Get the users ID token
   const { idToken } = await GoogleSignin.signIn();
-
   // Create a Google credential with the token
   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
   // Sign-in the user with the credential
   return auth().signInWithCredential(googleCredential);
 }
