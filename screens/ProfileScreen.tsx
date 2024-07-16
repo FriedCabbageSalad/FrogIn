@@ -14,22 +14,22 @@ import {
   TextInput,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import { UpdateProfile, ud } from './HomeScreen.tsx'
+import { getUD, updateUD } from './HomeScreen.tsx'
 import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx'
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
 const SeparatorVerticalSmall = () => <View style={{marginVertical: '0.5%'}}/>;
 const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
 
-function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
+function ProfileScreen({navigation}: {navigation: any}) {
   const [usernameModalVisible, setUsernameModalVisible] = useState(false);
   const [pfpModalVisible, setPFPModalVisible] = useState(false);
   const [text, onChangeText] = React.useState('');
-  const [displayImage, setDisplayImage] = useState(route.params.userdata[4]);
+  const [displayImage, setDisplayImage] = useState(getUD('pfp'));
 
   //function for showing available frogs when changing pfp
   function frogDisplay(n : number) {
-    if (route.params.userdata[6][n] != 0) {
+    if (getUD('frogs')[n] != 0) {
       return frogDirectories[n + defaultFrogIndex].image
     }
     else {
@@ -39,10 +39,8 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
 
   //function when pfp changed
   function updatePFP(n : number) {
-    route.params.userdata[4] = n + defaultFrogIndex
     setDisplayImage(defaultFrogIndex + n);
-    UpdateProfile(4, n + defaultFrogIndex)
-    firestore().collection('UserData').doc(route.params.userdata[0]).update({pfp: n + defaultFrogIndex})
+    updateUD('pfp', n + defaultFrogIndex)
   }
 
   //function for showing alert when clicking locked pfp
@@ -58,7 +56,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
           {/* Friendly UID */}
           <Text style={{fontSize: 20, margin: 10, color: 'white', fontWeight: '300', position: 'absolute', top: 0, left: 0}}>
             {/*turns friendlyUID into xxxx-xxxx*/}
-            {("00000000" + route.params.userdata[3].toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")}
+            {("00000000" + getUD('fuid').toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")}
           </Text>
         </View>
 
@@ -103,7 +101,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          if (route.params.userdata[6][1] != 0) {
+                          if (getUD('frogs')[1] != 0) {
                             updatePFP(1)
                           } else {frogLockedAlert()}}}>
                           <Image source={frogDisplay(1)} resizeMode='contain' style={styles.pfpModal}/>
@@ -116,7 +114,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          if (route.params.userdata[6][2] != 0) {
+                          if (getUD('frogs')[2] != 0) {
                             updatePFP(2)
                           } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(2)} resizeMode='contain' style={styles.pfpModal}/>
@@ -132,7 +130,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                         setPFPModalVisible(!pfpModalVisible);
-                        if (route.params.userdata[6][3] != 0) {
+                        if (getUD('frogs')[3] != 0) {
                           updatePFP(3)
                         } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(3)} resizeMode='contain' style={styles.pfpModal}/>
@@ -145,7 +143,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          if (route.params.userdata[6][4] != 0) {
+                          if (getUD('frogs')[4] != 0) {
                             updatePFP(4)
                           } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(4)} resizeMode='contain' style={styles.pfpModal}/>
@@ -158,7 +156,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          if (route.params.userdata[6][5] != 0) {
+                          if (getUD('frogs')[5] != 0) {
                             updatePFP(5)
                           } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(5)} resizeMode='contain' style={styles.pfpModal}/>
@@ -174,7 +172,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                         setPFPModalVisible(!pfpModalVisible);
-                        if (route.params.userdata[6][6] != 0) {
+                        if (getUD('frogs')[6] != 0) {
                           updatePFP(6)
                         } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(6)} resizeMode='contain' style={styles.pfpModal}/>
@@ -187,7 +185,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          if (route.params.userdata[6][7] != 0) {
+                          if (getUD('frogs')[7] != 0) {
                             updatePFP(7)
                           } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
@@ -200,7 +198,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           setPFPModalVisible(!pfpModalVisible);
-                          if (route.params.userdata[6][8] != 0) {
+                          if (getUD('frogs')[8] != 0) {
                             updatePFP(8)
                           } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
@@ -232,7 +230,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
           {/* Username display */}
           <View>
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
-              {route.params.userdata[2]}
+              {getUD('name')}
             </Text>
           </View>
         
@@ -273,9 +271,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                           if (text != "") {
-                            firestore().collection('UserData').doc(route.params.userdata[0]).update({name: text})
-                            UpdateProfile(1, text);
-                            route.params.userdata[2] = text;
+                            updateUD('name', text);
                             setUsernameModalVisible(!usernameModalVisible)
                           }
                           else {
@@ -349,7 +345,7 @@ function ProfileScreen({route, navigation}: {route: any, navigation: any}) {
       <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
           
           <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.2 - 40, width: 40, height: 40,}} 
-              onPress={() => navigation.navigate('Profile', {userdata: ud})}>
+              onPress={() => navigation.navigate('Profile')}>
               <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
           </TouchableOpacity>
 

@@ -5,11 +5,35 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {defaultFrogIndex} from './../screens/Scripts.tsx'
 
-//page store for userdata
-export let ud : any[];
+//userdata storage
+let ud : any[];
 
-export function UpdateProfile(index: number, data: any) {
-  ud[index] = data
+//converts field into index
+function fieldToIndex(name : string) : number {
+  switch (name) {
+    case "uid": return 0
+    case "email": return 1
+    case "name": return 2
+    case "fuid": return 3
+    case "pfp": return 4
+    case "mins": return 5
+    case "frogs": return 6
+    case "achivements": return 7
+    case "friends": return 8
+  }
+  return 0;
+}
+
+//sending userdata to other components
+export function getUD(field : string) {
+  return ud[fieldToIndex(field)]
+}
+
+//updating userdata
+export function updateUD(field : string, data: any) {
+  ud[fieldToIndex(field)] = data
+  const fieldPath = new firestore.FieldPath(field)
+  firestore().collection('UserData').doc(ud[0]).update(fieldPath,  data)
 }
 
 function HomeScreen({navigation}: {navigation: any}) {
@@ -103,7 +127,7 @@ function HomeScreen({navigation}: {navigation: any}) {
           onPress={() => navigation.navigate('Lock')}/>
 
         <Button title="Profile"
-          onPress={() => {navigation.navigate('Profile', {userdata: ud})}}/>
+          onPress={() => navigation.navigate('Profile')}/>
 
         <Button title="FriendsList"
           onPress={() => navigation.navigate('FriendsList')}/>
