@@ -27,7 +27,7 @@ export function dimensions() {
     return { _borderRadius, _height, _width }
 }
 
-  function GachaNumberGenerator() {
+export function GachaNumberGenerator() {
     return Math.ceil(Math.random() * 100); //rolls 1 to 100
 }
 
