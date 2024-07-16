@@ -1,15 +1,5 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {
-  AppState,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  Modal,
-  Pressable
-} from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { AppState, View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, Pressable } from 'react-native';
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
 import { frogDirectories, frogGacha, defaultFrogIndex, dimensions } from './../screens/Scripts.tsx';
