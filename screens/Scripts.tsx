@@ -46,7 +46,7 @@ export const timeCat = (sec : number) => {
     case (sec < 30*60): return 0
     case (sec >= 30*60 && sec < 60*60): return 1
     case (sec >= 60*60 && sec < 120*60): return 2
-    case (sec > 120*60): return 3
+    case (sec >= 120*60): return 3
     default: return 0
   }}
 

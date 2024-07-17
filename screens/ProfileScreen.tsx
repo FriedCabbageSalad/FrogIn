@@ -218,7 +218,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
           {/* Username display */}
           <View>
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
-              {getUD('name')}
+              {getUD('name')} {"\n"}
+              {Math.round(getUD('mins')/6)/10} hours focused {"\n"}
+              {getUD('frogs').reduce((x: number, y: number) => x + y, 0)} frogs grown
             </Text>
           </View>
         

@@ -14,6 +14,9 @@ var newDuration = {
 };
 var totalDuration = 0;
 
+//set to 900 for interstellar mode
+var timeWarp = 900;
+
 const oddsText = (sec : number) => {
     var defaultOddsText = 'Select a time to see the odds of getting certain frogs!'
     if (sec == 0) {
@@ -32,7 +35,7 @@ const oddsText = (sec : number) => {
         case 3: return <Text style={styles.modalText}>Ocean Frog: 10%{"\n"} 
                                                         Grey Frog: 20%{"\n"} Purple Frog: 20%{"\n"} Red Frog: 20%{"\n"} 
                                                         White Frog: 10%{"\n"} Dark Grey Frog: 10%{"\n"} Brown Frog: 10%</Text>
-                                                        
+
         default: return <Text style={styles.modalText}>{defaultOddsText}</Text>
     }
 }
@@ -180,7 +183,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                     </View>
                 ) : null}
                 
-                {/* Countdown Timer TODO add callback when timer ends*/}
+                {/* Countdown Timer */}
                 {!pickerVisible ? (
                     <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '4%'}}>
                         <CountDownTimer
@@ -189,10 +192,16 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                             containerStyle={styles.countdown}
                             textStyle={styles.countdownText}
                             timerCallback={() => {
+                                //timer ended, frog grown
                                 setLockedState(false);
                                 setButtonVisible(true);
                                 setShowPicker(true);
-                                setDisplayImage(frogGacha(totalDuration));
+                                var newFrog = frogGacha(totalDuration*timeWarp);
+                                setDisplayImage(newFrog);
+                                var frogArray = getUD('frogs');
+                                frogArray[newFrog - defaultFrogIndex] = frogArray[newFrog - defaultFrogIndex] + 1;
+                                updateUD('frogs', frogArray);
+                                updateUD('mins', getUD('mins') + Math.round(totalDuration*timeWarp/60));
                             }}/>
                     </View>
                 ) : null}
@@ -212,7 +221,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                     </View>
                 ) : null}
 
-                {/* Odds screen*/}
+                {/* Odds Screen */}
                 <View style={styles.centeredView}>
                     <Modal
                         animationType="slide"
@@ -224,7 +233,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
                             <Text style={styles.modalText}>Odds for{"\n"}{newDuration.hours} hours, {newDuration.minutes} minutes, {newDuration.seconds} seconds</Text>
-                            {oddsText(newDuration.hours * 3600 + newDuration.minutes * 60 + newDuration.seconds)}
+                            {oddsText((newDuration.hours * 3600 + newDuration.minutes * 60 + newDuration.seconds)*timeWarp)}
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => setOddsModalVisible(!oddsModalVisible)}>
