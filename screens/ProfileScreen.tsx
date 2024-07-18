@@ -3,7 +3,8 @@ import {useRef, useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal, Pressable, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { getUD, updateUD } from './HomeScreen.tsx'
-import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx';
+import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction, parseFUID} from './../screens/Scripts.tsx';
+
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
 const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
@@ -44,7 +45,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
           {/* Friendly UID */}
           <Text style={{fontSize: 20, margin: 10, color: 'white', fontWeight: '300', position: 'absolute', top: 0, left: 0}}>
             {/*turns friendlyUID into xxxx-xxxx*/}
-            {("00000000" + getUD('fuid').toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")}
+            {parseFUID(getUD('fuid'))}
           </Text>
         </View>
 

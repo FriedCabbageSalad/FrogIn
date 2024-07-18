@@ -1,10 +1,20 @@
 import * as React from 'react';
-import { Button, View, Text, StyleSheet, ImageBackground, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, TextInput } from 'react-native';
-import { frogDirectories, dimensions, showAlert, showAlertAction } from './../screens/Scripts.tsx'
+import { Button, View, Text, StyleSheet, ImageBackground, FlatList, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, TextInput } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import { frogDirectories, dimensions, showAlert, showAlertAction, parseFUID } from './../screens/Scripts.tsx';
+
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 const pfpDirectory = frogDirectories[3].image;
 
 function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
+
+    //function to add friend
+    function addFriend(uid : string, name : string, fuid : number, pfp : string) {
+        const newFriendList = getUD('friends')
+        newFriendList.push(name, parseFUID(fuid), pfp)
+        updateUD('friends', newFriendList)
+    }
+
     const [text, onChangeText] = React.useState('');
   return (
     // Background Image
@@ -19,17 +29,35 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
                     placeholder="Add Friend User ID"
                 />
 
-                <TouchableOpacity onPress={() => ''}>
+                {/* Add Friend Button */}
+                <TouchableOpacity onPress={() => {
+                    if (text.length != 8 || !/^\d+$/.test(text)) {showAlert('Please input a 8 digit friend ID','','OK')}
+                    else if (+text == getUD('fuid')) {showAlert('That is your own ID!','You silly!','')}
+                    else if (getUD('friends').includes(+text)) {showAlert('You are already friends with this person','','OK')}
+                    else{
+                        firestore().collection('UserData').where('fuid', '==', +text).get().then((querySnapshot) => {
+                            if (querySnapshot.empty) { //doesnt exist
+                                showAlert('No such user exists.','','OK')
+                            }
+                            else { //if exists, get username from docs
+                                addFriend(querySnapshot.docs[0].get('uid'), querySnapshot.docs[0].get('name'), querySnapshot.docs[0].get('fuid'), querySnapshot.docs[0].get('pfp'))
+                            }
+                    })}
+                }}>
                     <Image source={require('./../assets/right_arrow.png')} style={styles.confirmButton} resizeMode='cover'/>
                 </TouchableOpacity>
             </View>
             <Text style={styles.title}>Friend's List</Text>
-            <Text style={styles.friendTotal}> friends</Text>
+            <Text style={styles.friendTotal}>{getUD('friends').length/3} friends</Text>
         </View>
 
         {/* Friend List */}
         <SafeAreaView style={styles.scrollViewContainer}>
-            <ScrollView>
+        {/* <FlatList
+        data={DATA}
+        renderItem={({item}) => <Item title={item.title} />}
+        keyExtractor={item => item.id}
+      /> */}
 
                 {/* Friend Object */}
                 <View style={styles.friendContainer}>
@@ -49,7 +77,7 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
                     </View>
                 </View>
 
-            </ScrollView>
+
         </SafeAreaView>
 
             {/* Navbar */}

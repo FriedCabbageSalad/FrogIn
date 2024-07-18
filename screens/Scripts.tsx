@@ -92,3 +92,6 @@ export const showAlertAction = (title : string, msg : string, button : string, a
           },
         ],
       )
+
+export const parseFUID = (fuid : number) => 
+  ("00000000" + fuid.toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")
