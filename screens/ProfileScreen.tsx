@@ -5,9 +5,10 @@ import firestore from '@react-native-firebase/firestore';
 import { getUD, updateUD } from './HomeScreen.tsx'
 import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction, parseFUID} from './../screens/Scripts.tsx';
 
+
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
-const SeparatorVerticalSmall = () => <View style={{marginVertical: '0.5%'}}/>;
 const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
+const SeparatorHorizontalSmall = () => <View style={{marginHorizontal: '1%'}}/>;
 
 function ProfileScreen({navigation}: {navigation: any}) {
   const [usernameModalVisible, setUsernameModalVisible] = useState(false);
@@ -56,235 +57,250 @@ function ProfileScreen({navigation}: {navigation: any}) {
             </View>
         </View>
 
-        {/* Username */}
-        <View style={{alignItems: 'center', alignSelf: 'center', justifyContent: 'center', position: 'absolute', top: dimensions()._height * 0.29, flexDirection: 'row'}}>
-        
-        {/* Change Profile Picture Button */}
-        <View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={pfpModalVisible}
-              onRequestClose={() => {
-              setPFPModalVisible(!pfpModalVisible);
-            }}>
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  
-                  <View style={{flexDirection: 'row'}}>
-                    {/* icon 0, row 1, col 1 */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
-                        updatePFP(0);
-                        }}>
-                        <Image source={frogDirectories[defaultFrogIndex].image} resizeMode='contain' style={styles.pfpModal}/>
-                    </Pressable>
+        <View style={{alignItems: 'center', alignSelf: 'center', justifyContent: 'center', position: 'absolute', top: dimensions()._height * 0.29}}>
+          {/* Username */}
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          
+            {/* Change Profile Picture Button */}
+            <View>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={pfpModalVisible}
+                  onRequestClose={() => {
+                  setPFPModalVisible(!pfpModalVisible);
+                }}>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      
+                      <View style={{flexDirection: 'row'}}>
+                        {/* icon 0, row 1, col 1 */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                            setPFPModalVisible(!pfpModalVisible);
+                            updatePFP(0);
+                            }}>
+                            <Image source={frogDirectories[defaultFrogIndex].image} resizeMode='contain' style={styles.pfpModal}/>
+                        </Pressable>
 
-                    <SeparatorHorizontal/>
+                        <SeparatorHorizontal/>
 
-                    {/* icon 1, row 1, col 2 */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          setPFPModalVisible(!pfpModalVisible);
-                          if (getUD('frogs')[1] != 0) {
-                            updatePFP(1)
-                          } else {frogLockedAlert()}}}>
-                          <Image source={frogDisplay(1)} resizeMode='contain' style={styles.pfpModal}/>
-                    </Pressable>
+                        {/* icon 1, row 1, col 2 */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                              setPFPModalVisible(!pfpModalVisible);
+                              if (getUD('frogs')[1] != 0) {
+                                updatePFP(1)
+                              } else {frogLockedAlert()}}}>
+                              <Image source={frogDisplay(1)} resizeMode='contain' style={styles.pfpModal}/>
+                        </Pressable>
 
-                    <SeparatorHorizontal/>
+                        <SeparatorHorizontal/>
 
-                    {/* icon 2, row 1, col 3 */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          setPFPModalVisible(!pfpModalVisible);
-                          if (getUD('frogs')[2] != 0) {
-                            updatePFP(2)
-                          } else {frogLockedAlert()}}}>
-                        <Image source={frogDisplay(2)} resizeMode='contain' style={styles.pfpModal}/>
-                    </Pressable>
+                        {/* icon 2, row 1, col 3 */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                              setPFPModalVisible(!pfpModalVisible);
+                              if (getUD('frogs')[2] != 0) {
+                                updatePFP(2)
+                              } else {frogLockedAlert()}}}>
+                            <Image source={frogDisplay(2)} resizeMode='contain' style={styles.pfpModal}/>
+                        </Pressable>
 
+                      </View>
+
+                      <SeparatorVertical/>
+
+                      <View style={{flexDirection: 'row'}}>
+                        {/* icon 3, row 2, col 1 */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                            setPFPModalVisible(!pfpModalVisible);
+                            if (getUD('frogs')[3] != 0) {
+                              updatePFP(3)
+                            } else {frogLockedAlert()}}}>
+                            <Image source={frogDisplay(3)} resizeMode='contain' style={styles.pfpModal}/>
+                        </Pressable>
+
+                        <SeparatorHorizontal/>
+
+                        {/* icon 4, row 2, col 2 */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                              setPFPModalVisible(!pfpModalVisible);
+                              if (getUD('frogs')[4] != 0) {
+                                updatePFP(4)
+                              } else {frogLockedAlert()}}}>
+                            <Image source={frogDisplay(4)} resizeMode='contain' style={styles.pfpModal}/>
+                        </Pressable>
+
+                        <SeparatorHorizontal/>
+
+                        {/* icon 5, row 2, col 3 */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                              setPFPModalVisible(!pfpModalVisible);
+                              if (getUD('frogs')[5] != 0) {
+                                updatePFP(5)
+                              } else {frogLockedAlert()}}}>
+                            <Image source={frogDisplay(5)} resizeMode='contain' style={styles.pfpModal}/>
+                        </Pressable>
+
+                      </View>
+
+                      <SeparatorVertical/>
+
+                      <View style={{flexDirection: 'row'}}>
+                        {/* icon 6, row 3, col 1 */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                            setPFPModalVisible(!pfpModalVisible);
+                            if (getUD('frogs')[6] != 0) {
+                              updatePFP(6)
+                            } else {frogLockedAlert()}}}>
+                            <Image source={frogDisplay(6)} resizeMode='contain' style={styles.pfpModal}/>
+                        </Pressable>
+
+                        <SeparatorHorizontal/>
+
+                        {/* icon 7, row 3, col 2 */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                              setPFPModalVisible(!pfpModalVisible);
+                              if (getUD('frogs')[7] != 0) {
+                                updatePFP(7)
+                              } else {frogLockedAlert()}}}>
+                            <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
+                        </Pressable>
+
+                        <SeparatorHorizontal/>
+
+                        {/* icon 8, row 3, col 3 */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                              setPFPModalVisible(!pfpModalVisible);
+                              if (getUD('frogs')[8] != 0) {
+                                updatePFP(8)
+                              } else {frogLockedAlert()}}}>
+                            <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
+                        </Pressable>
+
+                      </View>
+
+                      <SeparatorVertical/>
+
+                      <View style={{flexDirection: 'row'}}>
+                        {/* Exit Modal Button */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setPFPModalVisible(!pfpModalVisible)}>
+                            <Text style={styles.textStyle}>Exit</Text>
+                        </Pressable>
+
+                      </View>
+                    </View>
                   </View>
+                </Modal>
 
-                  <SeparatorVertical/>
+                <Pressable
+                  onPress={() => setPFPModalVisible(true)}>
+                  <Image source={require('./../assets/edit_image.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
+                </Pressable>
+              </View>  
 
-                  <View style={{flexDirection: 'row'}}>
-                    {/* icon 3, row 2, col 1 */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
-                        if (getUD('frogs')[3] != 0) {
-                          updatePFP(3)
-                        } else {frogLockedAlert()}}}>
-                        <Image source={frogDisplay(3)} resizeMode='contain' style={styles.pfpModal}/>
-                    </Pressable>
-
-                    <SeparatorHorizontal/>
-
-                    {/* icon 4, row 2, col 2 */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          setPFPModalVisible(!pfpModalVisible);
-                          if (getUD('frogs')[4] != 0) {
-                            updatePFP(4)
-                          } else {frogLockedAlert()}}}>
-                        <Image source={frogDisplay(4)} resizeMode='contain' style={styles.pfpModal}/>
-                    </Pressable>
-
-                    <SeparatorHorizontal/>
-
-                    {/* icon 5, row 2, col 3 */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          setPFPModalVisible(!pfpModalVisible);
-                          if (getUD('frogs')[5] != 0) {
-                            updatePFP(5)
-                          } else {frogLockedAlert()}}}>
-                        <Image source={frogDisplay(5)} resizeMode='contain' style={styles.pfpModal}/>
-                    </Pressable>
-
-                  </View>
-
-                  <SeparatorVertical/>
-
-                  <View style={{flexDirection: 'row'}}>
-                    {/* icon 6, row 3, col 1 */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
-                        if (getUD('frogs')[6] != 0) {
-                          updatePFP(6)
-                        } else {frogLockedAlert()}}}>
-                        <Image source={frogDisplay(6)} resizeMode='contain' style={styles.pfpModal}/>
-                    </Pressable>
-
-                    <SeparatorHorizontal/>
-
-                    {/* icon 7, row 3, col 2 */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          setPFPModalVisible(!pfpModalVisible);
-                          if (getUD('frogs')[7] != 0) {
-                            updatePFP(7)
-                          } else {frogLockedAlert()}}}>
-                        <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
-                    </Pressable>
-
-                    <SeparatorHorizontal/>
-
-                    {/* icon 8, row 3, col 3 */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          setPFPModalVisible(!pfpModalVisible);
-                          if (getUD('frogs')[8] != 0) {
-                            updatePFP(8)
-                          } else {frogLockedAlert()}}}>
-                        <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
-                    </Pressable>
-
-                  </View>
-
-                  <SeparatorVertical/>
-
-                  <View style={{flexDirection: 'row'}}>
-                    {/* Exit Modal Button */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setPFPModalVisible(!pfpModalVisible)}>
-                        <Text style={styles.textStyle}>Exit</Text>
-                    </Pressable>
-
-                  </View>
-                </View>
+              {/* Username display */}
+              <View>
+                <Text style={{fontSize: 22, marginVertical: 10, color: 'white', fontWeight: '300'}}>
+                  {getUD('name')}
+                </Text>
               </View>
-            </Modal>
+            
+              {/* Change Username Button */}
+              <View>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={usernameModalVisible}
+                  onRequestClose={() => {
+                  setUsernameModalVisible(!usernameModalVisible);
+                }}>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      
+                      {/* Input Box */}
+                      <TextInput
+                      style={styles.input}
+                      onChangeText={onChangeText}
+                      value={text}
+                      placeholder="New Username"
+                      />
 
-            <Pressable
-              onPress={() => setPFPModalVisible(true)}>
-              <Image source={require('./../assets/edit_image.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
-            </Pressable>
-          </View>  
+                      <SeparatorVertical/>
 
-          {/* Username display */}
-          <View>
+                      <View style={{flexDirection: 'row'}}>
+                        {/* Exit Modal Button */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setUsernameModalVisible(!usernameModalVisible)}>
+                            <Text style={styles.textStyle}>Exit</Text>
+                        </Pressable>
+
+                        <SeparatorHorizontal/>
+
+                        {/* Confirm Change Username Button */}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => {
+                              if (text != "") {
+                                updateUD('name', text);
+                                setUsernameModalVisible(!usernameModalVisible)
+                              }
+                              else {
+                                showAlert('Please enter a username','','OK')
+                              }
+                            }}>
+                            <Text style={styles.textStyle}>Change Username</Text>
+                        </Pressable>
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
+
+                <Pressable
+                  onPress={() => setUsernameModalVisible(true)}>
+                  <Image source={require('./../assets/edit_pencil.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
+                </Pressable>
+              </View>
+            </View>
+          
+          {/* Stats Container */}
+          <View style={{flexDirection: 'row', alignItems: 'center', marginTop: -dimensions()._height * 0.02}}>
+            <Image source={require('./../assets/clock.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
+            <SeparatorHorizontalSmall/>
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
-              {getUD('name')} {"\n"}
-              {Math.round(getUD('mins')/6)/10} hours focused {"\n"}
-              {getUD('frogs').reduce((x: number, y: number) => x + y, 0)} frogs grown
+                  {Math.round(getUD('mins')/6)/10} hours
+            </Text>
+            
+            <SeparatorHorizontal/>
+
+            <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
+            <SeparatorHorizontalSmall/>
+            <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
+                  {getUD('frogs').reduce((x: number, y: number) => x + y, 0)}
             </Text>
           </View>
-        
-          {/* Change Username Button */}
-          <View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={usernameModalVisible}
-              onRequestClose={() => {
-              setUsernameModalVisible(!usernameModalVisible);
-            }}>
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  
-                  {/* Input Box */}
-                  <TextInput
-                  style={styles.input}
-                  onChangeText={onChangeText}
-                  value={text}
-                  placeholder="New Username"
-                  />
-
-                  <SeparatorVertical/>
-
-                  <View style={{flexDirection: 'row'}}>
-                    {/* Exit Modal Button */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setUsernameModalVisible(!usernameModalVisible)}>
-                        <Text style={styles.textStyle}>Exit</Text>
-                    </Pressable>
-
-                    <SeparatorHorizontal/>
-
-                    {/* Confirm Change Username Button */}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {
-                          if (text != "") {
-                            updateUD('name', text);
-                            setUsernameModalVisible(!usernameModalVisible)
-                          }
-                          else {
-                            showAlert('Please enter a username','','OK')
-                          }
-                        }}>
-                        <Text style={styles.textStyle}>Change Username</Text>
-                    </Pressable>
-                  </View>
-                </View>
-              </View>
-            </Modal>
-
-            <Pressable
-              onPress={() => setUsernameModalVisible(true)}>
-              <Image source={require('./../assets/edit_pencil.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
-            </Pressable>
-
-          </View>
-        </View>
 
       </View>
-      
+    </View>
       {/* Achievements */}
       <SafeAreaView style={styles.scrollViewContainer}>
         <ScrollView style={{marginTop: 20}}>

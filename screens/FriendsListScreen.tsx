@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Button, View, Text, StyleSheet, ImageBackground, FlatList, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { frogDirectories, dimensions, showAlert, showAlertAction, parseFUID } from './../screens/Scripts.tsx';
+
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 const pfpDirectory = frogDirectories[3].image;
 
