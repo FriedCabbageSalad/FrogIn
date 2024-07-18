@@ -219,7 +219,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
 
               {/* Username display */}
               <View>
-                <Text style={{fontSize: 22, marginVertical: 10, color: 'white', fontWeight: '300'}}>
+                <Text style={{fontSize: 30, marginVertical: 10, color: 'white', fontWeight: '300'}}>
                   {getUD('name')}
                 </Text>
               </View>
@@ -295,7 +295,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
             <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
             <SeparatorHorizontalSmall/>
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
-                  {getUD('frogs').reduce((x: number, y: number) => x + y, 0)}
+                  {' ' + getUD('frogs').reduce((x: number, y: number) => x + y, 0)} frogs
             </Text>
           </View>
 
@@ -303,7 +303,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
     </View>
       {/* Achievements */}
       <SafeAreaView style={styles.scrollViewContainer}>
-        <ScrollView style={{marginTop: 20}}>
+        <ScrollView style={{marginTop: 25}}>
 
           <View style={styles.achievementContainer}>
             <View>
