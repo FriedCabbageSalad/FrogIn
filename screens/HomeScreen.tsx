@@ -20,8 +20,8 @@ function fieldToIndex(name : string) : number {
     case "frogs": return 6
     case "achivements": return 7
     case "friends": return 8
+    default: return 0
   }
-  return 0;
 }
 
 //sending userdata to other components
@@ -79,7 +79,7 @@ function HomeScreen({navigation}: {navigation: any}) {
     // userdata processing
     function loadUD() { 
       firestore().collection('UserData').doc(user.uid).get().then(documentSnapshot => {
-        // if userdata doesnt exis, create, and update ud
+        // if userdata doesnt exist, create, and update ud
         if (!documentSnapshot.exists) {
             firestore().collection('UserData').get().then(querySnapshot => {
               firestore().collection('UserData').doc(user.uid).set({uid:user.uid, email:user.email, name: "user " + querySnapshot.size, fuid: querySnapshot.size, pfp: defaultFrogIndex, mins: 0, frogs: [0,0,0,0,0,0,0,0,0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})

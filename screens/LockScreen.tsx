@@ -1,18 +1,8 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {
-  AppState,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  Modal,
-  Pressable
-} from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { AppState, View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, Pressable } from 'react-native';
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
-import { frogDirectories, frogGacha, defaultFrogIndex, dimensions } from './../screens/Scripts.tsx';
+import { frogDirectories, frogGacha, defaultFrogIndex, timeCat, dimensions } from './../screens/Scripts.tsx';
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 
 const Separator = () => <View style={{marginVertical: '2%'}}/>;
@@ -24,23 +14,58 @@ var newDuration = {
 };
 var totalDuration = 0;
 
+//set to 900 for interstellar mode
+var timeWarp = 900;
+
+const oddsText = (sec : number) => {
+    var defaultOddsText = 'Select a time to see the odds of getting certain frogs!'
+    if (sec == 0) {
+        return <Text style={styles.modalText}>{defaultOddsText}</Text>  
+    }
+    switch (timeCat(sec)) {
+        case 0: return <Text style={styles.modalText}>Green Frog: 65%{"\n"} Blue Frog: 30%{"\n"} Ocean Frog: 5%</Text>
+
+        case 1: return <Text style={styles.modalText}>Green Frog: 30%{"\n"} Blue Frog: 20%{"\n"} Ocean Frog: 20%{"\n"}
+                                                        Grey Frog: 10%{"\n"} Purple Frog: 10%{"\n"} Red Frog: 10%</Text>
+
+        case 2: return <Text style={styles.modalText}>Green Frog: 20%{"\n"} Blue Frog: 10%{"\n"} Ocean Frog: 10%{"\n"}
+                                                        Grey Frog: 15%{"\n"} Purple Frog: 15%{"\n"} Red Frog: 15%{"\n"}
+                                                        White Frog: 5%{"\n"} Dark Grey Frog: 5%{"\n"} Brown Frog: 5%</Text>
+
+        case 3: return <Text style={styles.modalText}>Ocean Frog: 10%{"\n"} 
+                                                        Grey Frog: 20%{"\n"} Purple Frog: 20%{"\n"} Red Frog: 20%{"\n"} 
+                                                        White Frog: 10%{"\n"} Dark Grey Frog: 10%{"\n"} Brown Frog: 10%</Text>
+
+        default: return <Text style={styles.modalText}>{defaultOddsText}</Text>
+    }
+}
+
 function LockScreen({route, navigation}: {route: any, navigation: any}) {
+    //locked indicator
+    const [lockedState, setLockedState] = useState(false)
 
     //app state detector
-    const appState = useRef(AppState.currentState);
-    const [appStateVisible, setAppStateVisible] = useState(appState.current);
+    const appState = useRef(AppState.currentState)
+    const [appStateVisible, setAppStateVisible] = useState(appState.current)
 
-    
-//   useEffect(() => {
-//     const subscription = AppState.addEventListener('change', nextAppState => {
-//       appState.current = nextAppState;
-//       setAppStateVisible(appState.current);
-//       console.log('AppState', appState.current);
-//     });
-//     return () => {
-//       subscription.remove();
-//     };
-//     }, []);
+    useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+        // app state change
+        appState.current = nextAppState;
+        setAppStateVisible(appState.current);
+        console.log('AppState', appState.current);
+        console.log(lockedState); //dnr, app breaks
+        // check if app is bg during lock state
+        if (appState.current == 'background' && lockedState) {
+            setLockedState(false);
+            setDisplayImage(2)
+            setButtonVisible(true);
+            setShowPicker(true);
+        }
+    });
+    return () => {
+        subscription.remove();
+    };}, []);
 
     const [timerEnd, setTimerEnd] = useState(false);
     const [buttonVisible, setButtonVisible] = useState(true);
@@ -52,7 +77,6 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
     
     return (
         <View style={styles.background}>
-
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -65,7 +89,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                         <Text style={styles.modalTitleText}>Tutorial</Text>
                         <Text style={styles.modalText}>
                             Welcome to the Lock Screen!
-                            Here you can set the amount of time you'd like to focus with the sliders.
+                            Here you can set the amount of time you would like to focus.
                         </Text>
                         <Text style={styles.modalText}>
                             Try your best to make it all way without leaving the app to receive a frog!
@@ -92,10 +116,6 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
             </View>
 
             {/* Container for rest */}
-            <View>
-            <Text style={{fontSize: 10}}>Current state is: {appStateVisible}</Text>
-            </View>
-
             <View style={{position: 'absolute', top: dimensions()._height * 0.1, alignItems: 'center', alignSelf: 'center', justifyContent: 'center' }}>
                 {/* Circle and Image */}
                 <View style={styles.outerCircle}>
@@ -151,6 +171,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                             onPress={() => {
                                 if ((newDuration.hours !== 0) || (newDuration.minutes !== 0) || (newDuration.seconds !== 0)) {
                                     totalDuration = newDuration.hours * 3600 + newDuration.minutes * 60 + newDuration.seconds;
+                                    setLockedState(true);
                                     setButtonVisible(false);
                                     setShowPicker(false);
                                     setDisplayImage(0);
@@ -162,7 +183,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                     </View>
                 ) : null}
                 
-                {/* Countdown Timer TODO add callback when timer ends*/}
+                {/* Countdown Timer */}
                 {!pickerVisible ? (
                     <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '4%'}}>
                         <CountDownTimer
@@ -171,9 +192,16 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                             containerStyle={styles.countdown}
                             textStyle={styles.countdownText}
                             timerCallback={() => {
+                                //timer ended, frog grown
+                                setLockedState(false);
                                 setButtonVisible(true);
                                 setShowPicker(true);
-                                setDisplayImage(frogGacha(totalDuration));
+                                var newFrog = frogGacha(totalDuration*timeWarp);
+                                setDisplayImage(newFrog);
+                                var frogArray = getUD('frogs');
+                                frogArray[newFrog - defaultFrogIndex] = frogArray[newFrog - defaultFrogIndex] + 1;
+                                updateUD('frogs', frogArray);
+                                updateUD('mins', getUD('mins') + Math.round(totalDuration*timeWarp/60));
                             }}/>
                     </View>
                 ) : null}
@@ -183,6 +211,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                     <View style={{alignItems: 'center', justifyContent: 'center', marginTop: '4%'}}>
                         <TouchableOpacity 
                             onPress={() => {
+                                setLockedState(false);
                                 setButtonVisible(true);
                                 setShowPicker(true);
                             }
@@ -192,20 +221,19 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                     </View>
                 ) : null}
 
+                {/* Odds Screen */}
                 <View style={styles.centeredView}>
                     <Modal
                         animationType="slide"
                         transparent={true}
                         visible={oddsModalVisible}
                         onRequestClose={() => {
-                            Alert.alert('Modal has been closed.');
                             setOddsModalVisible(!oddsModalVisible);
                         }}>
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Green Frog 65%</Text>
-                            <Text style={styles.modalText}>Blue Frog 30%</Text>
-                            <Text style={styles.modalText}>Ocean Frog 5%</Text>
+                            <Text style={styles.modalText}>Odds for{"\n"}{newDuration.hours} hours, {newDuration.minutes} minutes, {newDuration.seconds} seconds</Text>
+                            {oddsText((newDuration.hours * 3600 + newDuration.minutes * 60 + newDuration.seconds)*timeWarp)}
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => setOddsModalVisible(!oddsModalVisible)}>
