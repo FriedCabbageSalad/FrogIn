@@ -69,29 +69,47 @@ export function frogGacha(sec : number) {
 }
 
 export const showAlert = (title : string, msg : string, button : string) =>
-    Alert.alert(
-      title,
-      msg,
-      [
-        {
-          text: button,
-          style: 'default',
-        },
-      ],
-    )
+  Alert.alert(
+    title,
+    msg,
+    [
+      {
+        text: button,
+        style: 'default',
+      },
+    ],
+  )
   
 export const showAlertAction = (title : string, msg : string, button : string, action : () => Function) =>
-      Alert.alert(
-        title,
-        msg,
-        [
-          {
-            text: button,
-            style: 'default',
-            onPress: action,
-          },
-        ],
-      )
+  Alert.alert(
+    title,
+    msg,
+    [
+      {
+        text: button,
+        style: 'default',
+        onPress: action,
+      },
+    ],
+  )
+
+export const showAlertConfirm = (title : string, msg : string, Nbutton : string, Pbutton: string, Naction : () => Function, Paction : () => Function) =>
+  Alert.alert(
+    title,
+    msg,
+    [
+      {
+        text: Nbutton,
+        style: 'default',
+        onPress: Naction,
+      },
+      {
+        text: Pbutton,
+        style: 'default',
+        onPress: Paction,
+      }
+    ],
+  )
 
 export const parseFUID = (fuid : number) => 
   ("00000000" + fuid.toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")

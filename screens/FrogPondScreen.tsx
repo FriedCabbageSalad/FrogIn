@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useRef, useState} from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image } from 'react-native';
-import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator} from './../screens/Scripts.tsx'
+import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator, showAlert, showAlertConfirm} from './../screens/Scripts.tsx'
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 import auth from '@react-native-firebase/auth';
 
@@ -16,21 +16,33 @@ const  motivationalMessages = [
 ]
 
 function FrogPondScreen({navigation}: {navigation: any}) {
+
+    // Log Out Function
+    function logOut() {
+        auth()
+        .signOut()
+        .catch(error => {
+            console.log("error")
+            showAlert('Something went wrong','Please restart the app.','OK')})
+        .then(() => navigation.navigate('Home')) //can remove once migrated
+    return () => ('')}
+
     const index = GachaNumberGenerator() % 8
+    const frogArray = getUD('frogs')
+
     return (
         <ImageBackground source={require('./../assets/frog_pond_background.png')} resizeMode='cover' style={styles.imageSizing}>
             <View style={{position: 'absolute', right: 0, borderRadius: 10, margin: 7, padding: 3, backgroundColor: '#516D67'}}>  
                 <TouchableOpacity
-                    onPress={() => auth()
-                        .signOut()
-                        .catch(error => {console.log("error")})
-                        }>
+                    onPress={() => {
+                        // Logout Button
+                        showAlertConfirm('Are you sure you want to sign out?', 'Your progress will be saved', 'No', 'Yes', () => () => ('') , logOut)}}>
                     <Image source={require('./../assets/log_out.png')} resizeMode='contain' style={{width: 20, height: 20}}/>
                 </TouchableOpacity>
             </View>
             
             <View style={styles.messageBox}>
-                <Text style={{fontSize: 13, fontWeight: 'bold'}}>Motivational Message</Text>
+                <Text style={{fontSize: 13, fontWeight: 'bold'}}>Today's Motivational Message</Text>
                 <Text>{motivationalMessages[index]}</Text>
             </View>
             {/* Frog Displays */}
@@ -38,39 +50,39 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             {/* arr[index] != 0 ? (the view) : <View></View> */}
             {/* Default */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.4, left: dimensions()._width * 0.45}}>
-                <Image source={frogDirectories[defaultFrogIndex].image}/>
+                {(frogArray[0] != 0) ? <Image source={frogDirectories[defaultFrogIndex].image}/> : <></>}
             </View>
             {/* Blue */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.45, left: dimensions()._width * 0.6}}>
-                <Image source={frogDirectories[defaultFrogIndex + 1].image}/>
+                {(frogArray[1] != 0) ? <Image source={frogDirectories[defaultFrogIndex + 1].image}/> : <></>}
             </View>
             {/* Ocean */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.35, left: dimensions()._width * 0.2}}>
-                <Image source={frogDirectories[defaultFrogIndex + 2].image}/>
+                {(frogArray[2] != 0) ? <Image source={frogDirectories[defaultFrogIndex + 2].image}/> : <></>}
             </View>
             {/* Gray */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.3, left: dimensions()._width * 0.4}}>
-                <Image source={frogDirectories[defaultFrogIndex + 3].image}/>
+                {(frogArray[3] != 0) ? <Image source={frogDirectories[defaultFrogIndex + 3].image}/> : <></>}
             </View>
             {/* Purple */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.35, left: dimensions()._width * 0.58}}>
-                <Image source={frogDirectories[defaultFrogIndex + 4].image}/>
+                {(frogArray[4] != 0) ? <Image source={frogDirectories[defaultFrogIndex + 4].image}/> : <></>}
             </View>
             {/* Red */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.42, left: dimensions()._width * 0.1}}>
-                <Image source={frogDirectories[defaultFrogIndex + 5].image}/>
+                {(frogArray[5] != 0) ? <Image source={frogDirectories[defaultFrogIndex + 5].image}/> : <></>}
             </View>
             {/* White */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.43, left: dimensions()._width * 0.3}}>
-                <Image source={frogDirectories[defaultFrogIndex + 6].image}/>
+                {(frogArray[6] != 0) ? <Image source={frogDirectories[defaultFrogIndex + 6].image}/> : <></>}
             </View>
             {/* Dark Gray */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.48, left: dimensions()._width * 0.28}}>
-                <Image source={frogDirectories[defaultFrogIndex + 7].image}/>
+                {(frogArray[7] != 0) ? <Image source={frogDirectories[defaultFrogIndex + 7].image}/> : <></>}
             </View>
             {/* Brown */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.49, left: dimensions()._width * 0.45}}>
-                <Image source={frogDirectories[defaultFrogIndex + 8].image}/>
+                {(frogArray[8] != 0) ? <Image source={frogDirectories[defaultFrogIndex + 8].image}/> : <></>}
             </View>
 
             {/* Navbar */}
