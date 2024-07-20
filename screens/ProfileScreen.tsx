@@ -332,8 +332,6 @@ function ProfileScreen({navigation}: {navigation: any}) {
         </View>
       </View>
     </View>
-
-
       {/* Navbar */}
       <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
           

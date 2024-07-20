@@ -134,6 +134,9 @@ function HomeScreen({navigation}: {navigation: any}) {
 
         <Button title="FrogPond"
           onPress={() => navigation.navigate('FrogPond')}/>
+        
+        <Button title="Leaderboard"
+          onPress={() => navigation.navigate('Leaderboard')}/>
 
         <Button title="Test"
           onPress={() => navigation.navigate('AchievementList')}/>
