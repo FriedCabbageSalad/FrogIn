@@ -1,8 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, SetStateAction } from 'react';
 import { AppState, View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, Pressable } from 'react-native';
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
-import { frogDirectories, frogGacha, defaultFrogIndex, timeCat, dimensions } from './../screens/Scripts.tsx';
+import { frogDirectories, frogGacha, defaultFrogIndex, timeCat, dimensions, showAlert } from './../screens/Scripts.tsx';
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 
 const Separator = () => <View style={{marginVertical: '2%'}}/>;
@@ -41,39 +41,45 @@ const oddsText = (sec : number) => {
 }
 
 function LockScreen({route, navigation}: {route: any, navigation: any}) {
-    //locked indicator
-    const [lockedState, setLockedState] = useState(false)
 
-    //app state detector
-    const appState = useRef(AppState.currentState)
-    const [appStateVisible, setAppStateVisible] = useState(appState.current)
-
-    useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
-        // app state change
-        appState.current = nextAppState;
-        setAppStateVisible(appState.current);
-        console.log('AppState', appState.current);
-        console.log(lockedState); //dnr, app breaks
-        // check if app is bg during lock state
-        if (appState.current == 'background' && lockedState) {
-            setLockedState(false);
-            setDisplayImage(2)
-            setButtonVisible(true);
-            setShowPicker(true);
-        }
-    });
-    return () => {
-        subscription.remove();
-    };}, []);
-
+    // Stuff on screen
     const [timerEnd, setTimerEnd] = useState(false);
     const [buttonVisible, setButtonVisible] = useState(true);
     const [pickerVisible, setShowPicker] = useState(true);
     const [oddsModalVisible, setOddsModalVisible] = useState(false);
     const [tutorialModalVisible, setTutorialModalVisible] = useState(false);
     const [displayImage, setDisplayImage] = useState(0);
-    const timer = useRef();    
+    const timer = useRef();
+
+    // Locked State
+    const [lockedState, setLockedState] = useState(false)
+
+    //App State
+    const appState = useRef(AppState.currentState)
+    const [appStateVisible, setAppStateVisible] = useState(appState.current)
+
+    // Logic for detecting and handling app leaving
+    useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+        // app state change
+        appState.current = nextAppState;
+        setAppStateVisible(appState.current);
+        console.log('AppState', appState.current, 'LockedState', lockedState, 'Display', displayImage);
+        // check if app is bg during lock state
+        if (appState.current == 'background' && lockedState) {
+            console.log('exit detected')
+            setDisplayImage(2)
+            setButtonVisible(true);
+            setShowPicker(true);
+        }
+        // if frog ded, show explain alert
+        if (appState.current == 'active' && displayImage == 2 && lockedState) {
+            showAlert('Your Frog has perished!', 'Avoid leaving the app to keep your frog alive!', 'OK')
+            setLockedState(false);
+        }});
+    return () => {
+        subscription.remove();
+    };}, [lockedState, appState, displayImage]); 
     
     return (
         <View style={styles.background}>

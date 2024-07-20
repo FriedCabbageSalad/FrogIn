@@ -82,8 +82,8 @@ function HomeScreen({navigation}: {navigation: any}) {
         // if userdata doesnt exist, create, and update ud
         if (!documentSnapshot.exists) {
             firestore().collection('UserData').get().then(querySnapshot => {
-              firestore().collection('UserData').doc(user.uid).set({uid:user.uid, email:user.email, name: "user " + querySnapshot.size, fuid: querySnapshot.size, pfp: defaultFrogIndex, mins: 0, frogs: [0,0,0,0,0,0,0,0,0], achievements: [0], friends: ["John Smith", "0000-0000", 0]})
-              ud = [user.uid, user.email, "user " + querySnapshot.size, querySnapshot.size, defaultFrogIndex, 0, [0,0,0,0,0,0,0,0,0], [0], ["John Smith", "0000-0000", 0]]
+              firestore().collection('UserData').doc(user.uid).set({uid:user.uid, email:user.email, name: "user " + querySnapshot.size, fuid: querySnapshot.size, pfp: defaultFrogIndex, mins: 0, frogs: [0,0,0,0,0,0,0,0,0], achievements: [], friends: []})
+              ud = [user.uid, user.email, "user " + querySnapshot.size, querySnapshot.size, defaultFrogIndex, 0, [0,0,0,0,0,0,0,0,0], [], []]
             })
           }
           // else load data from document into ud
@@ -104,7 +104,7 @@ function HomeScreen({navigation}: {navigation: any}) {
       })
     }
     loadUD();
-    
+  
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text style={{fontSize: 40}}>WORK IN PROGRESS</Text>
@@ -134,6 +134,9 @@ function HomeScreen({navigation}: {navigation: any}) {
 
         <Button title="FrogPond"
           onPress={() => navigation.navigate('FrogPond')}/>
+
+        <Button title="Test"
+          onPress={() => navigation.navigate('AchievementList')}/>
 
         <Button title="Log Out"
           onPress={() => auth()

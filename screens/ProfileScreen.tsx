@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {useRef, useState} from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal, Pressable, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal, Pressable, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { getUD, updateUD } from './HomeScreen.tsx'
-import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction, parseFUID} from './../screens/Scripts.tsx';
+import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction, parseFUID, getAchievements, isUnlocked} from './../screens/Scripts.tsx';
 
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
@@ -16,6 +16,31 @@ function ProfileScreen({navigation}: {navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const [displayImage, setDisplayImage] = useState(getUD('pfp'));
 
+  // Container for Achievement
+  function AchievementItem({ item }: { item : {id: string; name: string; description: string; progress: string;} }) {
+    return (
+    <View style={isUnlocked(item.progress) ? styles.achievementContainer : styles.achievementLockedContainer}>
+      <View>
+        <Text style={styles.achievementName}>{item.name}</Text>
+        <Text style={styles.achievementDescription}>{item.description}</Text>
+      </View>
+  
+      <View style={styles.statusContainer}>
+        {isUnlocked(item.progress) && (
+          <Image
+            source={require('./../assets/tick.png')}
+            resizeMode='contain'
+            style={styles.tickImage}
+          />
+        )}
+      </View>
+  
+      <View style={styles.progressContainer}>
+        <Text style={styles.progressText}>{item.progress}</Text>
+      </View>
+    </View>
+    )};
+  
   //function for showing available frogs when changing pfp
   function frogDisplay(n : number) {
     if (getUD('frogs')[n] != 0) {
@@ -219,7 +244,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
 
               {/* Username display */}
               <View>
-                <Text style={{fontSize: 22, marginVertical: 10, color: 'white', fontWeight: '300'}}>
+                <Text style={{fontSize: 30, marginVertical: 10, color: 'white', fontWeight: '300'}}>
                   {getUD('name')}
                 </Text>
               </View>
@@ -289,63 +314,25 @@ function ProfileScreen({navigation}: {navigation: any}) {
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
                   {Math.round(getUD('mins')/6)/10} hours
             </Text>
-            
             <SeparatorHorizontal/>
-
             <Image source={require('./../assets/frogs/default_frog.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
             <SeparatorHorizontalSmall/>
             <Text style={{fontSize: 20, marginVertical: 10, color: 'white', fontWeight: '300'}}>
-                  {getUD('frogs').reduce((x: number, y: number) => x + y, 0)}
+                  {' ' + getUD('frogs').reduce((x: number, y: number) => x + y, 0)} frogs
             </Text>
           </View>
 
+          {/* Achievements ScrollView */}
+          <View style={[styles.scrollViewContainer, {height: dimensions()._height * 0.525}]}>
+          <FlatList
+            data={getAchievements(getUD('mins'), getUD('frogs'), getUD('friends'), getUD('achievements'))}
+            renderItem={({ item }) => <AchievementItem item={item} />}
+            keyExtractor={item => item.id}
+            contentContainerStyle={{ flexGrow: 1}}/>
+        </View>
       </View>
     </View>
-      {/* Achievements */}
-      <SafeAreaView style={styles.scrollViewContainer}>
-        <ScrollView style={{marginTop: 20}}>
 
-          <View style={styles.achievementContainer}>
-            <View>
-              {/* Achievement Name */}
-              <Text style={{color: '#478E6D', fontSize: 19, fontWeight: 'bold'}}>Focus Time 1</Text>
-              {/* Achievement Description */}
-              <Text style={{color: 'black'}}>Focus for 4 hours total</Text>
-            </View>
-
-            <View style={{position: 'absolute', right: 0, margin: 5, marginTop: 10}}>
-              {/* Locked/Unlocked? */}
-              <Image source={require('./../assets/tick.png')} resizeMode='contain' style={{position: 'absolute', right: 0, marginRight: 5, width: 30, height: 30}}/>
-            </View>
-
-            <View style={{position: 'absolute', right: 0, bottom: 0, margin: 10}}>
-              {/* Progress */}
-              <Text style={{color: '#AB9D78', fontSize: 16, fontWeight: 'bold'}}>4/4</Text>
-            </View>
-          </View>
-
-
-          <View style={styles.achievementLockedContainer}>
-            <View>
-              {/* Achievement Name */}
-              <Text style={{color: '#478E6D', fontSize: 19, fontWeight: 'bold'}}>Focus Time 2</Text>
-              {/* Achievement Description */}
-              <Text style={{color: 'black'}}>Focus for 10 hours total</Text>
-            </View>
-
-            <View style={{position: 'absolute', right: 0, margin: 5, marginTop: 10}}>
-              {/* Locked/Unlocked? */}
-              <Image source={require('./../assets/green_cross.png')} resizeMode='contain' style={{position: 'absolute', right: 0, marginRight: 5, width: 30, height: 30}}/>
-            </View>
-
-            <View style={{position: 'absolute', right: 0, bottom: 0, margin: 10}}>
-              {/* Progress */}
-              <Text style={{color: '#AB9D78', fontSize: 16, fontWeight: 'bold'}}>4/10</Text>
-            </View>
-          </View>
-
-        </ScrollView>
-      </SafeAreaView>
 
       {/* Navbar */}
       <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
@@ -374,6 +361,47 @@ function ProfileScreen({navigation}: {navigation: any}) {
   );
 }
 export default ProfileScreen;
+
+
+// <View style={styles.achievementContainer}>
+// <View>
+//   {/* Achievement Name */}
+//   <Text style={{color: '#478E6D', fontSize: 19, fontWeight: 'bold'}}>Focus Time 1</Text>
+//   {/* Achievement Description */}
+//   <Text style={{color: 'black'}}>Focus for 4 hours total</Text>
+// </View>
+
+// <View style={{position: 'absolute', right: 0, margin: 5, marginTop: 10}}>
+//   {/* Locked/Unlocked? */}
+//   <Image source={require('./../assets/tick.png')} resizeMode='contain' style={{position: 'absolute', right: 0, marginRight: 5, width: 30, height: 30}}/>
+// </View>
+
+// <View style={{position: 'absolute', right: 0, bottom: 0, margin: 10}}>
+//   {/* Progress */}
+//   <Text style={{color: '#AB9D78', fontSize: 16, fontWeight: 'bold'}}>4/4</Text>
+// </View>
+// </View>
+
+
+// <View style={styles.achievementLockedContainer}>
+// <View>
+//   {/* Achievement Name */}
+//   <Text style={{color: '#478E6D', fontSize: 19, fontWeight: 'bold'}}>Focus Time 2</Text>
+//   {/* Achievement Description */}
+//   <Text style={{color: 'black'}}>Focus for 10 hours total</Text>
+// </View>
+
+// <View style={{position: 'absolute', right: 0, margin: 5, marginTop: 10}}>
+//   {/* Locked/Unlocked? */}
+//   <Image source={require('./../assets/green_cross.png')} resizeMode='contain' style={{position: 'absolute', right: 0, marginRight: 5, width: 30, height: 30}}/>
+// </View>
+
+// <View style={{position: 'absolute', right: 0, bottom: 0, margin: 10}}>
+//   {/* Progress */}
+//   <Text style={{color: '#AB9D78', fontSize: 16, fontWeight: 'bold'}}>4/10</Text>
+// </View>
+// </View>
+
 
 const styles = StyleSheet.create({
   background: {
@@ -415,8 +443,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   scrollViewContainer: {
-    flex: 2,
-    paddingTop: StatusBar.currentHeight,
+    flex: 1,
     alignSelf: 'center',
   },
   text: {
@@ -429,6 +456,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     borderRadius: 8.5,
+    flexDirection: 'row'
   },
   achievementLockedContainer: {
     width: dimensions()._width * 0.8,
@@ -505,5 +533,37 @@ const styles = StyleSheet.create({
   pfpModal: {
     height: dimensions()._height * 0.05,
     width: dimensions()._height * 0.05
-  }
+  },
+  achievementName: {
+    color: '#478E6D',
+    fontSize: 19,
+    fontWeight: 'bold',
+  },
+  achievementDescription: {
+    color: 'black',
+  },
+  statusContainer: {
+    position: 'absolute',
+    right: 0,
+    margin: 5,
+    marginTop: 10,
+  },
+  tickImage: {
+    position: 'absolute',
+    right: 0,
+    marginRight: 5,
+    width: 30,
+    height: 30,
+  },
+  progressContainer: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    margin: 10,
+  },
+  progressText: {
+    color: '#AB9D78',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
