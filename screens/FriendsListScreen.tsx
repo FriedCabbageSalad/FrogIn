@@ -1,25 +1,60 @@
 import * as React from 'react';
+import {useRef, useState} from 'react';
 import { Button, View, Text, StyleSheet, ImageBackground, FlatList, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import { frogDirectories, dimensions, showAlert, showAlertAction, parseFUID } from './../screens/Scripts.tsx';
-
+import { frogDirectories, dimensions, showAlert, showAlertConfirm, parseFUID, getFriends } from './../screens/Scripts.tsx';
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
-const pfpDirectory = frogDirectories[3].image;
 
 function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
 
     //function to add friend
-    function addFriend(uid : string, name : string, fuid : number, pfp : string) {
+    function addFriend(uid : string) {
         const newFriendList = getUD('friends')
-        newFriendList.push(name, parseFUID(fuid), pfp)
+        newFriendList.push(uid)
         updateUD('friends', newFriendList)
+        setFriendsList(newFriendList)
+        return () => {};
     }
 
-    const [text, onChangeText] = React.useState('');
+    //function to remove friend
+    function removeFriend(uid: string) {
+        const newFriendList = getUD('friends')
+        updateUD('friends', newFriendList.filter((x : string) => x != uid))
+        setFriendsList(newFriendList.filter((x : string) => x != uid))
+        return () => {};
+    }
+
+    
+    // Friend container
+    const FriendItem = ({ friend } : { friend: { uid: string, name: string; fuid: string; pfp: number } }) => {
+        return (
+        <View style={styles.friendContainer}>
+            <View>
+            <View style={{ flexDirection: 'row' }}>
+                <Image source={frogDirectories[(friend.pfp)].image} style={{ width: dimensions()._height * 0.05, height: dimensions()._height * 0.0375 }} />
+                <Text style={styles.friendNameText}>{friend.name}</Text>
+            </View>
+            <Text style={styles.userIdText}>{friend.fuid}</Text>
+            </View>
+            <View style={{ position: 'absolute', right: 20, top: dimensions()._height * 0.025 }}>
+            <TouchableOpacity onPress={() => showAlertConfirm('Are you sure you want to remove','','No','Yes',() => () => {} , () => removeFriend(friend.uid) )}>
+                <Image source={require('./../assets/green_cross.png')} style={styles.cross} resizeMode="cover" />
+            </TouchableOpacity>
+            </View>
+        </View>
+        );
+    };
+
+    //Set friends as state for editing
+    const [friendsList, setFriendsList] = useState(getUD('friends'))
+
+    //Field for inputting friend code
+    const [text, onChangeText] = useState('');
+
   return (
     // Background Image
     <View style={styles.background}>
-        <View style={{ alignItems: 'center'}}>
+        <View style={{flex: 1, alignItems: 'center'}}>
             {/* Title and Friend Count */}
             <View style={{flexDirection: 'row', margin: dimensions()._height * 0.03,}}>
                 <TextInput
@@ -31,36 +66,44 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
 
                 {/* Add Friend Button */}
                 <TouchableOpacity onPress={() => {
+                    onChangeText("")
                     if (text.length != 8 || !/^\d+$/.test(text)) {showAlert('Please input a 8 digit friend ID','','OK')}
-                    else if (+text == getUD('fuid')) {showAlert('That is your own ID!','You silly!','')}
-                    else if (getUD('friends').includes(+text)) {showAlert('You are already friends with this person','','OK')}
+                    else if (+text == getUD('fuid')) {showAlert('That is your own ID!','You silly!','OK')}
                     else{
                         firestore().collection('UserData').where('fuid', '==', +text).get().then((querySnapshot) => {
-                            if (querySnapshot.empty) { //doesnt exist
+                            if (querySnapshot.empty) { //if doesnt exist
                                 showAlert('No such user exists.','','OK')
                             }
                             else { //if exists, get username from docs
-                                addFriend(querySnapshot.docs[0].get('uid'), querySnapshot.docs[0].get('name'), querySnapshot.docs[0].get('fuid'), querySnapshot.docs[0].get('pfp'))
+                                const friendUID : string = querySnapshot.docs[0].get('uid')
+                                const friendName= querySnapshot.docs[0].get('name')
+                                if (getUD('friends').includes(friendUID)) {showAlert('You are already friends with this person','','OK')}
+                                else {showAlertConfirm('Do you want to add ' + friendName + ' as friend?', '', 'No', 'Yes', () => () => {}, () => addFriend(friendUID))}
                             }
-                    })}
+                })}
                 }}>
                     <Image source={require('./../assets/right_arrow.png')} style={styles.confirmButton} resizeMode='cover'/>
                 </TouchableOpacity>
             </View>
             <Text style={styles.title}>Friend's List</Text>
-            <Text style={styles.friendTotal}>{getUD('friends').length/3} friends</Text>
+            <Text style={styles.friendTotal}>{getUD('friends').length} friends</Text>
+
+            {/* Friend List */}
+            <View style={[styles.scrollViewContainer, {top: dimensions()._height * 0.16, height: dimensions()._height * 0.76}]}>
+            <FlatList
+            data={getFriends(friendsList)}
+            renderItem={({ item }) => <FriendItem friend={item} />}
+            keyExtractor={(item) => item.uid}
+            contentContainerStyle={{ flexGrow: 1}}
+            extraData={friendsList}/>
+            </View>
         </View>
 
-        {/* Friend List */}
-        <SafeAreaView style={styles.scrollViewContainer}>
-        {/* <FlatList
-        data={DATA}
-        renderItem={({item}) => <Item title={item.title} />}
-        keyExtractor={item => item.id}
-      /> */}
 
-                {/* Friend Object */}
-                <View style={styles.friendContainer}>
+
+
+                        {/*
+                        <View style={styles.friendContainer}>
                     <View>
                         <View style={{flexDirection: 'row'}}>
                             <Image source={pfpDirectory} style={{width: dimensions()._height * 0.05, height: dimensions()._height * 0.0375}}/>
@@ -75,10 +118,8 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
                             <Image source={require('./../assets/green_cross.png')} style={styles.cross} resizeMode='cover'/>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
 
-
-        </SafeAreaView>
 
             {/* Navbar */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
@@ -175,5 +216,5 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 8.5,
         backgroundColor: 'white'
-      },
+    },
 });

@@ -1,4 +1,6 @@
-import { Dimensions, Alert } from 'react-native';
+import {useState} from 'react';
+import { Dimensions, Alert, } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 export const frogDirectories = [
     {image: require('./../assets/tank_with_egg.png')},
@@ -113,3 +115,145 @@ export const showAlertConfirm = (title : string, msg : string, Nbutton : string,
 
 export const parseFUID = (fuid : number) => 
   ("00000000" + fuid.toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")
+
+// Returns formatted friends list
+export function getFriends(friends : string[]) {
+  const friendArray : any[] = []
+  for (let i = 0; i < friends.length; i++) {
+    firestore().collection('UserData').doc(friends[i]).get().then(documentSnapshot => {
+      // if userdata does exist
+      if (documentSnapshot.exists) {
+        const friendUD = { uid: friends[i] ,name : documentSnapshot.get("name"), fuid : parseFUID(documentSnapshot.get("fuid")), pfp : documentSnapshot.get("pfp")};
+        friendArray.push(friendUD)
+      }})
+  }
+    return friendArray;
+}
+
+// Check for unlocked
+export function isUnlocked(progress: string) : boolean {
+  const [current, total] = progress.split('/').map(Number);
+  return current >= total;
+}
+
+// Returns formatted achievements list
+export function getAchievements(mins : number, frogs : number[], friends : any[], achievements : number[]) {
+  //Get data
+  const numHours = Math.floor(mins/60);
+  const numFrogs = frogs.reduce((x : number, y : number) => x + y, 0);
+  const numFriends = friends.length;
+  
+  //Calculate progress
+  function checkProgress(type : string, amount : number) {
+    switch (type) {
+      case 'hours': {
+        return Math.min(numHours, amount) + '/' + amount
+      }
+      case 'frogs' : {
+        return Math.min(numFrogs, amount) + '/' + amount
+      }
+      case 'friends' : {
+        return Math.min(numFriends, amount) + '/' + amount
+      }
+      default : return '0/' + amount
+    }
+  }
+
+  //Array to return
+  const achievementArray = [
+    {
+      id: '1',
+      name: 'Focus Time 1',
+      description: 'Focus for 4 hours total',
+      progress: checkProgress('hours', 4),
+    },
+    {
+      id: '2',
+      name: 'Focus Time 2',
+      description: 'Focus for 8 hours total',
+      progress: checkProgress('hours', 8),
+    },
+    {
+      id: '3',
+      name: 'Focus Time 3',
+      description: 'Focus for 12 hours total',
+      progress: checkProgress('hours', 12),
+    },
+    {
+      id: '4',
+      name: 'Focus Time 4',
+      description: 'Focus for 16 hours total',
+      progress: checkProgress('hours', 16),
+    },
+    {
+      id: '5',
+      name: 'Focus Time 5',
+      description: 'Focus for 20 hours total',
+      progress: checkProgress('hours', 20),
+    },
+    {
+      id: '6',
+      name: 'Frog Growing 1',
+      description: 'Grow 5 Frogs',
+      progress: checkProgress('frogs', 5),
+    },
+    {
+      id: '7',
+      name: 'Frog Growing 2',
+      description: 'Grow 10 Frogs',
+      progress: checkProgress('frogs', 10),
+    },
+    {
+      id: '8',
+      name: 'Frog Growing 3',
+      description: 'Grow 15 Frogs',
+      progress: checkProgress('frogs', 15),
+    },
+    {
+      id: '9',
+      name: 'Frog Growing 4',
+      description: 'Grow 20 Frogs',
+      progress: checkProgress('frogs', 20),
+    },
+    {
+      id: '10',
+      name: 'Frog Growing 5',
+      description: 'Grow 25 Frogs',
+      progress: checkProgress('frogs', 25),
+    },
+    {
+      id: '11',
+      name: 'Add Friend 1',
+      description: 'Add 1 Friend',
+      progress: checkProgress('friends', 1),
+    },
+    {
+      id: '12',
+      name: 'Add Friend 2',
+      description: 'Add 2 Friends',
+      progress: checkProgress('friends', 2),
+    },
+    {
+      id: '13',
+      name: 'Add Friend 3',
+      description: 'Add 3 Friends',
+      progress: checkProgress('friends', 3),
+    },
+    {
+      id: '14',
+      name: 'Add Friend 4',
+      description: 'Add 4 Friends',
+      progress: checkProgress('friends', 4),
+    },
+    {
+      id: '15',
+      name: 'Add Friend 5',
+      description: 'Add 5 Friends',
+      progress: checkProgress('friends', 5),
+    },
+  ];
+  
+
+  //return achievements array
+  return achievementArray
+}

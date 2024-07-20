@@ -15,6 +15,8 @@ const  motivationalMessages = [
     "Every day is a new beginning. Take a deep breath, smile, and start again."
 ]
 
+const index = GachaNumberGenerator() % 8
+
 function FrogPondScreen({navigation}: {navigation: any}) {
 
     // Log Out Function
@@ -27,7 +29,6 @@ function FrogPondScreen({navigation}: {navigation: any}) {
         .then(() => navigation.navigate('Home')) //can remove once migrated
     return () => ('')}
 
-    const index = GachaNumberGenerator() % 8
     const frogArray = getUD('frogs')
 
     return (
@@ -46,8 +47,6 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                 <Text>{motivationalMessages[index]}</Text>
             </View>
             {/* Frog Displays */}
-            {/* If Else Statement for frogs, basically if he has the frog, then whatever is below, else empty view */}
-            {/* arr[index] != 0 ? (the view) : <View></View> */}
             {/* Default */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.4, left: dimensions()._width * 0.45}}>
                 {(frogArray[0] != 0) ? <Image source={frogDirectories[defaultFrogIndex].image}/> : <></>}
