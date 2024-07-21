@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, SetStateAction } from 'react';
 import { AppState, View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, Pressable } from 'react-native';
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
-import { frogDirectories, frogGacha, defaultFrogIndex, timeCat, dimensions, showAlert } from './../screens/Scripts.tsx';
+import { frogDirectories, frogGacha, defaultFrogIndex, timeCat, dimensions, showAlert, frogName, frogRarity, getRarityColour } from './../screens/Scripts.tsx';
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 
 const Separator = () => <View style={{marginVertical: '2%'}}/>;
@@ -48,6 +48,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
     const [pickerVisible, setShowPicker] = useState(true);
     const [oddsModalVisible, setOddsModalVisible] = useState(false);
     const [tutorialModalVisible, setTutorialModalVisible] = useState(false);
+    const [outcomeModalVisible, setOutcomeModalVisible] = useState(false);
     const [displayImage, setDisplayImage] = useState(0);
     const timer = useRef();
 
@@ -83,6 +84,8 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
     
     return (
         <View style={styles.background}>
+
+            {/* Tutorial Modal */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -113,7 +116,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                     </View>
                 </View>
             </Modal>
-
+            {/* Open Tutorial Modal Button */}
             <View style={{position: 'absolute', right: 0, backgroundColor: '#C8B88A', borderRadius: 20, margin: 7}}>  
                 <Pressable
                     onPress={() => setTutorialModalVisible(true)}>
@@ -121,12 +124,57 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                 </Pressable>
             </View>
 
+
+            {/* Outcome Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={outcomeModalVisible}
+                onRequestClose={() => {
+                setOutcomeModalVisible(!outcomeModalVisible);
+            }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.outcomeView}>
+                        <Text style={styles.modalTitleText}>You got a</Text>
+
+                        {/* Frog Display */}
+                        <View style={styles.outerCircle}>
+                            <View style={styles.innerCicle}>
+                                <Image source={frogDirectories[displayImage].image} style={styles.tank} resizeMode='contain'/>
+                            </View>
+                        </View>
+
+                        <Separator/>
+
+                        <View>
+                            {/* Frog Rarity Text */}
+                            <Text style={{textAlign: 'center', fontSize: 22, fontWeight: '900', color: getRarityColour(displayImage)}}>
+                                {frogRarity[displayImage]}
+                            </Text>
+                            
+                            {/* Frog Name Text */}
+                            <Text style={{textAlign: 'center', fontSize: 18}}>
+                                {frogName[displayImage]}! Check it out over at your frog pond!
+                            </Text>
+                        </View>
+
+                        <Separator/>
+
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setOutcomeModalVisible(!outcomeModalVisible)}>
+                            <Text style={styles.textStyle}>Exit</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+
             {/* Container for rest */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.1, alignItems: 'center', alignSelf: 'center', justifyContent: 'center' }}>
                 {/* Circle and Image */}
                 <View style={styles.outerCircle}>
                     <View style={styles.innerCicle}>
-                        <Image source={frogDirectories[displayImage].image} style={styles.tank} resizeMode='stretch'/>
+                        <Image source={frogDirectories[displayImage].image} style={styles.tank} resizeMode='contain'/>
                     </View>
                 </View>
 
@@ -202,6 +250,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                                 setLockedState(false);
                                 setButtonVisible(true);
                                 setShowPicker(true);
+                                setOutcomeModalVisible(true);
                                 var newFrog = frogGacha(totalDuration*timeWarp);
                                 setDisplayImage(newFrog);
                                 var frogArray = getUD('frogs');
@@ -257,28 +306,32 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
             </View>
 
             {/* Navbar */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.1, flexDirection: 'row'}}>
-                
-                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.2 - 40, width: 40, height: 40,}} 
+            <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
+                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('Profile')}>
                     <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{position: 'absolute', top: dimensions()._height * 0.002, left: dimensions()._width * 0.575, width: 40, height: 40,}} 
+                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
+                    onPress={() => navigation.navigate('Leaderboard')}>
+                    <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{position: 'absolute', top: dimensions()._height * 0.002, left: dimensions()._width * 0.5 - 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('FrogPond')}>
                     <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.575, width: 40, height: 40,}} 
+                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('Lock')}>
                     <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
                 
-                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.8, width: 40, height: 40,}} 
+                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('FriendsList')}>
                     <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-            </View>            
+            </View>     
         </View>
     );
 }
@@ -332,8 +385,8 @@ const styles = StyleSheet.create({
         borderRadius: 8.5,
     },
     tank: {
-        width: dimensions()._height * 0.06,
-        height: dimensions()._height * 0.06,
+        width: dimensions()._height * 0.1,
+        height: dimensions()._height * 0.1,
     },
     timerView: {
         backgroundColor: "#478E6D",
@@ -375,6 +428,22 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+      },
+      outcomeView: {
+        margin: 20,
+        backgroundColor: '#9AC99B',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        height: dimensions()._height * 0.6
       },
       button: {
         borderRadius: 20,

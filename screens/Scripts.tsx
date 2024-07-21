@@ -17,6 +17,51 @@ export const frogDirectories = [
     {image: require('./../assets/frogs/brown_frog.png')},
   ]
 
+export const frogName = [
+  "Tank with Egg",
+  "Locked Frog",
+  "Dead Frog",
+  "Green Frog",
+  "Blue Frog",
+  "Ocean Frog",
+  "Gray Frog",
+  "Purple Frog",
+  "Red Frog",
+  "White Frog",
+  "Dark Gray Frog",
+  "Brown Frog"
+]
+
+export const frogRarity = [
+  "how",
+  "how",
+  "how",
+  "Common",
+  "Common",
+  "Uncommon",
+  "Uncommon",
+  "Rare",
+  "Rare",
+  "Legendary",
+  "Epic",
+  "Epic"
+]
+
+export function getRarityColour(frogID : number) {
+  switch (true) {
+    // Common
+    case (frogID === 3 || frogID === 4): return "white"
+    // Uncommon
+    case (frogID === 5 || frogID === 6): return "#478E6D"
+    // Rare
+    case (frogID === 7 || frogID === 8): return "blue"
+    // Epic
+    case (frogID === 10 || frogID === 11): return "purple"
+    // Legendary
+    case (frogID === 9): return "#FFE7A1"
+    default: return "black"
+  }
+}
 export const defaultFrogIndex : number = 3;
 
 const { height, width } = Dimensions.get('window')
