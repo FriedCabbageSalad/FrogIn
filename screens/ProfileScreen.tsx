@@ -3,7 +3,7 @@ import {useRef, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal, Pressable, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { getUD, updateUD } from './HomeScreen.tsx'
-import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction, parseFUID, getAchievements, isUnlocked} from './../screens/Scripts.tsx';
+import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction, parseFUID, getAchievements, isUnlocked } from './../screens/Scripts.tsx';
 
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
@@ -17,16 +17,16 @@ function ProfileScreen({navigation}: {navigation: any}) {
   const [displayImage, setDisplayImage] = useState(getUD('pfp'));
 
   // Container for Achievement
-  function AchievementItem({ item }: { item : {id: string; name: string; description: string; progress: string;} }) {
+  function AchievementItem({ achievement }: { achievement : {id: string; name: string; description: string; progress: string;} }) {
     return (
-    <View style={isUnlocked(item.progress) ? styles.achievementContainer : styles.achievementLockedContainer}>
+    <View style={isUnlocked(achievement.progress) ? styles.achievementContainer : styles.achievementLockedContainer}>
       <View>
-        <Text style={styles.achievementName}>{item.name}</Text>
-        <Text style={styles.achievementDescription}>{item.description}</Text>
+        <Text style={styles.achievementName}>{achievement.name}</Text>
+        <Text style={styles.achievementDescription}>{achievement.description}</Text>
       </View>
   
       <View style={styles.statusContainer}>
-        {isUnlocked(item.progress) && (
+        {isUnlocked(achievement.progress) && (
           <Image
             source={require('./../assets/tick.png')}
             resizeMode='contain'
@@ -36,7 +36,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
       </View>
   
       <View style={styles.progressContainer}>
-        <Text style={styles.progressText}>{item.progress}</Text>
+        <Text style={styles.progressText}>{achievement.progress}</Text>
       </View>
     </View>
     )};
@@ -322,11 +322,11 @@ function ProfileScreen({navigation}: {navigation: any}) {
             </Text>
           </View>
 
-          {/* Achievements ScrollView */}
+          {/* Achievements List */}
           <View style={[styles.scrollViewContainer, {height: dimensions()._height * 0.525}]}>
           <FlatList
             data={getAchievements(getUD('mins'), getUD('frogs'), getUD('friends'), getUD('achievements'))}
-            renderItem={({ item }) => <AchievementItem item={item} />}
+            renderItem={({ item }) => <AchievementItem achievement={item} />}
             keyExtractor={item => item.id}
             contentContainerStyle={{ flexGrow: 1}}/>
         </View>
@@ -334,31 +334,27 @@ function ProfileScreen({navigation}: {navigation: any}) {
     </View>
             {/* Navbar */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
-              <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
-                  onPress={() => navigation.navigate('Profile')}>
-                  <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
-                  onPress={() => navigation.navigate('Leaderboard')}>
-                  <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={{position: 'absolute', top: dimensions()._height * 0.002, left: dimensions()._width * 0.5 - 20, width: 40, height: 40,}} 
-                  onPress={() => navigation.navigate('FrogPond')}>
-                  <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
-                  onPress={() => navigation.navigate('Lock')}>
-                  <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-              </TouchableOpacity>
-              
-              <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
-                  onPress={() => navigation.navigate('FriendsList')}>
-                  <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-              </TouchableOpacity>
-            </View>        
+                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
+                    onPress={() => navigation.navigate('Profile')}>
+                    <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
+                    onPress={() => navigation.navigate('Leaderboard')}>
+                    <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+                <TouchableOpacity style={{position: 'absolute', top: dimensions()._height * 0.002, left: dimensions()._width * 0.5 - 20, width: 40, height: 40,}} 
+                    onPress={() => navigation.navigate('FrogPond')}>
+                    <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
+                    onPress={() => navigation.navigate('Lock')}>
+                    <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
+                    onPress={() => navigation.navigate('FriendsList')}>
+                    <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+            </View>     
     </View>
   );
 }

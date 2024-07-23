@@ -39,7 +39,7 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
             <Text style={styles.userIdText}>{friend.fuid}</Text>
             </View>
             <View style={{ position: 'absolute', right: 20, top: dimensions()._height * 0.025 }}>
-            <TouchableOpacity onPress={() => showAlertConfirm('Are you sure you want to remove','','No','Yes',() => () => {} , () => removeFriend(friend.uid) )}>
+            <TouchableOpacity onPress={() => showAlertConfirm('Are you sure you want to remove ' + friend.name + ' as friend?','','No','Yes',() => () => {} , () => removeFriend(friend.uid) )}>
                 <Image source={require('./../assets/green_cross.png')} style={styles.cross} resizeMode="cover" />
             </TouchableOpacity>
             </View>
@@ -79,7 +79,9 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
                             else { //if exists, get username from docs
                                 const friendUID : string = querySnapshot.docs[0].get('uid')
                                 const friendName= querySnapshot.docs[0].get('name')
+                                // check if already friends
                                 if (getUD('friends').includes(friendUID)) {showAlert('You are already friends with this person','','OK')}
+                                // add friend
                                 else {showAlertConfirm('Do you want to add ' + friendName + ' as friend?', '', 'No', 'Yes', () => () => {}, () => addFriend(friendUID))}
                             }
                 })}
@@ -103,8 +105,6 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
             extraData={friendsList}/>
             </View>
         </View>
-
-
 
 
                         {/*
@@ -132,17 +132,14 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
                     onPress={() => navigation.navigate('Profile')}>
                     <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('Leaderboard')}>
                     <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={{position: 'absolute', top: dimensions()._height * 0.002, left: dimensions()._width * 0.5 - 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('FrogPond')}>
                     <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('Lock')}>
                     <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
@@ -152,7 +149,7 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
                     onPress={() => navigation.navigate('FriendsList')}>
                     <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-            </View>     
+            </View>  
     </View>
   );
 }
