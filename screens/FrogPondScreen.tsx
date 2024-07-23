@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useRef, useState} from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image } from 'react-native';
-import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator, showAlert, showAlertConfirm} from './../screens/Scripts.tsx'
+import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator, showAlert, showAlertConfirm } from './../screens/Scripts.tsx'
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 import auth from '@react-native-firebase/auth';
 
@@ -90,17 +90,14 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                     onPress={() => navigation.navigate('Profile')}>
                     <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('Leaderboard')}>
                     <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={{position: 'absolute', top: dimensions()._height * 0.002, left: dimensions()._width * 0.5 - 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('FrogPond')}>
                     <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('Lock')}>
                     <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
@@ -110,7 +107,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                     onPress={() => navigation.navigate('FriendsList')}>
                     <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-            </View>   
+            </View> 
         </ImageBackground>
     );
 }

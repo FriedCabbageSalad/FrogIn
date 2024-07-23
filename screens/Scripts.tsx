@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import { CommonActions } from '@react-navigation/native';
 import { Dimensions, Alert, } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
@@ -297,8 +298,23 @@ export function getAchievements(mins : number, frogs : number[], friends : any[]
       progress: checkProgress('friends', 5),
     },
   ];
-  
 
-  //return achievements array
   return achievementArray
+}
+
+export async function getLB() {
+  const LBArray: any[] = [];
+
+  const querySnapshot = await firestore().collection('UserData').where('mins', '>', 0).get();
+  
+  querySnapshot.forEach((queryDocumentSnapshot) => {
+    LBArray.push({
+      uid: queryDocumentSnapshot.get('uid'),
+      name: queryDocumentSnapshot.get('name'),
+      pfp: queryDocumentSnapshot.get('pfp'),
+      hours: queryDocumentSnapshot.get('mins')
+    });
+  });
+
+  return LBArray.sort((a, b) => b.hours - a.hours).slice(0,5);
 }
