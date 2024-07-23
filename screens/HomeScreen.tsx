@@ -70,6 +70,7 @@ function HomeScreen({navigation}: {navigation: any}) {
       <Button title="Sign Up"
         onPress={() => navigation.navigate('SignUp')}/>
     </View>
+    // navigation.navigate('SignUp')
     );
   }
 
@@ -147,6 +148,7 @@ function HomeScreen({navigation}: {navigation: any}) {
             .catch(error => {})
             }/>
       </View>
+      // navigation.navigate('FrogPond')
     );
   }
 }

@@ -27,6 +27,13 @@ function LogInScreen({navigation}: {navigation: any}) {
   return (
       <ImageBackground source={require('./../assets/background.png')} resizeMode='cover' style={styles.imageSizing}>
 
+            <View style={{position: 'absolute', left: 0, borderRadius: 10, margin: 7, padding: 3, backgroundColor: '#516D67'}}>  
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('SignUp')}>
+                    <Image source={require('./../assets/left_arrow.png')} resizeMode='contain' style={{width: 20, height: 20}}/>
+                </TouchableOpacity>
+            </View>
+
             {/* Application Name and Logo */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.1, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
               <Text style={styles.header}>FrogIn</Text>

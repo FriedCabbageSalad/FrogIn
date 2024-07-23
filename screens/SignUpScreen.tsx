@@ -95,10 +95,19 @@ function SignUpScreen({navigation}: {navigation: any}) {
               <Text style={{color: 'black', paddingHorizontal: '2%'}}>Google</Text>
             </View>
           </TouchableOpacity>
+          
+          <Separator/>
 
           <View style={{width: "75%"}}>
-            <Separator/>
             <Text style={styles.TOS}>By clicking continue, you agree to our Terms of Service and Privacy Policy</Text>
+          </View>
+
+          <View style={{width: "75%", alignItems: 'center', flexDirection: 'row', alignSelf: 'center'}}>
+            <Text style={styles.TOS}>Already have an account?</Text>
+            
+            <TouchableOpacity style={styles.logInButton} onPress={() => navigation.navigate('LogIn')}>
+              <Text style={styles.logInText}>Log In</Text>
+            </TouchableOpacity>
           </View>
         </View>
         
@@ -130,7 +139,7 @@ const styles = StyleSheet.create({
   },
   TOS: {
     color: 'black',
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: 'Sans-serif',
     padding: 5,
     paddingBottom: 10,
@@ -162,5 +171,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 8.5,
+  },
+  logInButton: {
+    alignSelf: 'center'
+  },
+  logInText: {
+    color: 'blue',
+    fontSize: 13,
+    fontFamily: 'Sans-serif',
+    paddingBottom: 5,
+    textDecorationLine: 'underline'
   }
 });

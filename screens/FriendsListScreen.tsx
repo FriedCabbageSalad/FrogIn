@@ -5,6 +5,8 @@ import firestore from '@react-native-firebase/firestore';
 import { frogDirectories, dimensions, showAlert, showAlertConfirm, parseFUID, getFriends } from './../screens/Scripts.tsx';
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 
+const Separator = () => <View style={{marginVertical: '2%'}}/>;
+
 function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
 
     //function to add friend
@@ -92,6 +94,9 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
 
             {/* Friend List */}
             <View style={[styles.scrollViewContainer, {top: dimensions()._height * 0.16, height: dimensions()._height * 0.76}]}>
+            
+            <Separator/>
+
             <FlatList
             data={getFriends(friendsList)}
             renderItem={({ item }) => <FriendItem friend={item} />}
