@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { Button, View, Text } from 'react-native';
+import { Button, View, Text, ImageBackground, Image, StyleSheet } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { defaultFrogIndex } from './../screens/Scripts.tsx'
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { dimensions } from './../screens/Scripts.tsx';
 
 //userdata storage
 let ud : any[];
@@ -119,45 +120,76 @@ function HomeScreen({navigation}: {navigation: any}) {
   }
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{fontSize: 40}}>WORK IN PROGRESS</Text>
-      <Text style={{fontSize: 20}}>This is a Test Home Screen</Text>
-      <Text style={{fontSize: 20}}>Welcome</Text>
+      // <Text style={{fontSize: 40}}>WORK IN PROGRESS</Text>
+      // <Text style={{fontSize: 20}}>This is a Test Home Screen</Text>
+      // <Text style={{fontSize: 20}}>Welcome</Text>
 
-      <Button title="Log In"
-        onPress={() => navigation.navigate('LogIn')}/>
+      // <Button title="Log In"
+      //   onPress={() => navigation.navigate('LogIn')}/>
       
-      <Button title="Sign Up"
-        onPress={() => navigation.navigate('SignUp')}/>
+      // <Button title="Sign Up"
+      //   onPress={() => navigation.navigate('SignUp')}/>
       
-      <Button title="Password"
-        onPress={() => navigation.navigate('Password')}/>
+      // <Button title="Password"
+      //   onPress={() => navigation.navigate('Password')}/>
 
-      <Button title="Settings"
-        onPress={() => navigation.navigate('Settings')}/>
+      // <Button title="Settings"
+      //   onPress={() => navigation.navigate('Settings')}/>
 
-      <Button title="Lock"
-        onPress={() => navigation.navigate('Lock')}/>
+      // <Button title="Lock"
+      //   onPress={() => navigation.navigate('Lock')}/>
 
-      <Button title="Profile"
-        onPress={() => navigation.navigate('Profile')}/>
+      // <Button title="Profile"
+      //   onPress={() => navigation.navigate('Profile')}/>
 
-      <Button title="FriendsList"
-        onPress={() => navigation.navigate('FriendsList')}/>
+      // <Button title="FriendsList"
+      //   onPress={() => navigation.navigate('FriendsList')}/>
 
-      <Button title="FrogPond"
-        onPress={() => navigation.navigate('FrogPond')}/>
+      // <Button title="FrogPond"
+      //   onPress={() => navigation.navigate('FrogPond')}/>
       
-      <Button title="Leaderboard"
-        onPress={() => navigation.navigate('Leaderboard')}/>
+      // <Button title="Leaderboard"
+      //   onPress={() => navigation.navigate('Leaderboard')}/>
 
-      <Button title="Log Out"
-        onPress={() => auth()
-          .signOut()
-          .catch(error => {})
-          }/>
-    </View>
+      // <Button title="Log Out"
+      //   onPress={() => auth()
+      //     .signOut()
+      //     .catch(error => {})
+      //     }/>
+
+    <ImageBackground source={require('./../assets/loading_background.png')} resizeMode='cover' style={styles.imageSizing}>
+
+      {/* Application Name and Logo */}
+      <View style={{position: 'absolute', top: dimensions()._height * 0.1, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
+        <Text style={styles.header}>FrogIn</Text>
+        <Image source={require('./../assets/default_frog.png')} resizeMode='contain' style={styles.logo}/>
+      </View>
+
+      <View style={{position: 'absolute', top: dimensions()._height * 0.25, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
+        <Text style={{fontSize: 40, fontWeight: 'bold', color: 'white'}}>Loading</Text>
+        <Image source={require('./../assets/loading_circle.png')} style={{width: dimensions()._width * 0.5, height: dimensions()._width * 0.5}} resizeMode='stretch'/>
+      </View>
+
+    </ImageBackground>
   );
 }
 
 export default HomeScreen;
+
+const styles = StyleSheet.create({
+  header: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 48,
+    fontFamily: 'Sans-serif',
+    padding: 5
+  },
+  logo: {
+    width: '90%',
+    height: '120%',
+  },
+  imageSizing: {
+    width: '100%',
+    height: '100%'
+  },
+});
