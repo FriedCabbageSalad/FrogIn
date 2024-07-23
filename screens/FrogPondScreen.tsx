@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {useRef, useState} from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image, Pressable } from 'react-native';
-import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator, showAlert, showAlertConfirm} from './../screens/Scripts.tsx'
+import {useRef, useState, useEffect} from 'react';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image, Pressable, BackHandler } from 'react-native';
+import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator, showAlert, showAlertAction, showAlertConfirm} from './../screens/Scripts.tsx'
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 import auth from '@react-native-firebase/auth';
 
@@ -17,18 +17,17 @@ const  motivationalMessages = [
     "Every day is a new beginning. Take a deep breath, smile, and start again."
 ]
 
-const index = GachaNumberGenerator() % 8
-
 function FrogPondScreen({navigation}: {navigation: any}) {
+    const index = GachaNumberGenerator() % 8
 
     // Log Out Function
     function logOut() {
         auth()
         .signOut()
+        .then(navigation.navigate('SignUp'))
         .catch(error => {
             console.log("error")
-            showAlert('Something went wrong','Please restart the app.','OK')})
-        .then(() => navigation.navigate('Home')) //can remove once migrated
+            showAlertAction('Something went wrong','Please restart the app.','OK',() => {BackHandler.exitApp();return () => {}})})
     return () => ('')}
 
     const frogArray = getUD('frogs')
