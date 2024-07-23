@@ -1,9 +1,11 @@
 import * as React from 'react';
 import {useRef, useState} from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image, Pressable } from 'react-native';
 import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator, showAlert, showAlertConfirm} from './../screens/Scripts.tsx'
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 import auth from '@react-native-firebase/auth';
+
+
 
 const  motivationalMessages = [
     "Believe in yourself and you will be unstoppable.",
