@@ -65,11 +65,11 @@ function LeaderboardScreen({route, navigation}: {route: any, navigation: any}) {
         {/* Medals */}
         </View>
             <Image source={require('./../assets/first_medal.png')} 
-            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.192}}/>
+            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.162}}/>
             <Image source={require('./../assets/second_medal.png')} 
-            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.292}}/>
+            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.262}}/>
             <Image source={require('./../assets/third_medal.png')} 
-            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.384}}/>
+            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.362}}/>
         <View>
 
         </View>
