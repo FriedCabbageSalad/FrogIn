@@ -129,8 +129,9 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             </View>
 
             {/* Mythics */}
+            <Image source={require('./../assets/cloud.png')} style={{width: dimensions()._height * 0.23, height: dimensions()._height * 0.1, position: 'absolute', top: dimensions()._height * 0.15, left: dimensions()._width * 0.10}}/>
             {/* Golden */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.15, left: dimensions()._width * 0.05}}>
+            <View style={{position: 'absolute', top: dimensions()._height * 0.17, left: dimensions()._width * 0.12}}>
                 {(achievementArray.includes(5)) ? 
                     <Pressable
                     onPress={() => {setSelectedFrog(9); setModalVisible(true)}}>
@@ -138,7 +139,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                     </Pressable> : <></>}
             </View>
             {/* Mysterious */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.15, left: dimensions()._width * 0.25}}>
+            <View style={{position: 'absolute', top: dimensions()._height * 0.18, left: dimensions()._width * 0.4}}>
                 {(achievementArray.includes(10)) ? 
                     <Pressable
                     onPress={() => {setSelectedFrog(10); setModalVisible(true)}}>
@@ -146,7 +147,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                     </Pressable> : <></>}
             </View>
             {/* Rainbow */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.22, left: dimensions()._width * 0.15}}>
+            <View style={{position: 'absolute', top: dimensions()._height * 0.13, left: dimensions()._width * 0.26}}>
                 {(achievementArray.includes(15)) ? 
                     <Pressable
                     onPress={() => {setSelectedFrog(11); setModalVisible(true)}}>
@@ -155,7 +156,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             </View>
 
             {/* Navbar */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
+            <View style={{position: 'absolute', top: dimensions()._height * 0.94, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
                 <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('Profile')}>
                     <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>

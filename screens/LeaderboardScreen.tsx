@@ -63,11 +63,11 @@ function LeaderboardScreen({route, navigation}: {route: any, navigation: any}) {
         {/* Medals */}
         </View>
             <Image source={require('./../assets/first_medal.png')} 
-            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.162}}/>
+            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.192}}/>
             <Image source={require('./../assets/second_medal.png')} 
-            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.262}}/>
+            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.292}}/>
             <Image source={require('./../assets/third_medal.png')} 
-            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.362}}/>
+            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.392}}/>
         <View>
 
         </View>
@@ -106,7 +106,7 @@ function LeaderboardScreen({route, navigation}: {route: any, navigation: any}) {
      */}
 
             {/* Navbar */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
+            <View style={{position: 'absolute', top: dimensions()._height * 0.94, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
                 <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('Profile')}>
                     <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
