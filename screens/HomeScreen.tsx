@@ -20,9 +20,9 @@ function fieldToIndex(name : string) : number {
     case "pfp": return 4
     case "mins": return 5
     case "frogs": return 6
-    case "achivements": return 7
+    case "achievements": return 7
     case "friends": return 8
-    default: return 0
+    default: return 9
   }
 }
 
@@ -38,6 +38,12 @@ export function updateUD(field : string, data: any) {
   firestore().collection('UserData').doc(ud[0]).update(fieldPath,  data)
 }
 
+//updating userdata backend only
+export function updateBE(uid : string, field : string, data: any) {
+  const fieldPath = new firestore.FieldPath(field)
+  firestore().collection('UserData').doc(uid).update(fieldPath,  data)
+}
+
 function HomeScreen({navigation}: {navigation: any}) {
 
   const [initializing, setInitializing] = useState(true);
@@ -45,6 +51,7 @@ function HomeScreen({navigation}: {navigation: any}) {
   const isFocused = useIsFocused();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Auth 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged((user: any) => {
       setUser(user);
@@ -53,13 +60,17 @@ function HomeScreen({navigation}: {navigation: any}) {
     return subscriber; // unsubscribe on unmount
   }, []);
 
+
+  // Load ud when user detected
   useEffect(() => {
     if (user) {
       loadUD();
     }
   }, [user]);
 
+  // Timer for loading and redirect
   useEffect(() => {
+    console.log('loading screen effect ran')
     if (isFocused && user) {
       timerRef.current = setTimeout(() => {
         navigation.navigate('FrogPond');
@@ -78,6 +89,7 @@ function HomeScreen({navigation}: {navigation: any}) {
     };
   }, [isFocused, navigation, user]);
 
+  // Function to load and store ud
   function loadUD() {
     firestore().collection('UserData').doc(user.uid).get().then(documentSnapshot => {
       if (!documentSnapshot.exists) {
@@ -96,16 +108,34 @@ function HomeScreen({navigation}: {navigation: any}) {
           ud = [user.uid, user.email, "user " + querySnapshot.size, querySnapshot.size, defaultFrogIndex, 0, [0,0,0,0,0,0,0,0,0], [], []];
         });
       } else {
+        let uidStore = documentSnapshot.get("uid");
+        let emailStore = documentSnapshot.get("email");
+        let nameStore = documentSnapshot.get("name");
+        let fuidStore = documentSnapshot.get("fuid");
+        let pfpStore = documentSnapshot.get("pfp");
+        let minsStore = documentSnapshot.get("mins");
+        let frogsStore = documentSnapshot.get("frogs");
+        let achievementsStore = documentSnapshot.get("achievements");
+        let friendsStore = documentSnapshot.get("friends");
+        //safety checks for userdata
+        if (uidStore != user.uid) {updateBE(user.uid,'user',user.uid); uidStore = user.uid}
+        if (emailStore != user.email) {updateBE(user.uid,'email',user.email); emailStore = user.email}
+        if (typeof nameStore === 'undefined') {updateBE(user.uid,'name','user'); nameStore = 'user'}
+        if (typeof(pfpStore) !== 'number') {updateBE(user.uid,'pfp',defaultFrogIndex); pfpStore = defaultFrogIndex}
+        if (typeof(minsStore) !== 'number') {updateBE(user.uid,'mins',0); minsStore = 0}
+        if (!Array.isArray(frogsStore)) {updateBE(user.uid,'frogs',[0,0,0,0,0,0,0,0,0]); frogsStore = [0,0,0,0,0,0,0,0,0]}
+        if (!Array.isArray(achievementsStore)) {updateBE(user.uid,'achievements',[]); achievementsStore = []}
+        if (!Array.isArray(friendsStore)) {updateBE(user.uid,'friends',[]); friendsStore = []}
         ud = [
-          documentSnapshot.get("uid"),
-          documentSnapshot.get("email"),
-          documentSnapshot.get("name"),
-          documentSnapshot.get("fuid"),
-          documentSnapshot.get("pfp"),
-          documentSnapshot.get("mins"),
-          documentSnapshot.get("frogs"),
-          documentSnapshot.get("achievements"),
-          documentSnapshot.get("friends"),
+          uidStore,
+          emailStore,
+          nameStore,
+          fuidStore,
+          pfpStore,
+          minsStore,
+          frogsStore,
+          achievementsStore,
+          friendsStore
         ];
       }
     });
@@ -113,11 +143,11 @@ function HomeScreen({navigation}: {navigation: any}) {
 
   if (initializing) return <Text style={{fontSize: 40}}></Text>;
 
-  //user logged in
-  if (user) {
-    // userdata processing
-    loadUD();
-  }
+  // //user logged in
+  // if (user) {
+  //   // userdata processing
+  //   loadUD();
+  // }
 
   return (
       // <Text style={{fontSize: 40}}>WORK IN PROGRESS</Text>

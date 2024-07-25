@@ -35,9 +35,9 @@ export const frogName = [
 ]
 
 export const frogRarity = [
-  "how",
-  "how",
-  "how",
+  "osuhow?",
+  "osuhow?",
+  "osuhow?",
   "Common",
   "Common",
   "Uncommon",
@@ -177,7 +177,7 @@ export function getFriends(friends : string[]) {
     return friendArray;
 }
 
-// Check for unlocked
+// Check if achievement unlocked
 export function isUnlocked(progress: string) : boolean {
   const [current, total] = progress.split('/').map(Number);
   return current >= total;
@@ -213,90 +213,105 @@ export function getAchievements(mins : number, frogs : number[], friends : any[]
       name: 'Focus Time 1',
       description: 'Focus for 4 hours total',
       progress: checkProgress('hours', 4),
+      claimed: false,
     },
     {
       id: '2',
       name: 'Focus Time 2',
       description: 'Focus for 8 hours total',
       progress: checkProgress('hours', 8),
+      claimed: false,
     },
     {
       id: '3',
       name: 'Focus Time 3',
       description: 'Focus for 12 hours total',
       progress: checkProgress('hours', 12),
+      claimed: false,
     },
     {
       id: '4',
       name: 'Focus Time 4',
       description: 'Focus for 16 hours total',
       progress: checkProgress('hours', 16),
+      claimed: false,
     },
     {
       id: '5',
       name: 'Focus Time 5',
       description: 'Focus for 20 hours total',
       progress: checkProgress('hours', 20),
+      claimed: achievements.includes(5),
     },
     {
       id: '6',
       name: 'Frog Growing 1',
       description: 'Grow 5 Frogs',
       progress: checkProgress('frogs', 5),
+      claimed: false,
     },
     {
       id: '7',
       name: 'Frog Growing 2',
       description: 'Grow 10 Frogs',
       progress: checkProgress('frogs', 10),
+      claimed: false,
     },
     {
       id: '8',
       name: 'Frog Growing 3',
       description: 'Grow 15 Frogs',
       progress: checkProgress('frogs', 15),
+      claimed: false,
     },
     {
       id: '9',
       name: 'Frog Growing 4',
       description: 'Grow 20 Frogs',
       progress: checkProgress('frogs', 20),
+      claimed: false,
     },
     {
       id: '10',
       name: 'Frog Growing 5',
       description: 'Grow 25 Frogs',
       progress: checkProgress('frogs', 25),
+      claimed: achievements.includes(5),
     },
     {
       id: '11',
       name: 'Add Friend 1',
       description: 'Add 1 Friend',
       progress: checkProgress('friends', 1),
+      claimed: false,
     },
     {
       id: '12',
       name: 'Add Friend 2',
       description: 'Add 2 Friends',
       progress: checkProgress('friends', 2),
+      claimed: false,
     },
     {
       id: '13',
       name: 'Add Friend 3',
       description: 'Add 3 Friends',
       progress: checkProgress('friends', 3),
+      claimed: false,
     },
     {
       id: '14',
       name: 'Add Friend 4',
       description: 'Add 4 Friends',
       progress: checkProgress('friends', 4),
+      claimed: false,
     },
     {
       id: '15',
       name: 'Add Friend 5',
       description: 'Add 5 Friends',
       progress: checkProgress('friends', 5),
+      claimed: false,
     },
   ];
 
@@ -304,18 +319,38 @@ export function getAchievements(mins : number, frogs : number[], friends : any[]
 }
 
 export async function getLB() {
-  const LBArray: any[] = [];
+  let LBArray: any[] = [];
 
   const querySnapshot = await firestore().collection('UserData').where('mins', '>', 0).get();
   
   querySnapshot.forEach((queryDocumentSnapshot) => {
     LBArray.push({
+      rank: 0,
       uid: queryDocumentSnapshot.get('uid'),
       name: queryDocumentSnapshot.get('name'),
       pfp: queryDocumentSnapshot.get('pfp'),
       hours: queryDocumentSnapshot.get('mins')
     });
   });
+  
+  LBArray = LBArray.sort((a, b) => b.hours - a.hours).slice(0,5)
 
-  return LBArray.sort((a, b) => b.hours - a.hours).slice(0,5);
+  for (let i = 0; i < LBArray.length; i++) {
+    LBArray[i].rank = i + 1;
+  }
+
+  return LBArray
+}
+
+export function getRankColor(rank : number) {
+  switch (rank) {
+    case 1:
+      return '#ffd700';
+    case 2:
+      return '#d4d4d4';
+    case 3:
+      return '#cd7f32';
+    default:
+      return 'white'; // default color if rank doesn't match any case
+  }
 }

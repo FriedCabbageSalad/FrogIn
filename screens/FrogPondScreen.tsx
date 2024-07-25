@@ -17,8 +17,10 @@ const  motivationalMessages = [
     "Every day is a new beginning. Take a deep breath, smile, and start again."
 ]
 
+const index = new Date().getDate() % 8
+
 function FrogPondScreen({navigation}: {navigation: any}) {
-    const index = GachaNumberGenerator() % 8
+  
     const [modal0Visible, setModal0Visible] = useState(false);
     const [modal1Visible, setModal1Visible] = useState(false);
     const [modal2Visible, setModal2Visible] = useState(false);

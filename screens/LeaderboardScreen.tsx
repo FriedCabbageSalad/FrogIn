@@ -2,9 +2,8 @@ import * as React from 'react';
 import {useRef, useState, useCallback, useEffect} from 'react';
 import { Button, View, Text, StyleSheet, ImageBackground, FlatList, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import { frogDirectories, dimensions, showAlert, showAlertAction, parseFUID, getLB } from './../screens/Scripts.tsx';
+import { frogDirectories, dimensions, showAlert, showAlertAction, parseFUID, getLB, getRankColor} from './../screens/Scripts.tsx';
 
-const pfpDirectory = frogDirectories[3].image;
 const SeparatorHorizontalSmall = () => <View style={{marginHorizontal: '1%'}}/>;
 
 function LeaderboardScreen({route, navigation}: {route: any, navigation: any}) {
@@ -25,18 +24,17 @@ function LeaderboardScreen({route, navigation}: {route: any, navigation: any}) {
 
     // Load achievements when the component mounts
     useEffect(() => {
-        console.log('use eff update')
         loadLB();
         }, [loadLB]);
     
     //User container
-    const UserItem = ({ user } : { user: { uid: string; name: string; pfp: number; hours: number } }) => {
+    const UserItem = ({ user } : { user: { rank: number; uid: string; name: string; pfp: number; hours: number } }) => {
         return(
             <View style={styles.friendContainer}>
         <View>
             <View style={{flexDirection: 'row'}}>
-                <Image source={pfpDirectory} style={{width: dimensions()._height * 0.05, height: dimensions()._height * 0.0375}}/>
-                <Text style={styles.friendNameText}>{user.name}</Text>
+                <Image source={frogDirectories[user.pfp].image} style={{width: dimensions()._height * 0.05, height: dimensions()._height * 0.0375}}/>
+                <Text style={[styles.friendNameText, {color: getRankColor(user.rank)}]}>{user.name}</Text>
             </View>   
         </View>
         

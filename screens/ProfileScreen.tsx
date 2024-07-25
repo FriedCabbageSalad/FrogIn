@@ -16,30 +16,50 @@ function ProfileScreen({navigation}: {navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const [displayImage, setDisplayImage] = useState(getUD('pfp'));
 
-  // Container for Achievement
-  function AchievementItem({ achievement }: { achievement : {id: string; name: string; description: string; progress: string;} }) {
+  function AchievementItem({ achievement }: { achievement: { id: string; name: string; description: string; progress: string; claimed: boolean } }) {
+    const isCompleted = isUnlocked(achievement.progress);
+    const [claimed, setClaimed] = useState(achievement.claimed ? styles.claimButtonIncomplete : styles.claimButtonCompleted)
     return (
-    <View style={isUnlocked(achievement.progress) ? styles.achievementContainer : styles.achievementLockedContainer}>
-      <View>
-        <Text style={styles.achievementName}>{achievement.name}</Text>
-        <Text style={styles.achievementDescription}>{achievement.description}</Text>
+      <View style={isCompleted ? styles.achievementContainer : styles.achievementLockedContainer}>
+        <View>
+          <Text style={styles.achievementName}>{achievement.name}</Text>
+          <Text style={styles.achievementDescription}>{achievement.description}</Text>
+        </View>
+        <View style={styles.statusContainer}>
+          {isCompleted && (
+            <Image
+              source={require('./../assets/tick.png')}
+              resizeMode='contain'
+              style={styles.tickImage}
+            />
+          )}
+        </View>
+        <View style={styles.progressContainer}>
+          <Text style={styles.progressText}>{achievement.progress}</Text>
+        </View>
+        { ['5','10'].includes(achievement.id) &&
+        <TouchableOpacity 
+          style={[
+            styles.claimButton, 
+            isCompleted ? (claimed) : styles.claimButtonIncomplete
+          ]}
+          onPress={() => {
+            if (isCompleted && !achievement.claimed) {
+              claim(+achievement.id)
+              setClaimed(styles.claimButtonIncomplete);
+            }
+            else if (!isCompleted) {            
+              showAlert("You haven't unlocked this yet!",'','OK')
+            }
+            else if (achievement.claimed) {
+              showAlert("You have already claimed the prize!",'','OK')
+          }}
+        }>
+          <Text style={styles.claimButtonText}>{(claimed == styles.claimButtonIncomplete) ? 'Claimed' : 'Claim'}</Text>
+        </TouchableOpacity>}
       </View>
-  
-      <View style={styles.statusContainer}>
-        {isUnlocked(achievement.progress) && (
-          <Image
-            source={require('./../assets/tick.png')}
-            resizeMode='contain'
-            style={styles.tickImage}
-          />
-        )}
-      </View>
-  
-      <View style={styles.progressContainer}>
-        <Text style={styles.progressText}>{achievement.progress}</Text>
-      </View>
-    </View>
-    )};
+    );
+  }
   
   //function for showing available frogs when changing pfp
   function frogDisplay(n : number) {
@@ -60,6 +80,14 @@ function ProfileScreen({navigation}: {navigation: any}) {
   //function for showing alert when clicking locked pfp
   function frogLockedAlert() {
     showAlert('Frog not unlocked yet!','Grow more frogs to unlock this frog.','OK')
+  }
+
+  // Function for claiming achievement
+  function claim(num : number) {
+    let UDachievement : any[] = getUD('achievements')
+    //if (!Array.isArray(UDachievement)) {UDachievement = []} 
+    UDachievement.push(num)
+    updateUD('achievements', UDachievement)
   }
 
   return (
@@ -238,7 +266,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
 
                 <Pressable
                   onPress={() => setPFPModalVisible(true)}>
-                  <Image source={require('./../assets/edit_image.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
+                  <Image source={require('./../assets/edit_image.png')} resizeMode='contain' style={{width: 40, height: 40}}/>
                 </Pressable>
               </View>  
 
@@ -562,6 +590,30 @@ const styles = StyleSheet.create({
   progressText: {
     color: '#AB9D78',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  claimButton: {
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  claimButtonCompleted: {
+    position: 'absolute',
+    right: 60,
+    bottom: 15,
+    backgroundColor: 'green',
+  },
+  claimButtonIncomplete: {
+    position: 'absolute',
+    right: 60,
+    bottom: 15,
+    backgroundColor: 'grey',
+  },
+  claimButtonText: {
+    color: 'white',
+    fontSize: 10,
     fontWeight: 'bold',
   },
 });
