@@ -79,7 +79,7 @@ function HomeScreen({navigation}: {navigation: any}) {
     if (isFocused && !user) {
       timerRef.current = setTimeout(() => {
         navigation.navigate('SignUp');
-      }, 1000);
+      }, 2000);
     }
 
     return () => {

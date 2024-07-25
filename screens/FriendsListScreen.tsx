@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {useRef, useState} from 'react';
-import { Button, View, Text, StyleSheet, ImageBackground, FlatList, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, TextInput } from 'react-native';
+import {useRef, useState } from 'react';
+import { Button, View, Text, StyleSheet, ImageBackground, FlatList, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, TextInput, Keyboard, Modal, Pressable } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { frogDirectories, dimensions, showAlert, showAlertConfirm, parseFUID, getFriends } from './../screens/Scripts.tsx';
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
@@ -9,26 +9,52 @@ const Separator = () => <View style={{marginVertical: '2%'}}/>;
 
 function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
 
+    //update friendslist on the friends side
+    async function updateFriendsFL(uid : string, add : boolean) {
+        var friendsFL = await firestore().collection('UserData').doc(uid).get().then(ds => (ds.get('friends'))) as any[]
+        if (add) {
+            friendsFL.push(getUD('uid'))
+            firestore().collection('UserData').doc(uid).update({friends: friendsFL})
+        }
+        else {
+            friendsFL = friendsFL.filter((x : string) => x != getUD('uid'))
+            firestore().collection('UserData').doc(uid).update({friends: friendsFL})   
+        }
+    }
+
     //function to add friend
     function addFriend(uid : string) {
+        // add friend for user
+        Keyboard.dismiss()
         const newFriendList = getUD('friends')
         newFriendList.push(uid)
         updateUD('friends', newFriendList)
+        console.log(newFriendList)
         setFriendsList(getFriends(newFriendList))
+        //add user to friends ud
+        updateFriendsFL(uid, true)
+        forceReload(!reload)
         return () => {};
     }
 
     //function to remove friend
     function removeFriend(uid: string) {
+        // remove friend for user
         const newFriendList = getUD('friends')
         updateUD('friends', newFriendList.filter((x : string) => x != uid))
         setFriendsList(getFriends(newFriendList.filter((x : string) => x != uid)))
+        // remove user from friends list
+        updateFriendsFL(uid, false)
+        forceReload(!reload)
         return () => {};
     }
 
     // Friend container
     const FriendItem = ({ friend } : { friend: { uid: string, name: string; fuid: string; pfp: number } }) => {
+        const [modalVisible, setModalVisible] = useState(false);
         return (
+            <>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={styles.friendContainer}>
             <View>
             <View style={{ flexDirection: 'row' }}>
@@ -43,11 +69,37 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
             </TouchableOpacity>
             </View>
         </View>
+        </TouchableOpacity>
+        {/* Friend Modal */}
+        <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalTitleText}>{friend.name}</Text>
+                        <Image source={frogDirectories[friend.pfp].image} style={{ width: dimensions()._height * 0.1, height: dimensions()._height * 0.075 }} />
+                        <Text style={styles.modalText}>Friend ID: {friend.fuid}</Text>
+
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setModalVisible(false)}>
+                            <Text style={styles.textStyle}>Close</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+        </>
         );
     };
 
     //Set friends as state for editing
     const [friendsList, setFriendsList] = useState(getFriends(getUD('friends')))
+
+    //Force friends list to reload
+    const [reload, forceReload] = useState(true)
 
     //Field for inputting friend code
     const [text, onChangeText] = useState('');
@@ -92,16 +144,13 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
             <Text style={styles.friendTotal}>{getUD('friends').length} friends</Text>
 
             {/* Friend List */}
-            <View style={[styles.scrollViewContainer, {top: dimensions()._height * 0.16, height: dimensions()._height * 0.76}]}>
-            
-            <Separator/>
-
+            <View style={[styles.scrollViewContainer, {top: dimensions()._height * 0.18, height: dimensions()._height * 0.76}]}>
             <FlatList
             data={friendsList}
             renderItem={({ item }) => <FriendItem friend={item} />}
             keyExtractor={(item) => item.uid}
             contentContainerStyle={{ flexGrow: 1}}
-            extraData={friendsList}/>
+            extraData={[friendsList, reload]}/>
             </View>
         </View>
 
@@ -220,5 +269,53 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 8.5,
         backgroundColor: 'white'
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+      },
+    modalView: {
+        width: dimensions()._width * 0.7, // 90% of screen width
+        height: dimensions()._height * 0.7, // 70% of screen height
+        margin: 20,
+        backgroundColor: '#9AC99B',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+        fontSize: 18
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonClose: {
+        backgroundColor: '#C8B88A',
+    },
+      textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalTitleText: {
+        marginBottom: 15,
+        textAlign: 'center',
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: 'white'
     },
 });

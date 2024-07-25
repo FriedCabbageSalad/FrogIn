@@ -77,7 +77,7 @@ function LeaderboardScreen({route, navigation}: {route: any, navigation: any}) {
             <FlatList
             data={LB}
             renderItem={({ item }) => <UserItem user={item} />}
-            keyExtractor={(item) => item.uid}
+            keyExtractor={(item) => item.rank}
             contentContainerStyle={{ flexGrow: 1}}
             extraData={LB}
             />

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useRef, useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image, Pressable, BackHandler, Modal } from 'react-native';
-import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator, showAlert, showAlertAction, showAlertConfirm} from './../screens/Scripts.tsx'
+import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator, showAlert, showAlertAction, showAlertConfirm, frogName, frogRarity, getRarityColour, frogInfo } from './../screens/Scripts.tsx'
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
 import auth from '@react-native-firebase/auth';
 
@@ -17,19 +17,13 @@ const  motivationalMessages = [
     "Every day is a new beginning. Take a deep breath, smile, and start again."
 ]
 
-const index = new Date().getDate() % 8
+const index = new Date().getDate() % 7
 
 function FrogPondScreen({navigation}: {navigation: any}) {
   
-    const [modal0Visible, setModal0Visible] = useState(false);
-    const [modal1Visible, setModal1Visible] = useState(false);
-    const [modal2Visible, setModal2Visible] = useState(false);
-    const [modal3Visible, setModal3Visible] = useState(false);
-    const [modal4Visible, setModal4Visible] = useState(false);
-    const [modal5Visible, setModal5Visible] = useState(false);
-    const [modal6Visible, setModal6Visible] = useState(false);
-    const [modal7Visible, setModal7Visible] = useState(false);
-    const [modal8Visible, setModal8Visible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedFrog, setSelectedFrog] = useState(0);
+
     // Log Out Function
     function logOut() {
         auth()
@@ -41,6 +35,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
     return () => ('')}
 
     const frogArray = getUD('frogs')
+    const achievementArray = getUD('achievements')
 
     return (
         <ImageBackground source={require('./../assets/frog_pond_background.png')} resizeMode='cover' style={styles.imageSizing}>
@@ -57,13 +52,13 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                 <Text style={{fontSize: 13, fontWeight: 'bold'}}>Today's Motivational Message</Text>
                 <Text>{motivationalMessages[index]}</Text>
             </View>
-            {/* Frog Displays */}
 
+            {/* Frog Displays */}
             {/* Default */}
             <View style={{position: 'absolute', top: dimensions()._height * 0.4, left: dimensions()._width * 0.45}}>
                 {(frogArray[0] != 0) ?                 
                     <Pressable
-                        onPress={() => setModal0Visible(true)}>
+                        onPress={() => {setSelectedFrog(0); setModalVisible(true)}}>
                             <Image source={frogDirectories[defaultFrogIndex].image}/>
                     </Pressable> : <></>}
             </View>
@@ -72,7 +67,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.45, left: dimensions()._width * 0.6}}>
                 {(frogArray[1] != 0) ?
                     <Pressable
-                    onPress={() => setModal1Visible(true)}>
+                    onPress={() => {setSelectedFrog(1); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 1].image}/>
                     </Pressable> : <></>}
             </View>
@@ -80,7 +75,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.35, left: dimensions()._width * 0.2}}>
                 {(frogArray[2] != 0) ? 
                     <Pressable
-                    onPress={() => setModal2Visible(true)}>
+                    onPress={() => {setSelectedFrog(2); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 2].image}/>
                     </Pressable> : <></>}
             </View>
@@ -88,7 +83,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.3, left: dimensions()._width * 0.4}}>
                 {(frogArray[3] != 0) ? 
                     <Pressable
-                    onPress={() => setModal3Visible(true)}>
+                    onPress={() => {setSelectedFrog(3); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 3].image}/>
                     </Pressable> : <></>}
             </View>
@@ -96,7 +91,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.35, left: dimensions()._width * 0.58}}>
                 {(frogArray[4] != 0) ? 
                     <Pressable
-                    onPress={() => setModal4Visible(true)}>
+                    onPress={() => {setSelectedFrog(4); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 4].image}/>
                     </Pressable> : <></>}
             </View>
@@ -104,7 +99,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.42, left: dimensions()._width * 0.1}}>
                 {(frogArray[5] != 0) ? 
                     <Pressable
-                    onPress={() => setModal5Visible(true)}>
+                    onPress={() => {setSelectedFrog(5); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 5].image}/>
                     </Pressable> : <></>}
             </View>
@@ -112,7 +107,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.43, left: dimensions()._width * 0.3}}>
                 {(frogArray[6] != 0) ? 
                     <Pressable
-                    onPress={() => setModal6Visible(true)}>
+                    onPress={() => {setSelectedFrog(6); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 6].image}/>
                     </Pressable> : <></>}
             </View>
@@ -120,7 +115,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.48, left: dimensions()._width * 0.28}}>
                 {(frogArray[7] != 0) ? 
                     <Pressable
-                    onPress={() => setModal7Visible(true)}>
+                    onPress={() => {setSelectedFrog(7); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 7].image}/>
                     </Pressable> : <></>}
             </View>
@@ -128,8 +123,34 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             <View style={{position: 'absolute', top: dimensions()._height * 0.49, left: dimensions()._width * 0.45}}>
                 {(frogArray[8] != 0) ? 
                     <Pressable
-                    onPress={() => setModal8Visible(true)}>
+                    onPress={() => {setSelectedFrog(8); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 8].image}/>
+                    </Pressable> : <></>}
+            </View>
+
+            {/* Mythics */}
+            {/* Golden */}
+            <View style={{position: 'absolute', top: dimensions()._height * 0.15, left: dimensions()._width * 0.05}}>
+                {(achievementArray.includes(5)) ? 
+                    <Pressable
+                    onPress={() => {setSelectedFrog(9); setModalVisible(true)}}>
+                        <Image source={frogDirectories[defaultFrogIndex + 9].image}/>
+                    </Pressable> : <></>}
+            </View>
+            {/* Mysterious */}
+            <View style={{position: 'absolute', top: dimensions()._height * 0.15, left: dimensions()._width * 0.25}}>
+                {(achievementArray.includes(10)) ? 
+                    <Pressable
+                    onPress={() => {setSelectedFrog(10); setModalVisible(true)}}>
+                        <Image source={frogDirectories[defaultFrogIndex + 10].image}/>
+                    </Pressable> : <></>}
+            </View>
+            {/* Rainbow */}
+            <View style={{position: 'absolute', top: dimensions()._height * 0.22, left: dimensions()._width * 0.15}}>
+                {(achievementArray.includes(15)) ? 
+                    <Pressable
+                    onPress={() => {setSelectedFrog(11); setModalVisible(true)}}>
+                        <Image source={frogDirectories[defaultFrogIndex + 11].image}/>
                     </Pressable> : <></>}
             </View>
 
@@ -158,261 +179,30 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                 </TouchableOpacity>
             </View> 
 
-            {/* Default Frog Modal */}
+            {/* Frog Modal */}
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={modal0Visible}
+                visible={modalVisible}
                 onRequestClose={() => {
-                setModal0Visible(!modal0Visible);
+                setModalVisible(!modalVisible);
             }}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Image/>
-                        <Text style={styles.modalTitleText}>Green Frog</Text>
-                            <Image source={frogDirectories[defaultFrogIndex].image}/>
-                            
+                        <Text style={styles.modalTitleText}>{frogName[defaultFrogIndex + selectedFrog]}</Text>
+                            <Image source={frogDirectories[defaultFrogIndex + selectedFrog].image}/>
+                            {/* Frog Rarity Text */}
+                            <Text style={{textAlign: 'center', fontSize: 22, fontWeight: '900', color: getRarityColour(selectedFrog + defaultFrogIndex)}}>
+                                {frogRarity[selectedFrog + defaultFrogIndex]}
+                            </Text>
                             <Separator/>
-
                             <Text style={styles.modalText}>
-                                placeholder
+                                {frogInfo[selectedFrog]}
                             </Text>
 
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModal0Visible(!modal0Visible)}>
-                                <Text style={styles.textStyle}>Exit</Text>
-                            </Pressable>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* Blue Frog Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modal1Visible}
-                onRequestClose={() => {
-                setModal1Visible(!modal1Visible);
-            }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Image/>
-                        <Text style={styles.modalTitleText}>Blue Frog</Text>
-                            <Image source={frogDirectories[defaultFrogIndex + 1].image}/>
-                            
-                            <Separator/>
-
-                            <Text style={styles.modalText}>
-                                placeholder
-                            </Text>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModal1Visible(!modal1Visible)}>
-                                <Text style={styles.textStyle}>Exit</Text>
-                            </Pressable>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* Ocean Frog Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modal2Visible}
-                onRequestClose={() => {
-                setModal2Visible(!modal2Visible);
-            }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Image/>
-                        <Text style={styles.modalTitleText}>Ocean Frog</Text>
-                            <Image source={frogDirectories[defaultFrogIndex + 2].image}/>
-                            
-                            <Separator/>
-
-                            <Text style={styles.modalText}>
-                                placeholder
-                            </Text>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModal2Visible(!modal2Visible)}>
-                                <Text style={styles.textStyle}>Exit</Text>
-                            </Pressable>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* Gray Frog Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modal3Visible}
-                onRequestClose={() => {
-                setModal3Visible(!modal3Visible);
-            }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Image/>
-                        <Text style={styles.modalTitleText}>Gray Frog</Text>
-                            <Image source={frogDirectories[defaultFrogIndex + 3].image}/>
-                            
-                            <Separator/>
-
-                            <Text style={styles.modalText}>
-                                placeholder
-                            </Text>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModal3Visible(!modal3Visible)}>
-                                <Text style={styles.textStyle}>Exit</Text>
-                            </Pressable>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* Purple Frog Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modal4Visible}
-                onRequestClose={() => {
-                setModal4Visible(!modal4Visible);
-            }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Image/>
-                        <Text style={styles.modalTitleText}>Purple Frog</Text>
-                            <Image source={frogDirectories[defaultFrogIndex + 4].image}/>
-                            
-                            <Separator/>
-
-                            <Text style={styles.modalText}>
-                                placeholder
-                            </Text>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModal4Visible(!modal4Visible)}>
-                                <Text style={styles.textStyle}>Exit</Text>
-                            </Pressable>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* Red Frog Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modal5Visible}
-                onRequestClose={() => {
-                setModal5Visible(!modal5Visible);
-            }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Image/>
-                        <Text style={styles.modalTitleText}>Red Frog</Text>
-                            <Image source={frogDirectories[defaultFrogIndex + 5].image}/>
-                            
-                            <Separator/>
-
-                            <Text style={styles.modalText}>
-                                placeholder
-                            </Text>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModal5Visible(!modal5Visible)}>
-                                <Text style={styles.textStyle}>Exit</Text>
-                            </Pressable>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* White Frog Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modal6Visible}
-                onRequestClose={() => {
-                setModal6Visible(!modal6Visible);
-            }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Image/>
-                        <Text style={styles.modalTitleText}>White Frog</Text>
-                            <Image source={frogDirectories[defaultFrogIndex + 6].image}/>
-                            
-                            <Separator/>
-
-                            <Text style={styles.modalText}>
-                                placeholder
-                            </Text>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModal6Visible(!modal6Visible)}>
-                                <Text style={styles.textStyle}>Exit</Text>
-                            </Pressable>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* Dark Gray Frog Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modal7Visible}
-                onRequestClose={() => {
-                setModal7Visible(!modal7Visible);
-            }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Image/>
-                        <Text style={styles.modalTitleText}>Dark Gray Frog</Text>
-                            <Image source={frogDirectories[defaultFrogIndex + 7].image}/>
-                            
-                            <Separator/>
-
-                            <Text style={styles.modalText}>
-                                placeholder
-                            </Text>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModal7Visible(!modal7Visible)}>
-                                <Text style={styles.textStyle}>Exit</Text>
-                            </Pressable>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* Brown Frog Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modal8Visible}
-                onRequestClose={() => {
-                setModal8Visible(!modal8Visible);
-            }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Image/>
-                        <Text style={styles.modalTitleText}>Brown Frog</Text>
-                            <Image source={frogDirectories[defaultFrogIndex + 8].image}/>
-                            
-                            <Separator/>
-
-                            <Text style={styles.modalText}>
-                                placeholder
-                            </Text>
-
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModal8Visible(!modal8Visible)}>
+                                onPress={() => setModalVisible(!modalVisible)}>
                                 <Text style={styles.textStyle}>Exit</Text>
                             </Pressable>
                     </View>
@@ -452,8 +242,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 22,
-      },
-      modalView: {
+    },
+    modalView: {
+        width: dimensions()._width * 0.7, // 90% of screen width
+        height: dimensions()._height * 0.7, // 70% of screen height
         margin: 20,
         backgroundColor: '#9AC99B',
         borderRadius: 20,
@@ -467,30 +259,30 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-      },
-      modalText: {
+    },
+    modalText: {
         marginBottom: 15,
         textAlign: 'center',
         fontSize: 18
-      },
-      button: {
+    },
+    button: {
         borderRadius: 20,
         padding: 10,
         elevation: 2,
-      },
-      buttonClose: {
+    },
+    buttonClose: {
         backgroundColor: '#C8B88A',
-      },
-      textStyle: {
+    },
+    textStyle: {
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
-      },
-      modalTitleText: {
+    },
+    modalTitleText: {
         marginBottom: 15,
         textAlign: 'center',
         fontSize: 28,
         fontWeight: 'bold',
         color: 'white'
-      },
+    },
  });

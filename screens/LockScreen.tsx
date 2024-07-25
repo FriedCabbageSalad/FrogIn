@@ -50,6 +50,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
     const [tutorialModalVisible, setTutorialModalVisible] = useState(false);
     const [outcomeModalVisible, setOutcomeModalVisible] = useState(false);
     const [displayImage, setDisplayImage] = useState(0);
+    const [showOddsButton, setShowOddsButton] = useState(true);
     const timer = useRef();
 
     // Locked State
@@ -66,12 +67,13 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
         appState.current = nextAppState;
         setAppStateVisible(appState.current);
         console.log('AppState', appState.current, 'LockedState', lockedState, 'Display', displayImage);
-        // check if app is bg during lock state
+        // trigger if app is bg during lock state
         if (appState.current == 'background' && lockedState) {
             console.log('exit detected')
             setDisplayImage(2)
             setButtonVisible(true);
             setShowPicker(true);
+            setShowOddsButton(true);
         }
         // if frog ded, show explain alert
         if (appState.current == 'active' && displayImage == 2 && lockedState) {
@@ -229,7 +231,9 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                                     setButtonVisible(false);
                                     setShowPicker(false);
                                     setDisplayImage(0);
+                                    setShowOddsButton(false);
                                 }
+                                else {showAlert('Select a time before pressing start','','OK')}
                             }
                         } style={styles.buttonStart}>
                             <Text style={{color: 'white', fontSize: 18}}>Start</Text>
@@ -251,6 +255,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                                 setButtonVisible(true);
                                 setShowPicker(true);
                                 setOutcomeModalVisible(true);
+                                setShowOddsButton(true);
                                 var newFrog = frogGacha(totalDuration*timeWarp);
                                 setDisplayImage(newFrog);
                                 var frogArray = getUD('frogs');
@@ -269,6 +274,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                                 setLockedState(false);
                                 setButtonVisible(true);
                                 setShowPicker(true);
+                                setShowOddsButton(true);
                             }
                         } style={styles.buttonCancel}>
                             <Text style={{color: 'white', fontSize: 18}}>Cancel</Text>
@@ -297,15 +303,19 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                             </View>
                         </View>
                     </Modal>
+
+                    {/* Show Odds Button*/}
+                    {showOddsButton &&
                     <Pressable
                         style={[styles.button, styles.buttonOpen]}
                         onPress={() => setOddsModalVisible(true)}>
                         <Text style={styles.textStyle}>Show Odds</Text>
-                    </Pressable>
+                    </Pressable>}
                 </View>
             </View>
 
             {/* Navbar */}
+            {showOddsButton &&
             <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
                 <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('Profile')}>
@@ -323,12 +333,11 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                     onPress={() => navigation.navigate('Lock')}>
                     <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-                
                 <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('FriendsList')}>
                     <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-            </View> 
+            </View>}
         </View>
     );
 }
