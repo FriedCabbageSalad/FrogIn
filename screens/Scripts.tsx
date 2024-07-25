@@ -17,6 +17,9 @@ export const frogDirectories = [
     {image: require('./../assets/frogs/white_frog.png')},
     {image: require('./../assets/frogs/dark_gray_frog.png')},
     {image: require('./../assets/frogs/brown_frog.png')},
+    {image: require('./../assets/frogs/golden_frog.png')},
+    {image: require('./../assets/frogs/mysterious_frog.png')},
+    {image: require('./../assets/frogs/rainbow_frog.png')},
   ]
 
 export const frogName = [
@@ -31,7 +34,10 @@ export const frogName = [
   "Red Frog",
   "White Frog",
   "Dark Gray Frog",
-  "Brown Frog"
+  "Brown Frog",
+  "Golden Frog",
+  "Mysterious Frog",
+  "Rainbow Frog",
 ]
 
 export const frogRarity = [
@@ -41,12 +47,66 @@ export const frogRarity = [
   "Common",
   "Common",
   "Uncommon",
-  "Uncommon",
+  "Rare",
   "Rare",
   "Rare",
   "Legendary",
   "Epic",
-  "Epic"
+  "Epic",
+  "Mythic",
+  "Mythic",
+  "Mythic",
+]
+
+export const frogInfo = [
+  //Default
+  `Conservation Status: 
+
+  Bio`,
+  //Blue
+  `Conservation Status: 
+
+  Bio`,
+  //Ocean
+  `Conservation Status: 
+
+  Bio`,
+  //Gray
+  `Conservation Status: 
+
+  Bio`,
+  // Purple
+  `Conservation Status: 
+
+  Bio`,
+  // Red
+  `Conservation Status: 
+
+  Bio`,
+  // White
+  `Conservation Status: 
+
+  Bio`,
+  // Dark Grey
+  `Conservation Status: 
+
+  Bio`,
+  // Brown
+  `Conservation Status: 
+
+  Bio`,
+  // Golden
+  `Conservation Status: ???
+
+  Bio`,
+  // Mysterious
+  `Conservation Status: ???
+
+  Bio`,
+  // Rainbow
+  `Conservation Status: ???
+
+  Bio`,
 ]
 
 export function getRarityColour(frogID : number) {
@@ -54,13 +114,16 @@ export function getRarityColour(frogID : number) {
     // Common
     case (frogID === 3 || frogID === 4): return "white"
     // Uncommon
-    case (frogID === 5 || frogID === 6): return "#478E6D"
+    case (frogID === 5): return "#478E6D"
     // Rare
-    case (frogID === 7 || frogID === 8): return "blue"
+    case (frogID === 6 || frogID === 7 || frogID === 8): return "blue"
     // Epic
     case (frogID === 10 || frogID === 11): return "purple"
     // Legendary
     case (frogID === 9): return "#FFE7A1"
+    // Mythic
+    case (frogID === 12 || frogID === 13 || frogID === 14) : return 'red'
+    // Default
     default: return "black"
   }
 }
@@ -311,7 +374,7 @@ export function getAchievements(mins : number, frogs : number[], friends : any[]
       name: 'Add Friend 5',
       description: 'Add 5 Friends',
       progress: checkProgress('friends', 5),
-      claimed: false,
+      claimed: achievements.includes(15),
     },
   ];
 

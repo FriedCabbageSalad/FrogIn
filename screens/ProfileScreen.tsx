@@ -37,7 +37,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
         <View style={styles.progressContainer}>
           <Text style={styles.progressText}>{achievement.progress}</Text>
         </View>
-        { ['5','10'].includes(achievement.id) &&
+        { ['5','10','15'].includes(achievement.id) &&
         <TouchableOpacity 
           style={[
             styles.claimButton, 
@@ -85,7 +85,6 @@ function ProfileScreen({navigation}: {navigation: any}) {
   // Function for claiming achievement
   function claim(num : number) {
     let UDachievement : any[] = getUD('achievements')
-    //if (!Array.isArray(UDachievement)) {UDachievement = []} 
     UDachievement.push(num)
     updateUD('achievements', UDachievement)
   }
