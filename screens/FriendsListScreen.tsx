@@ -14,7 +14,7 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
         const newFriendList = getUD('friends')
         newFriendList.push(uid)
         updateUD('friends', newFriendList)
-        setFriendsList(newFriendList)
+        setFriendsList(getFriends(newFriendList))
         return () => {};
     }
 
@@ -22,11 +22,10 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
     function removeFriend(uid: string) {
         const newFriendList = getUD('friends')
         updateUD('friends', newFriendList.filter((x : string) => x != uid))
-        setFriendsList(newFriendList.filter((x : string) => x != uid))
+        setFriendsList(getFriends(newFriendList.filter((x : string) => x != uid)))
         return () => {};
     }
 
-    
     // Friend container
     const FriendItem = ({ friend } : { friend: { uid: string, name: string; fuid: string; pfp: number } }) => {
         return (
@@ -48,12 +47,12 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
     };
 
     //Set friends as state for editing
-    const [friendsList, setFriendsList] = useState(getUD('friends'))
+    const [friendsList, setFriendsList] = useState(getFriends(getUD('friends')))
 
     //Field for inputting friend code
     const [text, onChangeText] = useState('');
-
-  return (
+    
+    return (
     // Background Image
     <View style={styles.background}>
         <View style={{flex: 1, alignItems: 'center'}}>
@@ -98,7 +97,7 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
             <Separator/>
 
             <FlatList
-            data={getFriends(friendsList)}
+            data={friendsList}
             renderItem={({ item }) => <FriendItem friend={item} />}
             keyExtractor={(item) => item.uid}
             contentContainerStyle={{ flexGrow: 1}}
@@ -144,7 +143,6 @@ function FriendsListScreen({route, navigation}: {route: any, navigation: any}) {
                     onPress={() => navigation.navigate('Lock')}>
                     <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-                
                 <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
                     onPress={() => navigation.navigate('FriendsList')}>
                     <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
