@@ -205,7 +205,7 @@ export const showAlertAction = (title : string, msg : string, button : string, a
     ],
   )
 
-export const showAlertConfirm = (title : string, msg : string, Nbutton : string, Pbutton: string, Naction : () => Function, Paction : () => Function) =>
+export const showAlertConfirm = (title : string, msg : string, Nbutton : string, Pbutton: string, Naction : () => any, Paction : () => any) =>
   Alert.alert(
     title,
     msg,
@@ -227,17 +227,24 @@ export const parseFUID = (fuid : number) =>
   ("00000000" + fuid.toString()).slice(-8).replace(/(\d{4})(\d{4})/, "$1-$2")
 
 // Returns formatted friends list
-export function getFriends(friends : string[]) {
+export async function getFriends(friends : string[]) {
   const friendArray : any[] = []
   for (let i = 0; i < friends.length; i++) {
-    firestore().collection('UserData').doc(friends[i]).get().then(documentSnapshot => {
+    await firestore().collection('UserData').doc(friends[i]).get().then(documentSnapshot => {
       // if userdata does exist
       if (documentSnapshot.exists) {
-        const friendUD = { uid: friends[i] ,name : documentSnapshot.get("name"), fuid : parseFUID(documentSnapshot.get("fuid")), pfp : documentSnapshot.get("pfp")};
+        const friendUD = { uid: friends[i], 
+          name : documentSnapshot.get("name"), 
+          fuid : parseFUID(documentSnapshot.get("fuid")), 
+          pfp : documentSnapshot.get("pfp"),
+          mins : documentSnapshot.get("mins"),
+          frogs: documentSnapshot.get("frogs"),
+          achievements: documentSnapshot.get("achievements"),};
         friendArray.push(friendUD)
       }})
   }
-    return friendArray;
+  console.log('getfriends called and returned')
+  return friendArray;
 }
 
 // Check if achievement unlocked
@@ -377,7 +384,7 @@ export function getAchievements(mins : number, frogs : number[], friends : any[]
       claimed: achievements.includes(15),
     },
   ];
-
+  console.log('getachievements called and returned')
   return achievementArray
 }
 
@@ -401,7 +408,7 @@ export async function getLB() {
   for (let i = 0; i < LBArray.length; i++) {
     LBArray[i].rank = i + 1;
   }
-
+  console.log('getlb called and returned')
   return LBArray
 }
 
@@ -414,6 +421,6 @@ export function getRankColor(rank : number) {
     case 3:
       return '#cd7f32';
     default:
-      return 'white'; // default color if rank doesn't match any case
+      return 'white';
   }
 }
