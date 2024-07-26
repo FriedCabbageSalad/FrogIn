@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useRef, useState, useEffect} from 'react';
+import {useRef, useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image, Pressable, BackHandler, Modal } from 'react-native';
 import { frogDirectories, dimensions, defaultFrogIndex, GachaNumberGenerator, showAlert, showAlertAction, showAlertConfirm, frogName, frogRarity, getRarityColour, frogInfo } from './../screens/Scripts.tsx'
 import { getUD, updateUD } from './../screens/HomeScreen.tsx'
@@ -34,8 +34,19 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             showAlertAction('Something went wrong','Please restart the app.','OK',() => {BackHandler.exitApp();return () => {}})})
     return () => ('')}
 
-    const frogArray = getUD('frogs')
-    const achievementArray = getUD('achievements')
+    const [frogArray, setFrogArray] = useState(getUD('frogs'))
+    const [achievementArray, setAchievementArray] = useState(getUD('achievements'))
+
+    const loadFrogs = useCallback(() => {
+        setFrogArray(getUD('frogs'))
+        setAchievementArray(getUD('achievements'))
+        console.log('loadfrogs called and returned')
+    }, []);
+
+    // Load when the component mounts
+    useEffect(() => {
+      loadFrogs();
+      }, [loadFrogs]);
 
     return (
         <ImageBackground source={require('./../assets/frog_pond_background.png')} resizeMode='cover' style={styles.imageSizing}>
@@ -43,14 +54,14 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                 <TouchableOpacity
                     onPress={() => {
                         // Logout Button
-                        showAlertConfirm('Are you sure you want to sign out?', 'Your progress will be saved', 'No', 'Yes', () => () => ('') , logOut)}}>
+                        showAlertConfirm('Are you sure you want to sign out?', 'Your progress will be saved', 'No', 'Yes', () => ('') , logOut)}}>
                     <Image source={require('./../assets/log_out.png')} resizeMode='contain' style={{width: 20, height: 20}}/>
                 </TouchableOpacity>
             </View>
             
             <View style={styles.messageBox}>
-                <Text style={{fontSize: 13, fontWeight: 'bold'}}>Today's Motivational Message</Text>
-                <Text>{motivationalMessages[index]}</Text>
+                <Text style={{fontSize: 13, fontWeight: 'bold', color: 'black'}}>Today's Motivational Message</Text>
+                <Text style={{color: 'grey'}}>{motivationalMessages[index]}</Text>
             </View>
 
             {/* Frog Displays */}
@@ -129,56 +140,66 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             </View>
 
             {/* Mythics */}
-            <Image source={require('./../assets/cloud.png')} style={{width: dimensions()._height * 0.23, height: dimensions()._height * 0.1, position: 'absolute', top: dimensions()._height * 0.15, left: dimensions()._width * 0.10}}/>
             {/* Golden */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.17, left: dimensions()._width * 0.12}}>
+            <View style={{position: 'absolute', left: dimensions()._width * 0.05}}>
+            <Image source={require('./../assets/cloud.png')} style={{top: dimensions()._height * 0.15 + 25, position: 'absolute', zIndex: 1}}/>
                 {(achievementArray.includes(5)) ? 
-                    <Pressable
+                    <Pressable style={{top: dimensions()._height * 0.15, position: 'absolute', zIndex: 2}}
                     onPress={() => {setSelectedFrog(9); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 9].image}/>
                     </Pressable> : <></>}
             </View>
             {/* Mysterious */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.18, left: dimensions()._width * 0.4}}>
+            <View style={{position: 'absolute', left: dimensions()._width * 0.25}}>
+                <Image source={require('./../assets/cloud.png')} style={{top: dimensions()._height * 0.15 + 25, position: 'absolute', zIndex: 1}}/>
                 {(achievementArray.includes(10)) ? 
-                    <Pressable
+                    <Pressable style={{top: dimensions()._height * 0.15, position: 'absolute', zIndex: 2}}
                     onPress={() => {setSelectedFrog(10); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 10].image}/>
                     </Pressable> : <></>}
             </View>
             {/* Rainbow */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.13, left: dimensions()._width * 0.26}}>
+            <View style={{position: 'absolute', left: dimensions()._width * 0.15}}>
+            <Image source={require('./../assets/cloud.png')} style={{top: dimensions()._height * 0.23 + 25, position: 'absolute', zIndex: 1}}/>
                 {(achievementArray.includes(15)) ? 
-                    <Pressable
+                    <Pressable style={{top: dimensions()._height * 0.23, position: 'absolute', zIndex: 2}}
                     onPress={() => {setSelectedFrog(11); setModalVisible(true)}}>
                         <Image source={frogDirectories[defaultFrogIndex + 11].image}/>
                     </Pressable> : <></>}
             </View>
 
             {/* Navbar */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.94, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
-                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Profile')}>
-                    <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Leaderboard')}>
-                    <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: dimensions()._height * 0.002, left: dimensions()._width * 0.5 - 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('FrogPond')}>
-                    <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Lock')}>
-                    <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                
-                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('FriendsList')}>
+            <View style={{
+                position: 'absolute', 
+                bottom: 0, 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                backgroundColor: '#516D67', 
+                width: dimensions()._width, 
+                height: dimensions()._height * 0.06, 
+                flexDirection: 'row'
+            }}>
+                <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                    onPress={() => navigation.replace('FriendsList')}>
                     <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
                 </TouchableOpacity>
-            </View> 
+                <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                    onPress={() => navigation.replace('Lock')}>
+                    <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+                <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                    onPress={() => ''}>
+                    <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+                <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                    onPress={() => navigation.replace('Leaderboard')}>
+                    <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+                <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                    onPress={() => navigation.replace('Profile')}>
+                    <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+                </TouchableOpacity>
+            </View>
 
             {/* Frog Modal */}
             <Modal
@@ -245,8 +266,8 @@ const styles = StyleSheet.create({
         marginTop: 22,
     },
     modalView: {
-        width: dimensions()._width * 0.7, // 90% of screen width
-        height: dimensions()._height * 0.7, // 70% of screen height
+        width: dimensions()._width * 0.8,
+        height: dimensions()._height * 0.7,
         margin: 20,
         backgroundColor: '#9AC99B',
         borderRadius: 20,
