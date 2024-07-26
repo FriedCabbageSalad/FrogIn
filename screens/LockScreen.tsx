@@ -91,12 +91,12 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={tutorialModalVisible}
+                visible={tutorialModalVisible}            
                 onRequestClose={() => {
                 setTutorialModalVisible(!tutorialModalVisible);
             }}>
                 <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
+                    <View style={{...styles.modalView, ...styles.tutorialView}}>
                         <Text style={styles.modalTitleText}>Tutorial</Text>
                         <Text style={styles.modalText}>
                             Welcome to the Lock Screen!
@@ -314,30 +314,39 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                 </View>
             </View>
 
-            {/* Navbar */}
-            {showOddsButton &&
-            <View style={{position: 'absolute', top: dimensions()._height * 0.94, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
-                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Profile')}>
-                    <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Leaderboard')}>
-                    <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: dimensions()._height * 0.002, left: dimensions()._width * 0.5 - 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('FrogPond')}>
-                    <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Lock')}>
-                    <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('FriendsList')}>
-                    <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-            </View>}
+        {/* Navbar */}
+        {showOddsButton &&
+        <View style={{
+            position: 'absolute', 
+            bottom: 0, 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            backgroundColor: '#516D67', 
+            width: dimensions()._width, 
+            height: dimensions()._height * 0.06, 
+            flexDirection: 'row'
+        }}>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => navigation.replace('FriendsList')}>
+                <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => ''}>
+                <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => navigation.replace('FrogPond')}>
+                <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => navigation.replace('Leaderboard')}>
+                <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => navigation.replace('Profile')}>
+                <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+        </View>}
         </View>
     );
 }
@@ -420,7 +429,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 22,
       },
-      modalView: {
+    modalView: {
         margin: 20,
         backgroundColor: '#9AC99B',
         borderRadius: 20,
@@ -434,8 +443,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-      },
-      outcomeView: {
+    },
+    tutorialView: {
+        position: 'absolute',
+        top: 0,
+        maxHeight: dimensions()._height * 0.8,
+    },
+    outcomeView: {
         margin: 20,
         backgroundColor: '#9AC99B',
         borderRadius: 20,
@@ -450,33 +464,33 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
         height: dimensions()._height * 0.6
-      },
-      button: {
+    },
+    button: {
         borderRadius: 20,
         padding: 10,
         elevation: 2,
-      },
-      buttonOpen: {
+    },
+    buttonOpen: {
         backgroundColor: '#C8B88A',
-      },
-      buttonClose: {
+    },
+    buttonClose: {
         backgroundColor: '#C8B88A',
-      },
-      textStyle: {
+    },
+    textStyle: {
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
-      },
-      modalText: {
+    },
+    modalText: {
         marginBottom: 15,
         textAlign: 'center',
         fontSize: 18
-      },
-      modalTitleText: {
+    },
+    modalTitleText: {
         marginBottom: 15,
         textAlign: 'center',
         fontSize: 28,
         fontWeight: 'bold',
         color: 'white'
-      },
+    },
 });
