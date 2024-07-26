@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Button, View, Text } from 'react-native';
+import { useEffect} from 'react';
+import { BackHandler } from 'react-native';
+import { showAlertConfirm} from './screens/Scripts.tsx'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -12,10 +14,24 @@ import LockScreen from './screens/LockScreen';
 import ProfileScreen from './screens/ProfileScreen'
 import FriendsListScreen from './screens/FriendsListScreen';
 import FrogPondScreen from './screens/FrogPondScreen';
+import LeaderboardScreen from './screens/LeaderboardScreen';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+  //Prevent Back
+  useEffect(() => {
+    const backAction = () => {
+        showAlertConfirm('Are you sure you want to exit the app?','','No','Yes',() => () => {},() => {BackHandler.exitApp();return () => {}})
+        return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+    );
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home"
@@ -29,6 +45,7 @@ function App() {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="FriendsList" component={FriendsListScreen} />
         <Stack.Screen name="FrogPond" component={FrogPondScreen} />
+        <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
