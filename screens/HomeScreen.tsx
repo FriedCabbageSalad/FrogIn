@@ -60,21 +60,23 @@ function HomeScreen({navigation}: {navigation: any}) {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-
-  // Load ud when user detected
-  useEffect(() => {
-    if (user) {
-      loadUD();
-    }
-  }, [user]);
+  // // Load ud when user detected
+  // useEffect(() => {
+  //   if (user) {
+  //     loadUD();
+  //   }
+  // }, [user]);
 
   // Timer for loading and redirect
   useEffect(() => {
     console.log('loading screen effect ran')
     if (isFocused && user) {
+      console.log('loading ud')
+      loadUD();
+      console.log('ud loaded')
       timerRef.current = setTimeout(() => {
         navigation.navigate('FrogPond');
-      }, 1000);
+      }, 2000);
     }
     if (isFocused && !user) {
       timerRef.current = setTimeout(() => {
@@ -90,8 +92,8 @@ function HomeScreen({navigation}: {navigation: any}) {
   }, [isFocused, navigation, user]);
 
   // Function to load and store ud
-  function loadUD() {
-    firestore().collection('UserData').doc(user.uid).get().then(documentSnapshot => {
+  async function loadUD() {
+    await firestore().collection('UserData').doc(user.uid).get().then(documentSnapshot => {
       if (!documentSnapshot.exists) {
         firestore().collection('UserData').get().then(querySnapshot => {
           firestore().collection('UserData').doc(user.uid).set({
@@ -143,12 +145,6 @@ function HomeScreen({navigation}: {navigation: any}) {
 
   if (initializing) return <Text style={{fontSize: 40}}></Text>;
 
-  // //user logged in
-  // if (user) {
-  //   // userdata processing
-  //   loadUD();
-  // }
-
   return (
       // <Text style={{fontSize: 40}}>WORK IN PROGRESS</Text>
       // <Text style={{fontSize: 20}}>This is a Test Home Screen</Text>
@@ -190,14 +186,14 @@ function HomeScreen({navigation}: {navigation: any}) {
     <ImageBackground source={require('./../assets/loading_background.png')} resizeMode='cover' style={styles.imageSizing}>
 
       {/* Application Name and Logo */}
-      <View style={{position: 'absolute', top: dimensions()._height * 0.1, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
+      <View style={{position: 'absolute', top: 70, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
         <Text style={styles.header}>FrogIn</Text>
         <Image source={require('./../assets/default_frog.png')} resizeMode='contain' style={styles.logo}/>
       </View>
 
-      <View style={{position: 'absolute', top: dimensions()._height * 0.25, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
-        <Text style={{fontSize: 40, fontWeight: 'bold', color: 'white'}}>Loading</Text>
-        <Image source={require('./../assets/loading_circle.png')} style={{width: dimensions()._width * 0.5, height: dimensions()._width * 0.5}} resizeMode='stretch'/>
+      <View style={{position: 'relative', justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
+        {/* <Text style={{fontSize: 28, fontWeight: 'bold', color: 'white'}}>Loading</Text> */}
+        {/* <Image source={require('./../assets/loading_circle.png')} style={{width: dimensions()._width * 0.5, height: dimensions()._width * 0.5}} resizeMode='stretch'/> */}
       </View>
 
     </ImageBackground>
@@ -211,8 +207,8 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontSize: 48,
-    fontFamily: 'Sans-serif',
-    padding: 5
+    fontFamily: 'serif',
+    padding: 5,
   },
   logo: {
     width: '90%',

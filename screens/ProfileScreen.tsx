@@ -1,10 +1,9 @@
 import * as React from 'react';
-import {useRef, useState} from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView, SafeAreaView, StatusBar, TouchableOpacity, Image, Modal, Pressable, TextInput } from 'react-native';
+import {useRef, useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, ScrollView, StatusBar, TouchableOpacity, Image, Modal, Pressable, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { getUD, updateUD } from './HomeScreen.tsx'
-import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction, parseFUID, getAchievements, isUnlocked } from './../screens/Scripts.tsx';
-
+import { frogDirectories, defaultFrogIndex, dimensions, showAlert, showAlertAction, parseFUID, getAchievements, isUnlocked, getRarityColour, frogName, frogRarity } from './../screens/Scripts.tsx';
 
 const SeparatorVertical = () => <View style={{marginVertical: '2%'}}/>;
 const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
@@ -15,7 +14,10 @@ function ProfileScreen({navigation}: {navigation: any}) {
   const [pfpModalVisible, setPFPModalVisible] = useState(false);
   const [text, onChangeText] = React.useState('');
   const [displayImage, setDisplayImage] = useState(getUD('pfp'));
+  const [outcomeModalVisible, setOutcomeModalVisible] = useState(false)
+  const [achievementFrog, setAchievementFrog] = useState(0)
 
+  // Function for displaying achievement in list
   function AchievementItem({ achievement }: { achievement: { id: string; name: string; description: string; progress: string; claimed: boolean } }) {
     const isCompleted = isUnlocked(achievement.progress);
     const [claimed, setClaimed] = useState(achievement.claimed ? styles.claimButtonIncomplete : styles.claimButtonCompleted)
@@ -60,14 +62,24 @@ function ProfileScreen({navigation}: {navigation: any}) {
       </View>
     );
   }
-  
+
   //function for showing available frogs when changing pfp
   function frogDisplay(n : number) {
-    if (getUD('frogs')[n] != 0) {
-      return frogDirectories[n + defaultFrogIndex].image
+    if (n <= 8) {
+      if (getUD('frogs')[n] != 0) {
+        return frogDirectories[n + defaultFrogIndex].image
+      }
+      else {
+        return frogDirectories[1].image
+      }
     }
-    else {
-      return frogDirectories[1].image
+    if (n >= 9) {
+      if (getUD('achievements').includes(((n-8)*5))) {
+        return frogDirectories[n + defaultFrogIndex].image
+      }
+      else {
+        return frogDirectories[1].image
+      }
     }
   }
 
@@ -87,6 +99,8 @@ function ProfileScreen({navigation}: {navigation: any}) {
     let UDachievement : any[] = getUD('achievements')
     UDachievement.push(num)
     updateUD('achievements', UDachievement)
+    setAchievementFrog((num/5)+8+defaultFrogIndex)
+    setOutcomeModalVisible(true)
   }
 
   return (
@@ -109,166 +123,245 @@ function ProfileScreen({navigation}: {navigation: any}) {
             </View>
         </View>
 
-        <View style={{alignItems: 'center', alignSelf: 'center', justifyContent: 'center', position: 'absolute', top: dimensions()._height * 0.29}}>
-          {/* Username */}
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          
-            {/* Change Profile Picture Button */}
-            <View>
-                <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={pfpModalVisible}
-                  onRequestClose={() => {
-                  setPFPModalVisible(!pfpModalVisible);
-                }}>
-                  <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                      
-                      <View style={{flexDirection: 'row'}}>
-                        {/* icon 0, row 1, col 1 */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                            setPFPModalVisible(!pfpModalVisible);
-                            updatePFP(0);
-                            }}>
-                            <Image source={frogDirectories[defaultFrogIndex].image} resizeMode='contain' style={styles.pfpModal}/>
-                        </Pressable>
+        {/* Achievement Prize Modal */}
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={outcomeModalVisible}
+            onRequestClose={() => {
+            setOutcomeModalVisible(!outcomeModalVisible);
+        }}>
+            <View style={styles.centeredView}>
+                <View style={styles.outcomeView}>
+                    <Text style={styles.modalTitleText}>You got a</Text>
 
-                        <SeparatorHorizontal/>
-
-                        {/* icon 1, row 1, col 2 */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                              setPFPModalVisible(!pfpModalVisible);
-                              if (getUD('frogs')[1] != 0) {
-                                updatePFP(1)
-                              } else {frogLockedAlert()}}}>
-                              <Image source={frogDisplay(1)} resizeMode='contain' style={styles.pfpModal}/>
-                        </Pressable>
-
-                        <SeparatorHorizontal/>
-
-                        {/* icon 2, row 1, col 3 */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                              setPFPModalVisible(!pfpModalVisible);
-                              if (getUD('frogs')[2] != 0) {
-                                updatePFP(2)
-                              } else {frogLockedAlert()}}}>
-                            <Image source={frogDisplay(2)} resizeMode='contain' style={styles.pfpModal}/>
-                        </Pressable>
-
-                      </View>
-
-                      <SeparatorVertical/>
-
-                      <View style={{flexDirection: 'row'}}>
-                        {/* icon 3, row 2, col 1 */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                            setPFPModalVisible(!pfpModalVisible);
-                            if (getUD('frogs')[3] != 0) {
-                              updatePFP(3)
-                            } else {frogLockedAlert()}}}>
-                            <Image source={frogDisplay(3)} resizeMode='contain' style={styles.pfpModal}/>
-                        </Pressable>
-
-                        <SeparatorHorizontal/>
-
-                        {/* icon 4, row 2, col 2 */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                              setPFPModalVisible(!pfpModalVisible);
-                              if (getUD('frogs')[4] != 0) {
-                                updatePFP(4)
-                              } else {frogLockedAlert()}}}>
-                            <Image source={frogDisplay(4)} resizeMode='contain' style={styles.pfpModal}/>
-                        </Pressable>
-
-                        <SeparatorHorizontal/>
-
-                        {/* icon 5, row 2, col 3 */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                              setPFPModalVisible(!pfpModalVisible);
-                              if (getUD('frogs')[5] != 0) {
-                                updatePFP(5)
-                              } else {frogLockedAlert()}}}>
-                            <Image source={frogDisplay(5)} resizeMode='contain' style={styles.pfpModal}/>
-                        </Pressable>
-
-                      </View>
-
-                      <SeparatorVertical/>
-
-                      <View style={{flexDirection: 'row'}}>
-                        {/* icon 6, row 3, col 1 */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                            setPFPModalVisible(!pfpModalVisible);
-                            if (getUD('frogs')[6] != 0) {
-                              updatePFP(6)
-                            } else {frogLockedAlert()}}}>
-                            <Image source={frogDisplay(6)} resizeMode='contain' style={styles.pfpModal}/>
-                        </Pressable>
-
-                        <SeparatorHorizontal/>
-
-                        {/* icon 7, row 3, col 2 */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                              setPFPModalVisible(!pfpModalVisible);
-                              if (getUD('frogs')[7] != 0) {
-                                updatePFP(7)
-                              } else {frogLockedAlert()}}}>
-                            <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
-                        </Pressable>
-
-                        <SeparatorHorizontal/>
-
-                        {/* icon 8, row 3, col 3 */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                              setPFPModalVisible(!pfpModalVisible);
-                              if (getUD('frogs')[8] != 0) {
-                                updatePFP(8)
-                              } else {frogLockedAlert()}}}>
-                            <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
-                        </Pressable>
-
-                      </View>
-
-                      <SeparatorVertical/>
-
-                      <View style={{flexDirection: 'row'}}>
-                        {/* Exit Modal Button */}
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => setPFPModalVisible(!pfpModalVisible)}>
-                            <Text style={styles.textStyle}>Exit</Text>
-                        </Pressable>
-
-                      </View>
+                    {/* Frog Display */}
+                    <View style={styles.outerCircle}>
+                        <View style={styles.innerCicle}>
+                            <Image source={frogDirectories[achievementFrog].image} style={styles.tank} resizeMode='contain'/>
+                        </View>
                     </View>
-                  </View>
-                </Modal>
+                    <SeparatorVertical/>
+                    <View>
+                        {/* Frog Rarity Text */}
+                        <Text style={{textAlign: 'center', fontSize: 22, fontWeight: '900', color: getRarityColour(achievementFrog)}}>
+                            {frogRarity[achievementFrog]}
+                        </Text>
+                        {/* Frog Name Text */}
+                        <Text style={{textAlign: 'center', fontSize: 18}}>
+                            {frogName[achievementFrog]}! Check it out over at your frog pond!
+                        </Text>
+                    </View>
+                    <SeparatorVertical/>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => setOutcomeModalVisible(!outcomeModalVisible)}>
+                        <Text style={styles.textStyle}>Exit</Text>
+                    </Pressable>
+                </View>
+            </View>
+        </Modal>
 
-                <Pressable
-                  onPress={() => setPFPModalVisible(true)}>
-                  <Image source={require('./../assets/edit_image.png')} resizeMode='contain' style={{width: 40, height: 40}}/>
-                </Pressable>
-              </View>  
+        {/* Change Profile Picture Button */}
+        <View style={{position: 'absolute', top: '20%', left : '69%'}}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={pfpModalVisible}
+            onRequestClose={() => {
+            setPFPModalVisible(!pfpModalVisible);
+          }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                
+                <View style={{flexDirection: 'row'}}>
+                  {/* icon 0, row 1, col 1 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                      setPFPModalVisible(!pfpModalVisible);
+                      updatePFP(0);
+                      }}>
+                      <Image source={frogDirectories[defaultFrogIndex].image} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
 
+                  <SeparatorHorizontal/>
+
+                  {/* icon 1, row 1, col 2 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        if (getUD('frogs')[1] != 0) {
+                          updatePFP(1)
+                        } else {frogLockedAlert()}}}>
+                        <Image source={frogDisplay(1)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                  <SeparatorHorizontal/>
+
+                  {/* icon 2, row 1, col 3 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        if (getUD('frogs')[2] != 0) {
+                          updatePFP(2)
+                        } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(2)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                </View>
+
+                <SeparatorVertical/>
+
+                <View style={{flexDirection: 'row'}}>
+                  {/* icon 3, row 2, col 1 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                      setPFPModalVisible(!pfpModalVisible);
+                      if (getUD('frogs')[3] != 0) {
+                        updatePFP(3)
+                      } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(3)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                  <SeparatorHorizontal/>
+
+                  {/* icon 4, row 2, col 2 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        if (getUD('frogs')[4] != 0) {
+                          updatePFP(4)
+                        } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(4)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                  <SeparatorHorizontal/>
+
+                  {/* icon 5, row 2, col 3 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        if (getUD('frogs')[5] != 0) {
+                          updatePFP(5)
+                        } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(5)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                </View>
+
+                <SeparatorVertical/>
+
+                <View style={{flexDirection: 'row'}}>
+                  {/* icon 6, row 3, col 1 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                      setPFPModalVisible(!pfpModalVisible);
+                      if (getUD('frogs')[6] != 0) {
+                        updatePFP(6)
+                      } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(6)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                  <SeparatorHorizontal/>
+
+                  {/* icon 7, row 3, col 2 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        if (getUD('frogs')[7] != 0) {
+                          updatePFP(7)
+                        } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                  <SeparatorHorizontal/>
+
+                  {/* icon 8, row 3, col 3 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        if (getUD('frogs')[8] != 0) {
+                          updatePFP(8)
+                        } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+                </View>
+
+                <SeparatorVertical/>
+
+                <View style={{flexDirection: 'row'}}>
+                  {/* icon 9, row 4, col 1 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                      setPFPModalVisible(!pfpModalVisible);
+                      if (getUD('achievements').includes(5)) {
+                        updatePFP(9)
+                      } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(9)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                  <SeparatorHorizontal/>
+
+                  {/* icon 10, row 4, col 2 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        if (getUD('achievements').includes(10)) {
+                          updatePFP(10)
+                        } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(10)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                  <SeparatorHorizontal/>
+
+                  {/* icon 11, row 4, col 3 */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => {
+                        setPFPModalVisible(!pfpModalVisible);
+                        if (getUD('achievements').includes(15)) {
+                          updatePFP(11)
+                        } else {frogLockedAlert()}}}>
+                      <Image source={frogDisplay(11)} resizeMode='contain' style={styles.pfpModal}/>
+                  </Pressable>
+
+                </View>
+
+                <SeparatorVertical/>
+
+                <View style={{flexDirection: 'row'}}>
+                  {/* Exit Modal Button */}
+                  <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => setPFPModalVisible(!pfpModalVisible)}>
+                      <Text style={styles.textStyle}>Exit</Text>
+                  </Pressable>
+
+                </View>
+              </View>
+            </View>
+          </Modal>
+
+          <Pressable
+            onPress={() => setPFPModalVisible(true)}>
+            <Image source={require('./../assets/edit_image.png')} resizeMode='contain' style={{width: 50, height: 50}}/>
+          </Pressable>
+        </View>  
+
+        <View style={{alignItems: 'center', alignSelf: 'center', justifyContent: 'center', position: 'absolute', top: dimensions()._height * 0.29}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap'}}>
+              <SeparatorHorizontal/>
               {/* Username display */}
               <View>
                 <Text style={{fontSize: 30, marginVertical: 10, color: 'white', fontWeight: '300'}}>
@@ -294,6 +387,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
                       onChangeText={onChangeText}
                       value={text}
                       placeholder="New Username"
+                      placeholderTextColor="#888"
                       />
 
                       <SeparatorVertical/>
@@ -302,7 +396,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
                         {/* Exit Modal Button */}
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
-                            onPress={() => setUsernameModalVisible(!usernameModalVisible)}>
+                            onPress={() => {onChangeText(''); setUsernameModalVisible(!usernameModalVisible)}}>
                             <Text style={styles.textStyle}>Exit</Text>
                         </Pressable>
 
@@ -312,12 +406,21 @@ function ProfileScreen({navigation}: {navigation: any}) {
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => {
-                              if (text != "") {
-                                updateUD('name', text);
-                                setUsernameModalVisible(!usernameModalVisible)
+                              if (text.length > 12) {
+                                showAlert('Please enter a shorter name','','OK')
+                                onChangeText('')
+                              }
+                              else if (text == '') {
+                                showAlert('Please enter a username','','OK')
+                              }
+                              else if (!/^[a-zA-Z0-9]+$/.test(text)) {
+                                showAlert('Please enter alphanumeric characters without spaces.','','OK')
+                                onChangeText('')
                               }
                               else {
-                                showAlert('Please enter a username','','OK')
+                                updateUD('name', text);
+                                setUsernameModalVisible(!usernameModalVisible)
+                                onChangeText(''); 
                               }
                             }}>
                             <Text style={styles.textStyle}>Change Username</Text>
@@ -326,10 +429,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                     </View>
                   </View>
                 </Modal>
-
                 <Pressable
                   onPress={() => setUsernameModalVisible(true)}>
-                  <Image source={require('./../assets/edit_pencil.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
+                  <Image source={require('./../assets/edit_pencil.png')} resizeMode='contain' style={{width: 35, height: 35}}/>
                 </Pressable>
               </View>
             </View>
@@ -350,7 +452,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
           </View>
 
           {/* Achievements List */}
-          <View style={[styles.scrollViewContainer, {height: dimensions()._height * 0.525}]}>
+          <View style={[styles.scrollViewContainer, {height: dimensions()._height*0.5}]}>
           <FlatList
             data={getAchievements(getUD('mins'), getUD('frogs'), getUD('friends'), getUD('achievements'))}
             renderItem={({ item }) => <AchievementItem achievement={item} />}
@@ -359,74 +461,42 @@ function ProfileScreen({navigation}: {navigation: any}) {
         </View>
       </View>
     </View>
-            {/* Navbar */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.915, justifyContent: 'center', alignItems: 'center', backgroundColor: '#516D67', width: dimensions()._width, height: dimensions()._height * 0.2, flexDirection: 'row'}}>
-                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Profile')}>
-                    <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: 0, left: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Leaderboard')}>
-                    <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: dimensions()._height * 0.002, left: dimensions()._width * 0.5 - 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('FrogPond')}>
-                    <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.6 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('Lock')}>
-                    <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{position: 'absolute', top: 0, right: dimensions()._width * 0.8 + 20, width: 40, height: 40,}} 
-                    onPress={() => navigation.navigate('FriendsList')}>
-                    <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
-                </TouchableOpacity>
-            </View>     
+        {/* Navbar */}
+        <View style={{
+            position: 'absolute', 
+            bottom: 0, 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            backgroundColor: '#516D67', 
+            width: dimensions()._width, 
+            height: dimensions()._height * 0.06, 
+            flexDirection: 'row'
+        }}>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => navigation.replace('FriendsList')}>
+                <Image source={require('./../assets/friends_list_alex.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => navigation.replace('Lock')}>
+                <Image source={require('./../assets/lock.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => navigation.replace('FrogPond')}>
+                <Image source={require('./../assets/lily_pad2.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => navigation.replace('Leaderboard')}>
+                <Image source={require('./../assets/trophy.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{flex: 1, width: 40, height: 40, alignItems: 'center'}} 
+                onPress={() => ''}>
+                <Image source={require('./../assets/profile.png')} style={{height: '100%', width: '100%'}} resizeMode='contain'/>
+            </TouchableOpacity>
+        </View>
     </View>
   );
 }
 export default ProfileScreen;
-
-
-// <View style={styles.achievementContainer}>
-// <View>
-//   {/* Achievement Name */}
-//   <Text style={{color: '#478E6D', fontSize: 19, fontWeight: 'bold'}}>Focus Time 1</Text>
-//   {/* Achievement Description */}
-//   <Text style={{color: 'black'}}>Focus for 4 hours total</Text>
-// </View>
-
-// <View style={{position: 'absolute', right: 0, margin: 5, marginTop: 10}}>
-//   {/* Locked/Unlocked? */}
-//   <Image source={require('./../assets/tick.png')} resizeMode='contain' style={{position: 'absolute', right: 0, marginRight: 5, width: 30, height: 30}}/>
-// </View>
-
-// <View style={{position: 'absolute', right: 0, bottom: 0, margin: 10}}>
-//   {/* Progress */}
-//   <Text style={{color: '#AB9D78', fontSize: 16, fontWeight: 'bold'}}>4/4</Text>
-// </View>
-// </View>
-
-
-// <View style={styles.achievementLockedContainer}>
-// <View>
-//   {/* Achievement Name */}
-//   <Text style={{color: '#478E6D', fontSize: 19, fontWeight: 'bold'}}>Focus Time 2</Text>
-//   {/* Achievement Description */}
-//   <Text style={{color: 'black'}}>Focus for 10 hours total</Text>
-// </View>
-
-// <View style={{position: 'absolute', right: 0, margin: 5, marginTop: 10}}>
-//   {/* Locked/Unlocked? */}
-//   <Image source={require('./../assets/green_cross.png')} resizeMode='contain' style={{position: 'absolute', right: 0, marginRight: 5, width: 30, height: 30}}/>
-// </View>
-
-// <View style={{position: 'absolute', right: 0, bottom: 0, margin: 10}}>
-//   {/* Progress */}
-//   <Text style={{color: '#AB9D78', fontSize: 16, fontWeight: 'bold'}}>4/10</Text>
-// </View>
-// </View>
-
 
 const styles = StyleSheet.create({
   background: {
@@ -475,19 +545,25 @@ const styles = StyleSheet.create({
     fontSize: 42,
   },
   achievementContainer: {
-    width: dimensions()._width * 0.8,
+    width: dimensions()._width * 0.85,
     height: dimensions()._height * 0.08,
     backgroundColor: '#9AC99B',
-    padding: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     margin: 10,
     borderRadius: 8.5,
     flexDirection: 'row'
   },
   achievementLockedContainer: {
-    width: dimensions()._width * 0.8,
+    width: dimensions()._width * 0.85,
     height: dimensions()._height * 0.08,
     backgroundColor: '#BEBBBB',
-    padding: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     margin: 10,
     borderRadius: 8.5,
     flexDirection: 'row'
@@ -553,14 +629,15 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     padding: 10,
     borderRadius: 8.5,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    color: 'black',
   },
   pfpModal: {
     height: dimensions()._height * 0.05,
     width: dimensions()._height * 0.05
   },
   achievementName: {
-    color: '#478E6D',
+    color : '#478E6D',
     fontSize: 19,
     fontWeight: 'bold',
   },
@@ -579,12 +656,14 @@ const styles = StyleSheet.create({
     marginRight: 5,
     width: 30,
     height: 30,
+
   },
   progressContainer: {
     position: 'absolute',
     right: 0,
     bottom: 0,
-    margin: 10,
+    marginBottom: 0,
+    marginRight: 10,
   },
   progressText: {
     color: '#AB9D78',
@@ -592,27 +671,70 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   claimButton: {
-    padding: 10,
+    padding: 5,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 5,
   },
   claimButtonCompleted: {
     position: 'absolute',
     right: 60,
-    bottom: 15,
+    top: 5,
     backgroundColor: 'green',
   },
   claimButtonIncomplete: {
     position: 'absolute',
     right: 60,
-    bottom: 15,
+    top: 5,
     backgroundColor: 'grey',
   },
   claimButtonText: {
     color: 'white',
     fontSize: 10,
     fontWeight: 'bold',
+  },
+  modalTitleText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'white'
+  },
+  outcomeView: {
+      margin: 20,
+      backgroundColor: '#9AC99B',
+      borderRadius: 20,
+      padding: 35,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      height: dimensions()._height * 0.6
+  },
+  outerCircle: {
+    width: dimensions()._height * 0.25,
+    height: dimensions()._height * 0.25,
+    borderRadius: dimensions()._borderRadius,
+    backgroundColor: '#C8B88A',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  innerCicle: {
+    width: dimensions()._height * 0.218,
+    height: dimensions()._height * 0.218,
+    borderRadius: dimensions()._borderRadius,
+    backgroundColor: '#FFE7A1',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  tank: {
+    width: dimensions()._height * 0.1,
+    height: dimensions()._height * 0.1,
   },
 });

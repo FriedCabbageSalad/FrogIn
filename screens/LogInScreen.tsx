@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, View, Text, ImageBackground, TouchableOpacity, TextInput, StyleSheet, Image } from 'react-native';
+import { Button, View, Text, ImageBackground, TouchableOpacity, TextInput, StyleSheet, Image, ScrollView } from 'react-native';
 import { dimensions, showAlert, showAlertAction} from './../screens/Scripts.tsx';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
@@ -23,34 +23,35 @@ async function onGoogleButtonPress() {
 function LogInScreen({navigation}: {navigation: any}) {
   const [text, onChangeText] = React.useState('');
   const [text2, onChangeText2] = React.useState('');
-  const Separator = () => <View style={styles.separator} />;
   return (
-      <ImageBackground source={require('./../assets/background.png')} resizeMode='cover' style={styles.imageSizing}>
-
-            <View style={{position: 'absolute', left: 0, borderRadius: 10, margin: 7, padding: 3, backgroundColor: '#516D67'}}>  
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('SignUp')}>
-                    <Image source={require('./../assets/left_arrow.png')} resizeMode='contain' style={{width: 20, height: 20}}/>
-                </TouchableOpacity>
-            </View>
-
+      <ImageBackground source={require('./../assets/background.png')} resizeMode='cover' style={styles.container}>
+        <View style={{position: 'absolute', left: 0, borderRadius: 10, margin: 7, padding: 3, backgroundColor: '#516D67', zIndex: 1}}>  
+          <TouchableOpacity
+              onPress={() => navigation.goBack()}>
+              <Image source={require('./../assets/left_arrow.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
+          </TouchableOpacity>
+        </View>
+      <ScrollView contentContainerStyle={[styles.scrollViewContent, {zIndex: 2}]}>
+        <View>
             {/* Application Name and Logo */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.1, justifyContent: 'center',alignItems: 'center', alignSelf: 'center'}}>
+            <View style={styles.headerContainer}>
               <Text style={styles.header}>FrogIn</Text>
+              <Text style={{fontSize: 5}}> </Text>
               <Image source={require('./../assets/default_frog.png')} resizeMode='stretch' style={styles.logo}/>
             </View>
 
             {/* Log In Features */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.25, justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
+            <View style={styles.loginContainer}>
               <Text style={styles.h2}>Login</Text>
-              <Text style={styles.h3}>Enter your details to login</Text>
-              
+              <Text style={styles.h3}>Enter your email and password</Text>
+
               {/* Email Input */}
               <TextInput
                 style={styles.input}
                 onChangeText={onChangeText}
                 value={text}
                 placeholder="email@domain.com"
+                placeholderTextColor={"#888"}
               />
 
               {/* Password Input */}
@@ -60,12 +61,10 @@ function LogInScreen({navigation}: {navigation: any}) {
                 value={text2}
                 secureTextEntry={true}
                 placeholder="Password"
+                placeholderTextColor={"#888"}
               />
-              <Separator/>
               {/* Log In Button */}
-              <View style={{width: "150%"}}>
-                <Button title="Login" color={'#000000'} 
-                  onPress={() => {
+              <TouchableOpacity style={styles.signUpButton} onPress={() => {
                     if (text == "" || text2 == "") {
                       showAlert('Error','Please enter an email and password','OK')
                     } else {
@@ -89,91 +88,118 @@ function LogInScreen({navigation}: {navigation: any}) {
                         console.error(error);
                       }
                     })
-                    .then(() => {
-                      
-                    });
                   }
-                  }}/>
+                  }}>
+                    <Text style={{color: 'white', justifyContent: 'center', alignItems: 'center' }}>Log In</Text>
+                  </TouchableOpacity>
               </View>
             </View>
 
             {/* Divider with text in the middle */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.525, flexDirection: 'row', alignItems: 'center', marginHorizontal: '12.5%',}}>
-              <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
-                <View>
-                  <Text style={{width: 120, textAlign: 'center'}}>or continue with</Text>
-                </View>
-              <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or continue with</Text>
+              <View style={styles.dividerLine} />
             </View>
 
             {/* Google sign up button */}
-            <View style={{position: 'absolute', top: dimensions()._height * 0.575, justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}>
               <TouchableOpacity style={styles.googleButton} onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Home'))}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                   <Image source={require('./../assets/google.jpg')} style={{height: '150%', width: '10%'}} resizeMode='contain'/>
                   <Text style={{color: 'black', paddingHorizontal: '2%'}}>Google</Text>
                 </View>
               </TouchableOpacity>
-
-              <View style={{width: "75%"}}>
-                <Separator/>
-                <Text style={styles.TOS}>By clicking continue, you agree to our Terms of Service and Privacy Policy</Text>
-              </View>
-            </View>
-            
+                <View>
+                  <Text style={styles.TOS}>By clicking continue, you agree to our{"\n"}Terms of Service and Privacy Policy</Text>
+                </View>
+        </ScrollView>
       </ImageBackground>
   );
 }
 export default LogInScreen;
 
 const styles = StyleSheet.create({
+  container: {
+      flex: 1,
+  },
+  scrollViewContent: {
+      flexGrow: 1,
+      justifyContent: 'space-between',
+      padding: 20,
+  },
+  headerContainer: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
   header: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 48,
-    fontFamily: 'Sans-serif',
+    fontFamily: 'serif',
     padding: 5,
+  },
+  loginContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  signUpButton: {
+    width: '80%',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 8.5,
+    marginTop: 10,
   },
   h2: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 28,
+    fontSize: 24,
     fontFamily: 'Sans-serif',
   },
   h3: {
     color: 'black',
-    fontSize: 16,
-    fontFamily: 'Sans-serif',
-    padding: 5,
-    paddingBottom: 10,
-  },
-  TOS: {
-    color: 'black',
     fontSize: 14,
     fontFamily: 'Sans-serif',
     padding: 5,
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
-  imageSizing: {
-    width: '100%',
-    height: '100%'
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'white',
+  },
+  dividerText: {
+    width: 120,
+    textAlign: 'center',
+    color: 'white',
+  },
+  TOS: {
+    color: 'black',
+    fontSize: 13,
+    fontFamily: 'Sans-serif',
+    padding: 5,
+    paddingBottom: 10,
+    textAlign: 'center',
   },
   logo: {
-    width: '75%',
-    height: '100%',
+    width: 100,
+    height: 80,
   },
   input: {
-    width: '150%',
+    width: '80%',
     height: 40,
-    margin: 6,
+    margin: 12,
     borderWidth: 0,
     padding: 10,
     paddingLeft: 20,
     borderRadius: 8.5,
-    backgroundColor: 'white'
-  },
-  separator: {
-    marginVertical: '2%',
+    backgroundColor: 'white',
+    color: 'black',
   },
   googleButton: {
     width: '95%',
@@ -181,5 +207,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 8.5,
-  }
+  },
 });
