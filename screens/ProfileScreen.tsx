@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useRef, useState, useEffect } from 'react';
+import {useRef, useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, ScrollView, StatusBar, TouchableOpacity, Image, Modal, Pressable, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { getUD, updateUD } from './HomeScreen.tsx'
@@ -10,12 +10,23 @@ const SeparatorHorizontal = () => <View style={{marginHorizontal: '5%'}}/>;
 const SeparatorHorizontalSmall = () => <View style={{marginHorizontal: '1%'}}/>;
 
 function ProfileScreen({navigation}: {navigation: any}) {
-  const [usernameModalVisible, setUsernameModalVisible] = useState(false);
-  const [pfpModalVisible, setPFPModalVisible] = useState(false);
-  const [text, onChangeText] = React.useState('');
-  const [displayImage, setDisplayImage] = useState(getUD('pfp'));
+  const [usernameModalVisible, setUsernameModalVisible] = useState(false)
+  const [pfpModalVisible, setPFPModalVisible] = useState(false)
+  const [text, onChangeText] = React.useState('')
+  const [displayImage, setDisplayImage] = useState(getUD('pfp'))
   const [outcomeModalVisible, setOutcomeModalVisible] = useState(false)
   const [achievementFrog, setAchievementFrog] = useState(0)
+  const [achievementsList, setAchievementsList] = useState<any[]>()
+
+  const loadAL = useCallback(() => {
+    const newAL = getAchievements(getUD('mins'), getUD('frogs'), getUD('friends'), getUD('achievements'));
+    setAchievementsList(newAL);
+  }, []);
+
+  // Load when the component mounts
+  useEffect(() => {
+    loadAL();
+  }, [loadAL]);
 
   // Function for displaying achievement in list
   function AchievementItem({ achievement }: { achievement: { id: string; name: string; description: string; progress: string; claimed: boolean } }) {
@@ -101,6 +112,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
     updateUD('achievements', UDachievement)
     setAchievementFrog((num/5)+8+defaultFrogIndex)
     setOutcomeModalVisible(true)
+    loadAL()
   }
 
   return (
@@ -179,8 +191,8 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                      setPFPModalVisible(!pfpModalVisible);
                       updatePFP(0);
+                      setPFPModalVisible(!pfpModalVisible);
                       }}>
                       <Image source={frogDirectories[defaultFrogIndex].image} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -194,6 +206,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
                         setPFPModalVisible(!pfpModalVisible);
                         if (getUD('frogs')[1] != 0) {
                           updatePFP(1)
+                          setPFPModalVisible(!pfpModalVisible);
                         } else {frogLockedAlert()}}}>
                         <Image source={frogDisplay(1)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -204,9 +217,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
                         if (getUD('frogs')[2] != 0) {
                           updatePFP(2)
+                          setPFPModalVisible(!pfpModalVisible);
                         } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(2)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -220,9 +233,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                      setPFPModalVisible(!pfpModalVisible);
                       if (getUD('frogs')[3] != 0) {
                         updatePFP(3)
+                        setPFPModalVisible(!pfpModalVisible);
                       } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(3)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -233,9 +246,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
                         if (getUD('frogs')[4] != 0) {
                           updatePFP(4)
+                          setPFPModalVisible(!pfpModalVisible);
                         } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(4)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -246,9 +259,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
                         if (getUD('frogs')[5] != 0) {
                           updatePFP(5)
+                          setPFPModalVisible(!pfpModalVisible);
                         } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(5)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -262,9 +275,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                      setPFPModalVisible(!pfpModalVisible);
                       if (getUD('frogs')[6] != 0) {
                         updatePFP(6)
+                        setPFPModalVisible(!pfpModalVisible);
                       } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(6)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -275,9 +288,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
                         if (getUD('frogs')[7] != 0) {
                           updatePFP(7)
+                          setPFPModalVisible(!pfpModalVisible);
                         } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -288,9 +301,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
                         if (getUD('frogs')[8] != 0) {
                           updatePFP(8)
+                          setPFPModalVisible(!pfpModalVisible);
                         } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(7)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -303,9 +316,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                      setPFPModalVisible(!pfpModalVisible);
                       if (getUD('achievements').includes(5)) {
                         updatePFP(9)
+                        setPFPModalVisible(!pfpModalVisible);
                       } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(9)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -316,9 +329,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
                         if (getUD('achievements').includes(10)) {
                           updatePFP(10)
+                          setPFPModalVisible(!pfpModalVisible);
                         } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(10)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -329,9 +342,9 @@ function ProfileScreen({navigation}: {navigation: any}) {
                   <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => {
-                        setPFPModalVisible(!pfpModalVisible);
                         if (getUD('achievements').includes(15)) {
                           updatePFP(11)
+                          setPFPModalVisible(!pfpModalVisible);
                         } else {frogLockedAlert()}}}>
                       <Image source={frogDisplay(11)} resizeMode='contain' style={styles.pfpModal}/>
                   </Pressable>
@@ -407,7 +420,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => {
                               if (text.length > 12) {
-                                showAlert('Please enter a shorter name','','OK')
+                                showAlert('Please enter name that is 12 characters or shorter','','OK')
                                 onChangeText('')
                               }
                               else if (text == '') {
@@ -454,7 +467,7 @@ function ProfileScreen({navigation}: {navigation: any}) {
           {/* Achievements List */}
           <View style={[styles.scrollViewContainer, {height: dimensions()._height*0.5}]}>
           <FlatList
-            data={getAchievements(getUD('mins'), getUD('frogs'), getUD('friends'), getUD('achievements'))}
+            data={achievementsList}
             renderItem={({ item }) => <AchievementItem achievement={item} />}
             keyExtractor={item => item.id}
             contentContainerStyle={{ flexGrow: 1}}/>

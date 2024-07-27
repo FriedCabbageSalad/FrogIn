@@ -20,10 +20,22 @@ function LeaderboardScreen({route, navigation}: {route: any, navigation: any}) {
         loadLB();
         }, [loadLB]);
 
+    //Medal array
+    const medalArray = [require('./../assets/first_medal.png'),
+        require('./../assets/second_medal.png'),
+        require('./../assets/third_medal.png'),
+        require('./../assets/frogs/dead_frog_thin.png'),
+        require('./../assets/frogs/dead_frog_thin.png'),
+    ]
+
     //User container
     const UserItem = ({ user } : { user: { rank: number; uid: string; name: string; pfp: number; hours: number }}) => {
         return(
             <View style={styles.friendContainer}>
+        {[1,2,3].includes(user.rank) ? <View>
+        <Image source={medalArray[user.rank - 1]} 
+            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06,}}/>
+        </View> : ''}
         <View>
             <View style={{flexDirection: 'row', alignItems: 'center',}}>
                 <Image source={frogDirectories[user.pfp].image} style={{width: dimensions()._height * 0.05, height: dimensions()._height * 0.0375,}}/>
@@ -50,22 +62,10 @@ function LeaderboardScreen({route, navigation}: {route: any, navigation: any}) {
                 <SeparatorHorizontalSmall/>
                 <Text style={styles.title}>Leaderboard</Text>
             </View>
-            
             <Text style={styles.friendTotal}>Top 5 Hours Focused</Text>
-        
-        {/* Medals */}
         </View>
-            <Image source={require('./../assets/first_medal.png')} 
-            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.20}}/>
-            <Image source={require('./../assets/second_medal.png')} 
-            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.275 + 20}}/>
-            <Image source={require('./../assets/third_medal.png')} 
-            style={{width: dimensions()._height * 0.06, height: dimensions()._height * 0.06, position: 'absolute', top: dimensions()._height * 0.35 + 35}}/>
-        <View>
-        </View>
-
         {/* Leaderboard List */}
-        <View style={[styles.scrollViewContainer, {top: dimensions()._height * 0.15, height: dimensions()._height * 0.70, alignSelf: 'flex-end', paddingRight: 20}]}>
+        <View style={[styles.scrollViewContainer, {top: dimensions()._height * 0.20, height: dimensions()._height * 0.70, alignSelf: 'center', paddingRight: 0}]}>
         <FlatList
         data={LB}
         renderItem={({ item }) => <UserItem user={item} />}
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         color: '#FFE7A1',
     },
     friendContainer: {
-        width: dimensions()._width * 0.78,
+        width: dimensions()._width * 0.9,
         height: dimensions()._height * 0.075,
         backgroundColor: '#9AC99B',
         padding: 10,
@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
     scrollViewContainer: {
         position: 'absolute',
         top: dimensions()._height * 0.15,
-        paddingTop: StatusBar.currentHeight,
         alignSelf: 'center',
     },
     cross: {

@@ -65,13 +65,12 @@ function SignUpScreen({navigation}: {navigation: any}) {
                     }
                   })
                 .catch(error => {
-                  if (error.code === 'auth/') {
+                  if (error.code === 'auth/invalid-email') {
                     showAlert('Invalid email address!','','OK');
                   }
                   else {
-                    showAlert('Error',error,'OK');
+                    //console.error(error);
                   }
-                  console.error(error);
                 })
                 };
               }}>
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: dimensions()._height * -0.1,
   },
   dividerLine: {
     flex: 1,
@@ -184,12 +183,6 @@ const styles = StyleSheet.create({
     height: 24,
     width: 24,
     marginRight: 10,
-  },
-  loginPrompt: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 10,
   },
   TOS: {
     color: 'black',
@@ -218,11 +211,17 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
   },
   googleButton: {
-    width: '95%',
+    width: '80%',
     alignItems: 'center',
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 8.5,
+  },
+  loginPrompt: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
   },
   logInButton: {
     alignSelf: 'center'

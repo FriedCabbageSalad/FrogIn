@@ -5,7 +5,6 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { defaultFrogIndex } from './../screens/Scripts.tsx'
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { dimensions } from './../screens/Scripts.tsx';
 
 //userdata storage
 let ud : any[];

@@ -14,7 +14,8 @@ const  motivationalMessages = [
     "Don't watch the clock, do what it does: keep going.",
     "Difficult roads often lead to beautiful destinations.",
     "You didn't come this far to only come this far.",
-    "Every day is a new beginning. Take a deep breath, smile, and start again."
+    "Every day is a new beginning. Take a deep breath, smile, and start again.",
+    "Click the icons at the bottom navigation bar to explore the app!",
 ]
 
 const index = new Date().getDate() % 7
@@ -60,8 +61,8 @@ function FrogPondScreen({navigation}: {navigation: any}) {
             </View>
             
             <View style={styles.messageBox}>
-                <Text style={{fontSize: 13, fontWeight: 'bold', color: 'black'}}>Today's Motivational Message</Text>
-                <Text style={{color: 'grey'}}>{motivationalMessages[index]}</Text>
+                <Text style={{fontSize: 13, fontWeight: 'bold', color: 'black'}}>Today's Message</Text>
+                <Text style={{color: 'grey'}}>{motivationalMessages[(frogArray.reduce((x : number, y : number) => x + y, 0) == 0) ? 7 : index]}</Text>
             </View>
 
             {/* Frog Displays */}

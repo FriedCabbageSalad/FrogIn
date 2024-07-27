@@ -65,7 +65,7 @@ function PasswordScreen({route, navigation}: {route: any, navigation: any}) {
                 })
                 .catch(error => {
                   if (error.code === 'auth/weak-password') {
-                    showAlert("Weak Password","Your password is too weak! Choose a longer one","OK")
+                    showAlert("Weak Password","Choose a longer one","OK")
                   };
                 })
             };
