@@ -110,6 +110,10 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                             Be warned, leaving the app while the timer is ticking will have disastrous
                             consequences for your amphibian pal.
                         </Text>
+                        {(timeWarp != 0) ? <Text style={styles.modalText}>
+                            Debug mode is on:
+                            the app will treat 1 second in real life as 15 minutes of phone lock time.
+                        </Text> : ''}
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setTutorialModalVisible(!tutorialModalVisible)}>

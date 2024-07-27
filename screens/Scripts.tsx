@@ -60,53 +60,77 @@ export const frogRarity = [
 
 export const frogInfo = [
   //Default
-  `Conservation Status: 
+  `Conservation Status:
+  Least Concern
 
-  Bio`,
+  Lithobates clamitans, commonly known as the green frog, is a North American species inhabiting freshwater environments. Distinguished by its dorsolateral ridges, it exhibits green or brown coloration.
+  `,
   //Blue
-  `Conservation Status: 
+  `Conservation Status:
+  Not evaluated
 
-  Bio`,
+  The blue poison dart frog (Dendrobates azureus), native to Suriname and Brazil, is known for its vibrant blue skin with black spots. Its toxic secretions deter predators, aiding its survival.
+  `,
   //Ocean
-  `Conservation Status: 
+  `Conservation Status:
+  Least Concern
 
-  Bio`,
+  The crab-eating frog (Fejervarya raja), is native to Southeast Asia. Remarkably, it can survive in saltwater environments, allowing it to inhabit coastal areas and mangroves.
+  `,
   //Gray
-  `Conservation Status: 
+  `Conservation Status:
+  Least Concern
 
-  Bio`,
+  The gray treefrog (Dryophytes versicolor), found in North America, exhibits remarkable color-changing abilities from gray to green. This arboreal amphibian's distinctive call and camouflage aid in predator evasion and mating.
+  `,
   // Purple
-  `Conservation Status: 
+  `Conservation Status:
+  Near Threatened
 
-  Bio`,
+  The purple frog (Nasikabatrachus sahyadrensis), endemic to India's Western Ghats, is notable for its bloated body and pointed snout. This fossorial species spends most of its life underground, emerging only to breed.
+  `,
   // Red
-  `Conservation Status: 
+  `Conservation Status:
+  Least Concern
 
+  The Strawberry poison-dart frog (Oophaga pumilio), found in Central America, displays bright red skin with varying patterns. This dendrobatid species produces potent toxins and is crucial for its ecological role.
   Bio`,
   // White
-  `Conservation Status: 
+  `Conservation Status:
+  Varied
 
-  Bio`,
+  Albino frogs, characterized by their lack of pigment and distinctive white or yellow skin, suffer from genetic mutations affecting melanin production. These frogs are more sensitive to light and environmental conditions.
+  `,
   // Dark Grey
-  `Conservation Status: 
+  `Conservation Status:
+  Vulnerable
 
-  Bio`,
+  The black-banded rock frog (Melanobatrachus indicus), is an endemic species from India. Characterized by its dark coloration and distinctive banding, it inhabits rocky, forested environments and is part of the Dicroglossidae family.
+  `,
   // Brown
-  `Conservation Status: 
+  `Conservation Status:
+  Near Threatened
 
-  Bio`,
+  The coronated tree frog (Triprion spinosus), found in Central America, features distinctive spines and a pronounced crown-like structure on its head. It inhabits humid forests and displays unique, colorful patterns.
+  `,
   // Golden
-  `Conservation Status: ???
+  `Conservation Status:
+  ???
 
-  Bio`,
+  The golden mythic frog, born from enchanted moonlight in ancient forests, glows with a celestial hue. Its shimmering skin is said to bring good fortune and wisdom to those who glimpse it.
+  `,
   // Mysterious
-  `Conservation Status: ???
+  `Conservation Status:
+  ???
 
-  Bio`,
+  The enigmatic mysterious frog, cloaked in deep black scales, is said to be a relic of ancient magic. Legends tell of its creation by moonlit sorcery, guarding secrets of forgotten realms.
+  `,
   // Rainbow
-  `Conservation Status: ???
+  `Conservation Status:
+  ???
 
-  Bio`,
+  The mythical rainbow frog, born from a cosmic rainbow that touched Earth, dazzles with its vibrant, shifting colors. Legends say it grants wishes to those pure of heart who encounter it.
+  `,
 ]
 
 export function getRarityColour(frogID : number) {
@@ -346,7 +370,7 @@ export function getAchievements(mins : number, frogs : number[], friends : any[]
       name: 'Frog Growing 5',
       description: 'Grow 25 Frogs',
       progress: checkProgress('frogs', 25),
-      claimed: achievements.includes(5),
+      claimed: achievements.includes(10),
     },
     {
       id: '11',
