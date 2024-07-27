@@ -56,7 +56,7 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                     onPress={() => {
                         // Logout Button
                         showAlertConfirm('Are you sure you want to sign out?', 'Your progress will be saved', 'No', 'Yes', () => ('') , logOut)}}>
-                    <Image source={require('./../assets/log_out.png')} resizeMode='contain' style={{width: 20, height: 20}}/>
+                    <Image source={require('./../assets/log_out.png')} resizeMode='contain' style={{width: 30, height: 30}}/>
                 </TouchableOpacity>
             </View>
             
@@ -213,6 +213,9 @@ function FrogPondScreen({navigation}: {navigation: any}) {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalTitleText}>{frogName[defaultFrogIndex + selectedFrog]}</Text>
+                        <Text style={styles.modalText}>
+                                {([9,10,11].includes(selectedFrog)) ? 'Floating in the clouds' : frogArray[selectedFrog] + ' in pond'}
+                        </Text>
                             <Image source={frogDirectories[defaultFrogIndex + selectedFrog].image}/>
                             {/* Frog Rarity Text */}
                             <Text style={{textAlign: 'center', fontSize: 22, fontWeight: '900', color: getRarityColour(selectedFrog + defaultFrogIndex)}}>
@@ -255,9 +258,9 @@ const styles = StyleSheet.create({
         left: 0,
         borderRadius: 10,
         backgroundColor: '#FFE7A1',
-        width: dimensions()._width - 50,
-        height: dimensions()._height * 0.12,
-        margin: 10,
+        width: dimensions()._width - 56,
+        height: dimensions()._height * 0.11,
+        margin: 7,
         padding: 5,
     },
     centeredView: {
@@ -267,12 +270,12 @@ const styles = StyleSheet.create({
         marginTop: 22,
     },
     modalView: {
-        width: dimensions()._width * 0.8,
-        height: dimensions()._height * 0.7,
+        width: dimensions()._width * 0.85,
+        height: dimensions()._height * 0.85,
         margin: 20,
         backgroundColor: '#9AC99B',
         borderRadius: 20,
-        padding: 35,
+        padding: 20,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -284,7 +287,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     modalText: {
-        marginBottom: 15,
+        marginBottom: 10,
         textAlign: 'center',
         fontSize: 18
     },

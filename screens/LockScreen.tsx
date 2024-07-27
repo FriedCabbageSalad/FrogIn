@@ -126,7 +126,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
             <View style={{position: 'absolute', right: 0, backgroundColor: '#C8B88A', borderRadius: 20, margin: 7}}>  
                 <Pressable
                     onPress={() => setTutorialModalVisible(true)}>
-                    <Image source={require('./../assets/question_mark.png')} resizeMode='contain' style={{width: 25, height: 25}}/>
+                    <Image source={require('./../assets/question_mark.png')} resizeMode='contain' style={{width: 35, height: 35}}/>
                 </Pressable>
             </View>
 
@@ -160,7 +160,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                             
                             {/* Frog Name Text */}
                             <Text style={{textAlign: 'center', fontSize: 18}}>
-                                {frogName[displayImage]}! Check it out over at your frog pond!
+                                {frogName[displayImage]}! Tap on a frog in your frog pond to view its info!
                             </Text>
                         </View>
 
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
         margin: 20,
         backgroundColor: '#9AC99B',
         borderRadius: 20,
-        padding: 35,
+        padding: 20,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
