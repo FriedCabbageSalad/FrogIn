@@ -1,8 +1,5 @@
 # FrogIn
 
-## Full README
-https://docs.google.com/document/d/1yc9KK-xlpNC51n4DE_wswI6iQt7f8Em-ETr5ljg4Yx4/edit?usp=sharing
-
 ## Problem Statement
 Remaining productive in life is as fickle as always, so why not focus up with the help of a little
 application? Introducing, FrogIn a portmanteau of Frog and the colloquial phrase “lock in”
