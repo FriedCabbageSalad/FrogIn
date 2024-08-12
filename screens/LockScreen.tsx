@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect, SetStateAction } from 'react';
-import { AppState, View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, Pressable } from 'react-native';
+import { AppState, View, Text, Image, TouchableOpacity, StyleSheet, Alert, Modal, Pressable, TouchableWithoutFeedback } from 'react-native';
 import { TimerPicker } from "react-native-timer-picker";
 import CountDownTimer from "react-native-countdown-timer-hooks";
 import { frogDirectories, frogGacha, defaultFrogIndex, timeCat, dimensions, showAlert, frogName, frogRarity, getRarityColour } from './../screens/Scripts.tsx';
-import { getUD, updateUD } from './../screens/HomeScreen.tsx'
+import { getUD, updateUD } from './../screens/HomeScreen.tsx';
+import KeepAwake from 'react-native-keep-awake';
 
 const Separator = () => <View style={{marginVertical: '2%'}}/>;
 
@@ -48,6 +49,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
     const [pickerVisible, setShowPicker] = useState(true);
     const [oddsModalVisible, setOddsModalVisible] = useState(false);
     const [tutorialModalVisible, setTutorialModalVisible] = useState(false);
+    const [screenoffModalVisible, setScreenoffModalVisible] = useState(false);
     const [outcomeModalVisible, setOutcomeModalVisible] = useState(false);
     const [displayImage, setDisplayImage] = useState(0);
     const [showOddsButton, setShowOddsButton] = useState(true);
@@ -64,6 +66,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
     useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
         // app state change
+        setScreenoff(false)
         appState.current = nextAppState;
         setAppStateVisible(appState.current);
         console.log('AppState', appState.current, 'LockedState', lockedState, 'Display', displayImage);
@@ -83,9 +86,78 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
     return () => {
         subscription.remove();
     };}, [lockedState, appState, displayImage]); 
-    
+
+    //Black Overlay
+    const [screenoff, setScreenoff] = useState(false);
+    const ScreenOffOverlay = ({ onDismiss }: any) => {
+        return (
+          <TouchableWithoutFeedback onPress={onDismiss}>
+            <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 1)',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 2,
+              }}
+            >
+            <KeepAwake />
+            </View>
+          </TouchableWithoutFeedback>
+        );
+      };
+
     return (
         <View style={styles.background}>
+        
+        {/* Black Overlay */}
+        {screenoff && (
+        <ScreenOffOverlay onDismiss={() => setScreenoff(false)} />
+        )}
+
+            {/* Screen Off Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={screenoffModalVisible}            
+                onRequestClose={() => {
+                setScreenoffModalVisible(!screenoffModalVisible);
+            }}>
+                <View style={styles.centeredView}>
+                    <View style={{...styles.modalView, ...styles.tutorialView}}>
+                        <Text style={styles.modalTitleText}>Do you want to turn off your screen?</Text>
+                        <Text style={styles.modalText}>
+                            Tap "Screen Off" to turn off your screen without causing harm to your frog!
+                        </Text>
+                        <Text style={styles.modalText}>
+                            This will disable the auto sleep function of your phone. The countdown will still continue as usual. You can tap anywhere on your screen to show the app.
+                        </Text>
+                        <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Pressable
+                            style={{...styles.button, ...styles.buttonClose, flex: 1, margin: 10}}
+                            onPress={() => setScreenoffModalVisible(!screenoffModalVisible)}>
+                            <Text style={styles.textStyle}>Exit</Text>
+                        </Pressable>
+                        <Pressable
+                            style={{...styles.button, ...styles.buttonClose, flex: 1, margin: 10}}
+                            onPress={() => {setScreenoffModalVisible(!screenoffModalVisible);setScreenoff(true)}}>
+                            <Text style={styles.textStyle}>Screen Off</Text>
+                        </Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            {/* Open Screen Off Modal Button */}
+            <View style={{position: 'absolute', left: 0, backgroundColor: '#C8B88A', borderRadius: 20, margin: 7}}>  
+                <Pressable
+                    onPress={() => setScreenoffModalVisible(true)}>
+                    <Image source={require('./../assets/phoneoff.png')} resizeMode='contain' style={{width: 35, height: 35}}/>
+                </Pressable>
+            </View>
 
             {/* Tutorial Modal */}
             <Modal
@@ -103,13 +175,17 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                             Here you can set the amount of time you would like to focus.
                         </Text>
                         <Text style={styles.modalText}>
-                            Try your best to make it all way without leaving the app to receive a frog!
+                            Try your best to make it all the way without leaving the app to receive a frog!
                             The more time you focus for, the better your odds of receiving rarer frogs.
                         </Text>
                         <Text style={styles.modalText}>
                             Be warned, leaving the app while the timer is ticking will have disastrous
                             consequences for your amphibian pal.
                         </Text>
+                        {(timeWarp != 0) ? <Text style={styles.modalText}>
+                            Debug mode is on:
+                            the app will treat 1 second in real life as 15 minutes of phone lock time.
+                        </Text> : ''}
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setTutorialModalVisible(!tutorialModalVisible)}>
@@ -122,7 +198,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
             <View style={{position: 'absolute', right: 0, backgroundColor: '#C8B88A', borderRadius: 20, margin: 7}}>  
                 <Pressable
                     onPress={() => setTutorialModalVisible(true)}>
-                    <Image source={require('./../assets/question_mark.png')} resizeMode='contain' style={{width: 25, height: 25}}/>
+                    <Image source={require('./../assets/question_mark.png')} resizeMode='contain' style={{width: 35, height: 35}}/>
                 </Pressable>
             </View>
 
@@ -156,7 +232,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
                             
                             {/* Frog Name Text */}
                             <Text style={{textAlign: 'center', fontSize: 18}}>
-                                {frogName[displayImage]}! Check it out over at your frog pond!
+                                {frogName[displayImage]}! Tap on a frog in your frog pond to view its info!
                             </Text>
                         </View>
 
@@ -164,7 +240,7 @@ function LockScreen({route, navigation}: {route: any, navigation: any}) {
 
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
-                            onPress={() => setOutcomeModalVisible(!outcomeModalVisible)}>
+                            onPress={() => {setOutcomeModalVisible(!outcomeModalVisible);setScreenoff(false)}}>
                             <Text style={styles.textStyle}>Exit</Text>
                         </Pressable>
                     </View>
@@ -433,7 +509,7 @@ const styles = StyleSheet.create({
         margin: 20,
         backgroundColor: '#9AC99B',
         borderRadius: 20,
-        padding: 35,
+        padding: 20,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -448,6 +524,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         maxHeight: dimensions()._height * 0.8,
+        width: dimensions()._width * 0.9,
     },
     outcomeView: {
         margin: 20,

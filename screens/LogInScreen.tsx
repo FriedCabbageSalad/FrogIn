@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, View, Text, ImageBackground, TouchableOpacity, TextInput, StyleSheet, Image, ScrollView } from 'react-native';
-import { dimensions, showAlert, showAlertAction} from './../screens/Scripts.tsx';
+import { dimensions, showAlert, showAlertAction, showAlertConfirm } from './../screens/Scripts.tsx';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
@@ -78,14 +78,14 @@ function LogInScreen({navigation}: {navigation: any}) {
                       if (error.code === 'auth/invalid-email') {
                         showAlert('Invalid email address!','','OK');
                       }
-                      if (error.code === 'auth/wrong-password') {
-                        showAlert('Wrong password','','OK');
+                      else if (error.code === 'auth/wrong-password') {
+                        showAlert('Wrong password!','','OK');
                       }
-                      if (error.code === 'auth/user-not-found') {
+                      else if (error.code === 'auth/user-not-found') {
                         showAlertAction('Account not found','','Sign Up for FrogIn',() => navigation.navigate('SignUp'));
                       }
                       else {
-                        console.error(error);
+                        //console.error(error);
                       }
                     })
                   }
@@ -103,7 +103,7 @@ function LogInScreen({navigation}: {navigation: any}) {
             </View>
 
             {/* Google sign up button */}
-              <TouchableOpacity style={styles.googleButton} onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Home'))}>
+              <TouchableOpacity style={[styles.googleButton, {alignSelf: 'center'}]} onPress={() => onGoogleButtonPress().then(() => navigation.navigate('Home'))}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                   <Image source={require('./../assets/google.jpg')} style={{height: '150%', width: '10%'}} resizeMode='contain'/>
                   <Text style={{color: 'black', paddingHorizontal: '2%'}}>Google</Text>
@@ -111,6 +111,30 @@ function LogInScreen({navigation}: {navigation: any}) {
               </TouchableOpacity>
                 <View>
                   <Text style={styles.TOS}>By clicking continue, you agree to our{"\n"}Terms of Service and Privacy Policy</Text>
+                <View style={styles.loginPrompt}>
+                  <Text style={styles.TOS}>Forgot your password?</Text>
+                  <TouchableOpacity style={styles.logInButton} onPress={() => (text == '') ?
+                    showAlert('Please enter your email.','','OK') :
+                    auth().sendPasswordResetEmail(text).then(
+                      () => {
+                        //success
+                        showAlert('Password reset email has been sent!','Please check ' + text,'OK')
+                      })
+                      .catch(error => {
+                        if (error.code === 'auth/invalid-email') {
+                          showAlert('Invalid email address!','','OK');
+                        }
+                        else if (error.code === 'auth/user-not-found') {
+                          showAlertConfirm('Account not found','','Sign Up for Frog In','Try another email',() => navigation.navigate('SignUp'),()=> {});
+                        }
+                        else {
+                          //console.error(error);
+                        }
+                      })
+                    }>
+                    <Text style={styles.logInText}>Reset Password</Text>
+                  </TouchableOpacity>
+                </View>
                 </View>
         </ScrollView>
       </ImageBackground>
@@ -166,7 +190,7 @@ const styles = StyleSheet.create({
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: dimensions()._height * -0.1,
   },
   dividerLine: {
     flex: 1,
@@ -202,10 +226,26 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   googleButton: {
-    width: '95%',
+    width: '80%',
     alignItems: 'center',
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 8.5,
   },
+  loginPrompt: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  logInButton: {
+    alignSelf: 'center'
+  },
+  logInText: {
+    color: 'blue',
+    fontSize: 13,
+    fontFamily: 'Sans-serif',
+    paddingBottom: 5,
+    textDecorationLine: 'underline'
+  }
 });
