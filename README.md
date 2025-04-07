@@ -1,18 +1,54 @@
 # FrogIn
 
 ## Problem Statement
-Remaining productive in life is as fickle as always, so why not focus up with the help of a little
-application? Introducing, FrogIn a portmanteau of Frog and the colloquial phrase “lock in”
-meaning “to get focused and commit to something”. FrogIn will aid not only students around
-the globe but also the everyday man who wishes to concentrate and complete the tasks they
-have set for themselves. We all had our moments where we desire to put aside the major distraction we all now carry with us: our phones. As such, we seek to put forward a mobile application that solves this.
 
-## Solution
-We hope to create an application that would remove distractions posed by our mobile devices
-by essentially locking the phone for a set amount of time dictated by the user. During this
-time, the phone will be unable to receive notifications or swap to a different screen bar for
-emergencies. Users will be incentivised to see through their dedication by way of gamification.
-When they start the timer, they will be given a frog egg, which over the course of the timer,
-will mature and grow into fully fledged adults! However, should the user abscond their
-commitment, the frog will sadly pass away instead. Users will be able to collect and display
-the various frogs collected in a personal “pond” where the frogs will live.
+Remaining productive is a constant challenge in our distraction-filled world. With smartphones at the center of our daily routines, it's increasingly difficult to stay focused and committed to our tasks. Consider these challenges:
+
+- **Ubiquitous Distractions:**
+
+  Our phones, while incredibly useful, often pull us away from important tasks with endless notifications and temptations.
+
+- **Commitment Struggles:**
+
+  Whether you're a student or a professional, maintaining concentration amid constant interruptions is no easy feat.
+
+- **The Need for a Focus Tool:**
+
+  There's a clear demand for an application that not only minimizes distractions but also motivates users to stay on track.
+
+## Our Solution: FrogIn
+
+A blend of the word "Frog" and the phrase "lock in": FrogIn is a mobile application designed to help you regain control of your focus and productivity. Here’s how it works:
+
+### Key Features
+
+**1. Scheduled Distraction Lock:**
+   - Set a timer to lock your phone for a user-defined period.
+   - During this period, your device won’t receive notifications or allow you to switch screens, keeping you fully engaged.
+
+**2. Gamified Commitment:**
+   - Start the timer and receive a frog egg.
+   - As you remain committed, watch your egg mature into a thriving frog.
+   - If you break your focus, the frog’s journey ends prematurely.
+
+**3. Personal Pond:**
+   - Collect and showcase your frogs in a personal "pond".
+   - Track your progress and celebrate your successes as your pond fills with the fruits of your dedication.
+
+## Why FrogIn?
+
+- [x] Boost Your Productivity:
+
+Remove mobile distractions and reclaim your focus.
+
+- [x] Motivate Through Gamification:
+      
+Turn commitment into a rewarding, visual experience that encourages consistency.
+
+- [x] Universal Appeal:
+      
+Designed for students, professionals, and anyone looking to maximize their productivity.
+
+------------
+
+Embrace a distraction-free lifestyle and let FrogIn help you lock in on what truly matters!
