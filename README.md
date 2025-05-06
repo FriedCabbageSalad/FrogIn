@@ -1,5 +1,7 @@
 # FrogIn
 
+![FrogIn_Poster2](https://github.com/user-attachments/assets/dac2cc5a-01a9-4973-86b1-b64ccb598f05)
+
 ## Problem Statement
 
 Remaining productive is a constant challenge in our distraction-filled world. With smartphones at the center of our daily routines, it's increasingly difficult to stay focused and committed to our tasks. Consider these challenges:
@@ -49,7 +51,10 @@ Turn commitment into a rewarding, visual experience that encourages consistency.
       
 Designed for students, professionals, and anyone looking to maximize their productivity.
 
+Pond Menu           |  Discover New Frogs!
+:-------------------------:|:-------------------------:
+![Screenshot_20240728_004418](https://github.com/user-attachments/assets/b5cdea8c-5f98-4959-bca2-f9e65c20295c)  |  ![Screenshot_20240728_004606](https://github.com/user-attachments/assets/dff9f1ee-3bf6-429c-8faf-2194b4f549b7)
+
 ------------
-![FrogIn_Poster2](https://github.com/user-attachments/assets/dac2cc5a-01a9-4973-86b1-b64ccb598f05)
 
 Embrace a distraction-free lifestyle and let FrogIn help you lock in on what truly matters!
