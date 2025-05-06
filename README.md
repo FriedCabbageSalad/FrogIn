@@ -50,5 +50,6 @@ Turn commitment into a rewarding, visual experience that encourages consistency.
 Designed for students, professionals, and anyone looking to maximize their productivity.
 
 ------------
+![FrogIn_Poster2](https://github.com/user-attachments/assets/dac2cc5a-01a9-4973-86b1-b64ccb598f05)
 
 Embrace a distraction-free lifestyle and let FrogIn help you lock in on what truly matters!
